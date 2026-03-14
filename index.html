@@ -6,71 +6,18 @@
     <title>WrenchPrice | Part Finder</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --brand: #f1c40f; /* High-viz mechanic yellow */
-            --bg: #121212;
-            --card: #1e1e1e;
-            --text: #ffffff;
-        }
-
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: var(--bg); 
-            color: var(--text); 
-            margin: 0; 
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
+        :root { --brand: #f1c40f; --bg: #121212; --card: #1e1e1e; --text: #ffffff; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         .container { width: 100%; max-width: 600px; }
-
-        /* Header Area */
         header { text-align: center; margin-bottom: 30px; }
-        header h1 { font-weight: 900; letter-spacing: -1px; margin: 0; font-size: 32px; }
+        header h1 { font-weight: 900; letter-spacing: -1px; margin: 0; font-size: 38px; }
         header span { color: var(--brand); }
-
-        /* Step Cards */
-        .card { 
-            background: var(--card); 
-            padding: 20px; 
-            border-radius: 15px; 
-            margin-bottom: 15px; 
-            border: 1px solid #333;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-
+        .card { background: var(--card); padding: 20px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #333; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
         h2 { font-size: 14px; text-transform: uppercase; color: #888; margin-top: 0; letter-spacing: 1px; }
-
-        select, input {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: white;
-            border-radius: 8px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        .btn-search {
-            width: 100%;
-            padding: 15px;
-            background: var(--brand);
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            font-weight: 900;
-            text-transform: uppercase;
-            margin-top: 15px;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        .btn-search:active { transform: scale(0.98); }
-
+        select, input { width: 100%; padding: 12px; margin-top: 10px; background: #2a2a2a; border: 1px solid #444; color: white; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        .btn-search { width: 100%; padding: 15px; background: var(--brand); color: #000; border: none; border-radius: 8px; font-weight: 900; text-transform: uppercase; margin-top: 15px; cursor: pointer; transition: 0.2s; }
+        .btn-search:hover { background: #fff; }
+        .store-btn { width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; cursor: pointer; font-size: 14px; color: white; display: block; text-align: center; text-decoration: none; }
         .loading-text { font-size: 12px; color: var(--brand); margin-top: 5px; display: none; }
     </style>
 </head>
@@ -79,26 +26,24 @@
     <div class="container">
         <header>
             <h1>WRENCH<span>PRICE</span></h1>
-            <p style="color: #666; font-size: 14px;">The Ultimate Mechanic's Price & Video Guide</p>
+            <p style="color: #666; font-size: 14px;">Master Part Search & Repair Guide</p>
         </header>
 
         <div class="card">
             <h2>1. Select Vehicle</h2>
             <select id="makeSelect" onchange="fetchModels()">
-                <option>Loading Makes...</option>
+                <option value="">Loading Makes...</option>
             </select>
-            
             <select id="modelSelect" disabled>
-                <option>Select a Make First</option>
+                <option value="">Select a Make First</option>
             </select>
-            
             <input type="number" id="yearInput" placeholder="Year (e.g. 2015)" min="1981" max="2027">
-            <div id="loadingStatus" class="loading-text">Fetching data from NHTSA...</div>
+            <div id="loadingStatus" class="loading-text">Connecting to NHTSA Database...</div>
         </div>
 
         <div class="card">
-            <h2>2. What part do you need?</h2>
-            <input type="text" id="partInput" placeholder="e.g. Alternator, Brake Pads, Headlight">
+            <h2>2. Find Part</h2>
+            <input type="text" id="partInput" placeholder="e.g. Brake Pads">
             <button class="btn-search" onclick="startSearch()">Scour the Internet</button>
         </div>
 
@@ -106,7 +51,7 @@
     </div>
 
     <script>
-        // Fetch all Manufacturers from the Gov Database on load
+        // Initial Fetch of Makes
         fetch('https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json')
             .then(res => res.json())
             .then(data => {
@@ -119,6 +64,8 @@
                     opt.textContent = m.Make_Name;
                     makeSelect.appendChild(opt);
                 });
+            }).catch(err => {
+                alert("Database Error: Check your connection.");
             });
 
         function fetchModels() {
@@ -126,11 +73,8 @@
             const modelSelect = document.getElementById('modelSelect');
             const status = document.getElementById('loadingStatus');
             if(!make) return;
-
             modelSelect.disabled = true;
-            modelSelect.innerHTML = '<option>Loading Models...</option>';
             status.style.display = 'block';
-
             fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${make}?format=json`)
                 .then(res => res.json())
                 .then(data => {
@@ -147,40 +91,44 @@
         }
 
         function startSearch() {
+            console.log("Search started...");
             const year = document.getElementById('yearInput').value;
             const make = document.getElementById('makeSelect').value;
             const model = document.getElementById('modelSelect').value;
             const part = document.getElementById('partInput').value;
 
             if(!year || !make || !model || !part) {
-                alert("Please fill in all vehicle and part info!");
+                alert("Please fill in every box!");
                 return;
             }
 
-            const query = `${year} ${make} ${model} ${part}`;
+            const query = encodeURIComponent(`${year} ${make} ${model} ${part}`);
             const resultsArea = document.getElementById('resultsArea');
 
-            // Build the Results UI
-            resultsArea.innerHTML = `
-                <div class="card" style="border-left: 5px solid var(--brand);">
-                    <h2 style="color: var(--brand)">Results for ${query}</h2>
+            // Building the UI
+            let html = `
+                <div class="card" style="border-top: 5px solid var(--brand);">
+                    <h3 style="margin-top:0;">Searching for: ${year} ${make} ${model} ${part}</h3>
                     
-                    <p style="font-size: 12px; margin-bottom: 5px; color: #888;">GET IT TODAY (LOCAL STORES):</p>
-                    <button class="btn-search" style="background:#d90000; color:white; margin-bottom:10px;" onclick="window.open('https://www.autozone.com/searchresult?searchText=${query}', '_blank')">Search AutoZone</button>
-                    <button class="btn-search" style="background:#00833e; color:white; margin-bottom:10px;" onclick="window.open('https://www.oreillyauto.com/search?q=${query}', '_blank')">Search O'Reilly</button>
-                    <button class="btn-search" style="background:#ffcc00; color:black; margin-bottom:10px;" onclick="window.open('https://shop.advanceautoparts.com/web/SearchResults?searchTerm=${query}', '_blank')">Search Advance Auto</button>
+                    <p style="font-size: 11px; color: #888; margin-top:20px; font-weight:bold;">LOCAL STORES (TODAY):</p>
+                    <a href="https://www.autozone.com/searchresult?searchText=${query}" target="_blank" class="store-btn" style="background:#d90000;">AutoZone</a>
+                    <a href="https://www.oreillyauto.com/search?q=${query}" target="_blank" class="store-btn" style="background:#00833e;">O'Reilly</a>
+                    <a href="https://shop.advanceautoparts.com/web/SearchResults?searchTerm=${query}" target="_blank" class="store-btn" style="background:#ffcc00; color:black;">Advance Auto</a>
 
-                    <p style="font-size: 12px; margin-top: 15px; margin-bottom: 5px; color: #888;">SHIPPING (BEST PRICES):</p>
-                    <button class="btn-search" style="background:#005399; color:white; margin-bottom:10px;" onclick="window.open('https://www.rockauto.com/en/catalog/${make},${year},${model},${part}', '_blank')">Search RockAuto</button>
-                    <button class="btn-search" style="background:#e53238; color:white; margin-bottom:10px;" onclick="window.open('https://www.ebay.com/sch/i.html?_nkw=${query}', '_blank')">Search eBay Motors</button>
+                    <p style="font-size: 11px; color: #888; margin-top:20px; font-weight:bold;">SHIPPING (SAVINGS):</p>
+                    <a href="https://www.rockauto.com/en/catalog/${make},${year},${model},${encodeURIComponent(part)}" target="_blank" class="store-btn" style="background:#005399;">RockAuto</a>
+                    <a href="https://www.ebay.com/sch/i.html?_nkw=${query}" target="_blank" class="store-btn" style="background:#e53238;">eBay Motors</a>
 
-                    <p style="font-size: 12px; margin-top: 15px; margin-bottom: 5px; color: #888;">HOW-TO GUIDES:</p>
-                    <button class="btn-search" style="background:#ff0000; color:white;" onclick="window.open('https://www.youtube.com/results?search_query=how+to+replace+${part}+${year}+${make}+${model}', '_blank')">Watch Repair Videos</button>
+                    <p style="font-size: 11px; color: #888; margin-top:20px; font-weight:bold;">REPAIR GUIDES:</p>
+                    <a href="https://www.youtube.com/results?search_query=how+to+replace+${query}" target="_blank" class="store-btn" style="background:#ff0000;">Watch How-To Video</a>
                 </div>
             `;
             
-            // Scroll down to results
-            resultsArea.scrollIntoView({ behavior: 'smooth' });
+            resultsArea.innerHTML = html;
+            console.log("HTML Injected");
+            
+            // This forces the screen to slide down so you see the results
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
     </script>
 </body>
