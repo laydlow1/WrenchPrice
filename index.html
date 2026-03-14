@@ -3,43 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WrenchPrice | Smart Garage</title>
+    <title>WrenchPrice | Mobile Garage</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --brand: #f1c40f; --bg: #121212; --card: #1e1e1e; --text: #ffffff; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { width: 100%; max-width: 600px; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 500px; }
         header { text-align: center; margin-bottom: 20px; }
-        header h1 { font-weight: 900; letter-spacing: -1px; margin: 0; font-size: 38px; }
+        header h1 { font-weight: 900; letter-spacing: -1px; margin: 0; font-size: 34px; }
         header span { color: var(--brand); }
         
-        .garage-section { background: #222; border: 1px dashed var(--brand); padding: 15px; border-radius: 12px; margin-bottom: 20px; }
-        .garage-item { background: #333; padding: 12px; margin-top: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-left: 4px solid var(--brand); font-weight: bold; font-size: 14px;}
-        .garage-item:hover { background: #444; }
-        .delete-btn { background: #d90000; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .garage-section { background: #222; border: 1px dashed var(--brand); padding: 15px; border-radius: 12px; margin-bottom: 15px; }
+        .garage-item { background: #333; padding: 15px; margin-top: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-left: 4px solid var(--brand); font-weight: bold; font-size: 15px;}
+        .garage-item:active { background: #444; }
+        .delete-btn { background: #d90000; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
 
         .card { background: var(--card); padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
-        h2 { font-size: 13px; text-transform: uppercase; color: #888; margin-top: 0; letter-spacing: 1px; }
+        h2 { font-size: 14px; text-transform: uppercase; color: #888; margin-top: 0; letter-spacing: 1px; }
         
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 11px; color: var(--brand); font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
-        select, input { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #444; color: white; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
+        .form-group label { display: block; font-size: 12px; color: var(--brand); font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
+        select, input { width: 100%; padding: 15px; background: #2a2a2a; border: 1px solid #444; color: white; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
         select:disabled, input:disabled { opacity: 0.4; cursor: not-allowed; }
         
-        .btn-search { width: 100%; padding: 15px; background: var(--brand); color: #000; border: none; border-radius: 6px; font-weight: 900; text-transform: uppercase; margin-top: 10px; cursor: pointer; font-size: 16px; }
-        .btn-save { background: #333; color: white; border: 1px solid #555; margin-top: 10px; font-size: 13px;}
+        .btn-search { width: 100%; padding: 18px; background: var(--brand); color: #000; border: none; border-radius: 8px; font-weight: 900; text-transform: uppercase; margin-top: 5px; cursor: pointer; font-size: 16px; }
+        .btn-save { background: #333; color: white; border: 1px solid #555; margin-top: 10px; font-size: 14px;}
         
-        .store-btn { width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; cursor: pointer; font-size: 13px; color: white; display: block; text-align: center; text-decoration: none; box-sizing: border-box; }
-        .loading-text { font-size: 11px; color: var(--brand); font-style: italic; display: none; margin-top: 4px; }
+        .store-btn { width: 100%; padding: 16px; border: none; border-radius: 8px; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; cursor: pointer; font-size: 15px; color: white; display: block; text-align: center; text-decoration: none; box-sizing: border-box; }
+        .loading-text { font-size: 12px; color: var(--brand); font-style: italic; display: none; margin-top: 6px; }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .saved-item { background: #2a2a2a; padding: 10px; border-radius: 6px; margin-bottom: 10px; font-size: 13px; border-left: 3px solid #00a8ff; display: flex; justify-content: space-between; align-items: center;}
         
-        /* Fixed Video Container */
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000; border-radius: 8px; margin-bottom: 10px;}
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         
         #resultsArea { display: none; }
+        .section-title { font-size: 12px; color: #aaa; margin-top: 25px; margin-bottom: 10px; text-transform: uppercase; font-weight: bold; border-bottom: 1px solid #333; padding-bottom: 5px;}
+        
+        .buy-link-btn { background: #00a8ff; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; display: inline-block; margin-top: 5px;}
     </style>
 </head>
 <body>
@@ -47,12 +48,12 @@
     <div class="container">
         <header>
             <h1>WRENCH<span>PRICE</span></h1>
-            <p style="color: #666; font-size: 13px; font-weight: bold;">SMART PARTS COUNTER</p>
+            <p style="color: #666; font-size: 13px; font-weight: bold;">YOUR MOBILE GARAGE</p>
         </header>
 
         <div class="garage-section" id="garageArea">
             <h2 style="color: var(--brand); margin-bottom: 5px;">My Garage</h2>
-            <div id="garageList"><p style="font-size: 12px; color: #aaa; margin: 0;">Saved vehicles will appear here.</p></div>
+            <div id="garageList"><p style="font-size: 12px; color: #aaa; margin: 0;">No vehicles saved yet.</p></div>
         </div>
 
         <div class="card">
@@ -80,58 +81,60 @@
         </div>
 
         <div class="card">
-            <h2>2. Requested Part</h2>
+            <h2>2. Part Search</h2>
             <div class="form-group">
-                <input type="text" id="partInput" placeholder="e.g. Starter, Alternator, Rotors">
+                <input type="text" id="partInput" placeholder="e.g. Starter, Alternator">
             </div>
-            <button class="btn-search" onclick="runSearch()">Scour The Internet</button>
+            <button class="btn-search" onclick="runSearch()">Find Part</button>
         </div>
 
         <div id="resultsArea">
-            <div class="card" style="border-top: 5px solid #d90000;">
-                <h3 style="margin-top:0; font-size:16px;" id="resVehicle">Vehicle</h3>
-                <p style="color:var(--brand); font-weight:bold; font-size: 18px;" id="resPart">PART</p>
+            <div class="card" style="border-top: 5px solid #00a8ff;">
+                <h3 style="margin-top:0; font-size:18px;" id="resVehicle">Vehicle</h3>
+                <p style="color:var(--brand); font-weight:900; font-size: 22px; margin-top:5px;" id="resPart">PART</p>
                 
-                <p style="font-size: 11px; color: #888; margin-top:15px; text-transform:uppercase;">Direct Links (Google X-Ray Method):</p>
-                <a href="#" id="linkRockAuto" target="_blank" class="store-btn" style="background:#005399;">Find on RockAuto</a>
-                <a href="#" id="linkAutoZone" target="_blank" class="store-btn" style="background:#d90000;">Find on AutoZone</a>
-                <a href="#" id="linkOReilly" target="_blank" class="store-btn" style="background:#00833e;">Find on O'Reilly</a>
-                <a href="#" id="linkAdvance" target="_blank" class="store-btn" style="background:#ffcc00; color:black;">Find on Advance Auto</a>
+                <div class="section-title">Online Deals (Shipping)</div>
+                <a href="#" id="linkAmazon" target="_blank" class="store-btn" style="background:#ff9900; color:black;">Amazon Auto</a>
+                <a href="#" id="linkEbay" target="_blank" class="store-btn" style="background:#e53238;">eBay Motors</a>
+                <a href="#" id="linkRockAuto" target="_blank" class="store-btn" style="background:#005399;">RockAuto</a>
                 
-                <p style="font-size: 11px; color: #888; margin-top:20px; text-transform:uppercase;">Marketplaces (Direct Search):</p>
-                <a href="#" id="linkEbay" target="_blank" class="store-btn" style="background:#e53238;">Shop eBay Motors</a>
-                <a href="#" id="linkAmazon" target="_blank" class="store-btn" style="background:#ff9900; color:black;">Shop Amazon Auto</a>
+                <div class="section-title">Can't Wait? Shop Local</div>
+                <a href="#" id="linkAutoZone" target="_blank" class="store-btn" style="background:#d90000;">AutoZone</a>
+                <a href="#" id="linkOReilly" target="_blank" class="store-btn" style="background:#00833e;">O'Reilly</a>
+                <a href="#" id="linkAdvance" target="_blank" class="store-btn" style="background:#ffcc00; color:black;">Advance Auto</a>
 
-                <p style="font-size: 11px; color: #888; margin-top:20px; text-transform:uppercase;">Repair Instructions:</p>
-                <a href="#" id="linkYouTube" target="_blank" class="store-btn" style="background:#222; border: 1px solid #444;">Search YouTube Guides</a>
+                <div class="section-title">How-To Repair Guides</div>
+                <a href="#" id="linkYouTube" target="_blank" class="store-btn" style="background:#222; border: 1px solid #555;">Search YouTube Guides</a>
             </div>
 
-            <div class="card" style="border-top: 4px solid #00a8ff; background: #181818;">
-                <h3 style="margin-top:0; font-size:14px;">Digital Notepad</h3>
-                <p style="font-size: 11px; color: #888;">Log part numbers or embed YouTube videos here for your records.</p>
+            <div class="card" style="border-top: 4px solid var(--brand); background: #181818;">
+                <h3 style="margin-top:0; font-size:16px;">Vehicle Build Sheet</h3>
                 
+                <div class="section-title">Save a Part Link</div>
+                <p style="font-size: 11px; color: #888; margin-top:0;">Found the right part? Log it here so you don't lose the link.</p>
                 <div class="grid-2">
-                    <input type="text" id="logName" placeholder="Part / Details">
+                    <input type="text" id="logName" placeholder="Part Name">
                     <input type="text" id="logPrice" placeholder="Price (e.g. $120)">
                 </div>
-                <button class="btn-search" style="padding: 10px; font-size: 12px; background: #00a8ff; color: white;" onclick="saveLog()">Save Note</button>
-                <div id="savedLogs" style="margin-top: 15px;"></div>
+                <input type="url" id="logLink" placeholder="Paste link to the part..." style="margin-top: 10px;">
+                <button class="btn-search" style="padding: 12px; font-size: 14px; margin-top: 10px; background: #00a8ff; color: white;" onclick="saveLog()">Save Part to Build Sheet</button>
+                
+                <div id="savedLogs" style="margin-top: 20px;"></div>
 
-                <div style="margin-top: 20px; border-top: 1px solid #333; padding-top: 15px;">
-                    <p style="font-size: 11px; color: #aaa; margin-bottom: 5px;">Paste a YouTube link below to save the video.</p>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="videoLinkInput" placeholder="https://youtube.com/watch?v=...">
-                        <button class="btn-search" style="margin-top: 0; width: auto; padding: 0 15px; background: #ff0000; color: white;" onclick="saveVideo()">Embed</button>
-                    </div>
-                    <div id="savedVideosList" style="margin-top: 15px;"></div>
+                <div class="section-title" style="margin-top: 30px;">Saved Repair Videos</div>
+                <p style="font-size: 11px; color: #888; margin-top:0;">Paste a YouTube link to embed it.</p>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="videoLinkInput" placeholder="Paste YouTube link..." style="padding:12px; font-size:14px;">
+                    <button class="btn-search" style="margin-top: 0; width: auto; padding: 0 15px; background: #ff0000; color: white;" onclick="saveVideo()">Save</button>
                 </div>
+                <div id="savedVideosList" style="margin-top: 15px;"></div>
             </div>
         </div>
 
     </div>
 
     <script>
-        // --- TOP HALF LOGIC (EPA DATABASE - UNCHANGED) ---
+        // --- TOP HALF LOGIC (EPA DATABASE) ---
         const epaHeaders = { headers: { 'Accept': 'application/json' } };
         window.onload = () => {
             loadGarage();
@@ -193,7 +196,7 @@
         }
 
         // --- GARAGE DATABASE ---
-        let wrenchDB = JSON.parse(localStorage.getItem('wrenchDB_v3')) || {};
+        let wrenchDB = JSON.parse(localStorage.getItem('wrenchDB_v5')) || {};
         let activeVehicleKey = null;
 
         function saveToGarage() {
@@ -205,19 +208,20 @@
 
             const key = `${y} ${m} ${mod} | ${eng}`;
             if(!wrenchDB[key]) {
-                wrenchDB[key] = { logs: [], videos: [], shortModel: mod.split(' ')[0] };
-                localStorage.setItem('wrenchDB_v3', JSON.stringify(wrenchDB));
+                // Now storing full part objects with links, not just names
+                wrenchDB[key] = { savedParts: [], videos: [], shortModel: mod.split(' ')[0] };
+                localStorage.setItem('wrenchDB_v5', JSON.stringify(wrenchDB));
             }
             loadGarage();
             activeVehicleKey = key;
-            alert("Vehicle Saved & Loaded!");
+            alert("Vehicle Saved to Garage!");
         }
 
         function loadGarage() {
             const list = document.getElementById('garageList');
             const vehicles = Object.keys(wrenchDB);
             if(vehicles.length === 0) {
-                list.innerHTML = '<p style="font-size: 12px; color: #aaa; margin: 0;">Saved vehicles will appear here.</p>';
+                list.innerHTML = '<p style="font-size: 12px; color: #aaa; margin: 0;">No vehicles saved yet.</p>';
                 return;
             }
             list.innerHTML = '';
@@ -232,19 +236,19 @@
 
         function deleteFromGarage(key) {
             delete wrenchDB[key];
-            localStorage.setItem('wrenchDB_v3', JSON.stringify(wrenchDB));
+            localStorage.setItem('wrenchDB_v5', JSON.stringify(wrenchDB));
             document.getElementById('resultsArea').style.display = 'none';
             loadGarage();
         }
 
         function setActiveVehicle(key) {
             activeVehicleKey = key;
+            document.getElementById('partInput').value = '';
             alert(`Loaded ${key}. Type a part below to search.`);
-            renderNotepad();
-            document.getElementById('resultsArea').style.display = 'block';
+            document.getElementById('resultsArea').style.display = 'none';
         }
 
-        // --- THE "GOOGLE X-RAY" SEARCH ENGINE ---
+        // --- THE LAUNCHPAD SEARCH ENGINE ---
         function runSearch() {
             let year, make, engine, shortModel;
             const part = document.getElementById('partInput').value;
@@ -254,9 +258,7 @@
             if (activeVehicleKey) {
                 const split = activeVehicleKey.split(' | ');
                 const carParts = split[0].split(' ');
-                year = carParts[0];
-                make = carParts[1];
-                engine = split[1];
+                year = carParts[0]; make = carParts[1]; engine = split[1];
                 shortModel = wrenchDB[activeVehicleKey].shortModel;
             } else {
                 year = document.getElementById('yearSelect').value;
@@ -267,33 +269,32 @@
                 shortModel = model.split(' ')[0]; 
             }
 
-            // The X-Ray Query: Forces Google to find the exact page on their website
-            const xrayQuery = `${year} ${make} ${shortModel} ${engine} ${part}`;
+            const cleanSearch = `${year} ${make} ${shortModel} ${part}`;
+            const videoSearch = `How to replace ${part} ${year} ${make} ${shortModel} ${engine}`;
 
             document.getElementById('resVehicle').innerText = `${year} ${make} ${shortModel} | ${engine}`;
-            document.getElementById('resPart').innerText = `PART: ${part.toUpperCase()}`;
+            document.getElementById('resPart').innerText = part.toUpperCase();
 
-            // Inject the X-Ray Google links for the problematic stores
-            document.getElementById('linkAutoZone').href = `https://www.google.com/search?q=site:autozone.com+${encodeURIComponent(xrayQuery)}`;
-            document.getElementById('linkOReilly').href = `https://www.google.com/search?q=site:oreillyauto.com+${encodeURIComponent(xrayQuery)}`;
-            document.getElementById('linkAdvance').href = `https://www.google.com/search?q=site:advanceautoparts.com+${encodeURIComponent(xrayQuery)}`;
-            document.getElementById('linkRockAuto').href = `https://www.google.com/search?q=site:rockauto.com+${encodeURIComponent(xrayQuery)}`;
+            document.getElementById('linkAmazon').href = `https://www.amazon.com/s?k=${encodeURIComponent(cleanSearch + ' automotive')}`;
+            document.getElementById('linkEbay').href = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(cleanSearch)}`;
+            document.getElementById('linkRockAuto').href = `https://www.rockauto.com/en/partsearch/?searchtext=${encodeURIComponent(cleanSearch)}`;
             
-            // eBay & Amazon actually have good internal search engines, so we link them directly
-            document.getElementById('linkEbay').href = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(year + ' ' + make + ' ' + shortModel + ' ' + part)}`;
-            document.getElementById('linkAmazon').href = `https://www.amazon.com/s?k=${encodeURIComponent(year + ' ' + make + ' ' + shortModel + ' ' + part)}+automotive`;
+            document.getElementById('linkAutoZone').href = `https://www.autozone.com/searchresult?searchText=${encodeURIComponent(cleanSearch)}`;
+            document.getElementById('linkOReilly').href = `https://www.oreillyauto.com/search?q=${encodeURIComponent(cleanSearch)}`;
+            document.getElementById('linkAdvance').href = `https://shop.advanceautoparts.com/web/SearchResults?searchTerm=${encodeURIComponent(cleanSearch)}`;
             
-            // YouTube
-            document.getElementById('linkYouTube').href = `https://www.youtube.com/results?search_query=${encodeURIComponent('How to replace ' + part + ' ' + year + ' ' + make + ' ' + shortModel + ' ' + engine)}`;
+            document.getElementById('linkYouTube').href = `https://www.youtube.com/results?search_query=${encodeURIComponent(videoSearch)}`;
 
             document.getElementById('resultsArea').style.display = 'block';
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            
+            // Auto-fill the "Part Name" in the save box to save typing
+            document.getElementById('logName').value = part.charAt(0).toUpperCase() + part.slice(1);
+            
             if(activeVehicleKey) renderNotepad();
         }
 
-        // --- BULLETPROOF YOUTUBE EMBEDDER & NOTEPAD ---
-        
-        // This function intercepts messy URLs and rips out just the 11-character video ID
+        // --- MOBILE FRIENDLY BUILD SHEET ---
         function extractYouTubeID(url) {
             const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
             const match = url.match(regExp);
@@ -305,31 +306,37 @@
             
             const logsList = document.getElementById('savedLogs');
             logsList.innerHTML = '';
-            wrenchDB[activeVehicleKey].logs.forEach((log, idx) => {
-                logsList.innerHTML += `
-                    <div class="saved-item">
-                        <div><strong>${log.name}</strong> <br> <span style="color:var(--brand);">${log.price}</span></div>
-                        <button class="delete-btn" style="padding: 2px 6px;" onclick="deleteLog('logs', ${idx})">X</button>
-                    </div>`;
-            });
+            
+            if(wrenchDB[activeVehicleKey].savedParts.length === 0) {
+                logsList.innerHTML = '<p style="font-size:11px; color:#888;">No parts saved yet.</p>';
+            } else {
+                wrenchDB[activeVehicleKey].savedParts.forEach((item, idx) => {
+                    let linkHtml = item.link ? `<a href="${item.link}" target="_blank" class="buy-link-btn">Buy Part</a>` : '';
+                    
+                    logsList.innerHTML += `
+                        <div style="background: #2a2a2a; padding: 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: flex-start; border-left: 3px solid #00a8ff;">
+                            <div>
+                                <div style="font-weight: bold; font-size: 14px;">${item.name}</div>
+                                <div style="color: var(--brand); font-size: 13px; margin-top: 2px;">${item.price}</div>
+                                ${linkHtml}
+                            </div>
+                            <button class="delete-btn" style="padding: 6px 10px; background: #555;" onclick="deletePart(${idx})">X</button>
+                        </div>`;
+                });
+            }
 
             const videosList = document.getElementById('savedVideosList');
             videosList.innerHTML = '';
             wrenchDB[activeVehicleKey].videos.forEach((v, idx) => {
-                // Use the bulletproof extractor
                 const videoId = extractYouTubeID(v);
-                
                 if(videoId) {
                     videosList.innerHTML += `
                         <div style="background: #111; padding: 10px; border-radius: 8px; border: 1px solid #333; margin-bottom: 15px;">
                             <div class="video-container">
                                 <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
                             </div>
-                            <button class="delete-btn" style="width:100%; margin-top: 5px;" onclick="deleteLog('videos', ${idx})">Remove Video</button>
+                            <button class="delete-btn" style="width:100%; margin-top: 5px;" onclick="deleteVideo(${idx})">Remove Video</button>
                         </div>`;
-                } else {
-                    // Fallback if the URL was completely invalid
-                    videosList.innerHTML += `<div class="saved-item"><p style="color:red; font-size:11px;">Invalid Video Link</p><button class="delete-btn" onclick="deleteLog('videos', ${idx})">X</button></div>`;
                 }
             });
         }
@@ -338,11 +345,21 @@
             if(!activeVehicleKey) return alert("Save this vehicle to your Garage first!");
             const name = document.getElementById('logName').value;
             const price = document.getElementById('logPrice').value;
-            if(!name) return;
+            const link = document.getElementById('logLink').value;
             
-            wrenchDB[activeVehicleKey].logs.push({ name, price });
-            localStorage.setItem('wrenchDB_v3', JSON.stringify(wrenchDB));
-            document.getElementById('logName').value = ''; document.getElementById('logPrice').value = '';
+            if(!name) return alert("Please enter a part name.");
+            
+            wrenchDB[activeVehicleKey].savedParts.push({ name, price, link });
+            localStorage.setItem('wrenchDB_v5', JSON.stringify(wrenchDB));
+            
+            document.getElementById('logPrice').value = '';
+            document.getElementById('logLink').value = '';
+            renderNotepad();
+        }
+
+        function deletePart(index) {
+            wrenchDB[activeVehicleKey].savedParts.splice(index, 1);
+            localStorage.setItem('wrenchDB_v5', JSON.stringify(wrenchDB));
             renderNotepad();
         }
 
@@ -352,14 +369,14 @@
             if(!link) return;
             
             wrenchDB[activeVehicleKey].videos.push(link);
-            localStorage.setItem('wrenchDB_v3', JSON.stringify(wrenchDB));
+            localStorage.setItem('wrenchDB_v5', JSON.stringify(wrenchDB));
             document.getElementById('videoLinkInput').value = '';
             renderNotepad();
         }
 
-        function deleteLog(type, index) {
-            wrenchDB[activeVehicleKey][type].splice(index, 1);
-            localStorage.setItem('wrenchDB_v3', JSON.stringify(wrenchDB));
+        function deleteVideo(index) {
+            wrenchDB[activeVehicleKey].videos.splice(index, 1);
+            localStorage.setItem('wrenchDB_v5', JSON.stringify(wrenchDB));
             renderNotepad();
         }
     </script>
