@@ -94,6 +94,7 @@
                 <p style="color:var(--brand); font-weight:900; font-size: 22px; margin-top:5px;" id="resPart">PART</p>
                 
                 <div class="section-title">Online Deals (Shipping)</div>
+                <a href="#" id="link1AAuto" target="_blank" class="store-btn" style="background:#0033a0;">1A Auto</a>
                 <a href="#" id="linkAmazon" target="_blank" class="store-btn" style="background:#ff9900; color:black;">Amazon Auto</a>
                 <a href="#" id="linkEbay" target="_blank" class="store-btn" style="background:#e53238;">eBay Motors</a>
                 <a href="#" id="linkRockAuto" target="_blank" class="store-btn" style="background:#005399;">RockAuto</a>
@@ -104,7 +105,8 @@
                 <a href="#" id="linkAdvance" target="_blank" class="store-btn" style="background:#ffcc00; color:black;">Advance Auto</a>
 
                 <div class="section-title">How-To Repair Guides</div>
-                <a href="#" id="linkYouTube" target="_blank" class="store-btn" style="background:#222; border: 1px solid #555;">Search YouTube Guides</a>
+                <a href="#" id="link1AVideo" target="_blank" class="store-btn" style="background:#0033a0; border: 1px solid #0055ff;">1A Auto Repair Videos</a>
+                <a href="#" id="linkYouTube" target="_blank" class="store-btn" style="background:#222; border: 1px solid #555;">Search All YouTube Guides</a>
             </div>
 
             <div class="card" style="border-top: 4px solid var(--brand); background: #181818;">
@@ -141,7 +143,7 @@
         window.onload = () => {
             loadGarage();
             const yearSelect = document.getElementById('yearSelect');
-            for(let y = 2025; y >= 1984; y--) yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+            for(let y = 2026; y >= 1984; y--) yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
         };
 
         function ensureArray(data) { return (!data || !data.menuItem) ? [] : Array.isArray(data.menuItem) ? data.menuItem : [data.menuItem]; }
@@ -276,6 +278,8 @@
             document.getElementById('resVehicle').innerText = `${year} ${make} ${shortModel} | ${engine}`;
             document.getElementById('resPart').innerText = part.toUpperCase();
 
+            // Store Links
+            document.getElementById('link1AAuto').href = `https://www.1aauto.com/search?q=${encodeURIComponent(cleanSearch)}`;
             document.getElementById('linkAmazon').href = `https://www.amazon.com/s?k=${encodeURIComponent(cleanSearch + ' automotive')}`;
             document.getElementById('linkEbay').href = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(cleanSearch)}`;
             document.getElementById('linkRockAuto').href = `https://www.rockauto.com/en/partsearch/?searchtext=${encodeURIComponent(cleanSearch)}`;
@@ -284,14 +288,14 @@
             document.getElementById('linkOReilly').href = `https://www.oreillyauto.com/search?q=${encodeURIComponent(cleanSearch)}`;
             document.getElementById('linkAdvance').href = `https://shop.advanceautoparts.com/web/SearchResults?searchTerm=${encodeURIComponent(cleanSearch)}`;
             
+            // Video Links
+            document.getElementById('link1AVideo').href = `https://www.youtube.com/results?search_query=${encodeURIComponent(videoSearch + ' "1A Auto"')}`;
             document.getElementById('linkYouTube').href = `https://www.youtube.com/results?search_query=${encodeURIComponent(videoSearch)}`;
 
             document.getElementById('resultsArea').style.display = 'block';
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             
-            // Auto-fill the "Part Name" in the save box to save typing
             document.getElementById('logName').value = part.charAt(0).toUpperCase() + part.slice(1);
-            
             if(activeVehicleKey) renderNotepad();
         }
 
@@ -301,7 +305,8 @@
             if(!link) return;
             
             let store = "";
-            if(link.includes('autozone.com')) store = "AutoZone";
+            if(link.includes('1aauto.com')) store = "1A Auto";
+            else if(link.includes('autozone.com')) store = "AutoZone";
             else if(link.includes('rockauto.com')) store = "RockAuto";
             else if(link.includes('amazon.com')) store = "Amazon";
             else if(link.includes('ebay.com')) store = "eBay";
@@ -310,13 +315,9 @@
             
             const nameBox = document.getElementById('logName');
             
-            // If it detects a store and it hasn't been added yet, append it to the part name
             if(store && !nameBox.value.includes(store)) {
-                if(nameBox.value) {
-                    nameBox.value = nameBox.value + ` (${store})`;
-                } else {
-                    nameBox.value = `Part from ${store}`;
-                }
+                if(nameBox.value) nameBox.value = nameBox.value + ` (${store})`;
+                else nameBox.value = `Part from ${store}`;
             }
         }
 
@@ -380,7 +381,6 @@
             
             document.getElementById('logPrice').value = '';
             document.getElementById('logLink').value = '';
-            // Reset the name back to just the base part
             const basePart = document.getElementById('partInput').value;
             document.getElementById('logName').value = basePart ? basePart.charAt(0).toUpperCase() + basePart.slice(1) : '';
             
