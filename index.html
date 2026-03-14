@@ -88,17 +88,65 @@
         <div class="card">
             <h2>2. Part Search</h2>
             <div class="form-group">
-                <input type="text" id="partInput" placeholder="e.g. Starter, Shocks, Oil">
+                <input type="text" id="partInput" placeholder="e.g. Starter, Rotors, Oil" onkeyup="checkSmartTriggers()">
             </div>
+            
+            <div id="smartModifiers" style="display: none; background: #2a2a2a; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #00a8ff;">
+                <label style="font-size: 11px; color: #00a8ff; display: block; margin-bottom: 8px; text-transform: uppercase;">Parts Counter Questions:</label>
+                
+                <select id="logPosition" style="padding: 12px; font-size: 14px; margin-bottom: 8px; width: 100%; border-radius: 6px; background: #1e1e1e; border: 1px solid #555; color: white;">
+                    <option value="">Select Position (Optional)</option>
+                    <option value="Front Pair">Front Pair</option>
+                    <option value="Rear Pair">Rear Pair</option>
+                    <option value="Full Set">Full Set (Front & Rear)</option>
+                    <option value="Driver Side">Driver Side (Left)</option>
+                    <option value="Passenger Side">Passenger Side (Right)</option>
+                </select>
+                
+                <div id="drivetrainOptions" style="display: none;">
+                    <select id="driveSelect" style="padding: 12px; font-size: 14px; margin-bottom: 8px; width: 100%; border-radius: 6px; background: #1e1e1e; border: 1px solid #555; color: white;">
+                        <option value="">Select Drivetrain</option>
+                        <option value="4WD">4WD / AWD</option>
+                        <option value="2WD">2WD / RWD</option>
+                    </select>
+                </div>
+                
+                <div id="oilOptions" style="display: none;">
+                    <select id="oilSelect" style="padding: 12px; font-size: 14px; margin-bottom: 8px; width: 100%; border-radius: 6px; background: #1e1e1e; border: 1px solid #555; color: white;">
+                        <option value="">Select Oil Type</option>
+                        <option value="Full Synthetic">Full Synthetic</option>
+                        <option value="Synthetic Blend">Synthetic Blend</option>
+                        <option value="Conventional">Conventional</option>
+                    </select>
+                </div>
+
+                <div id="brakeOptions" class="smart-row" style="display: none; background: #d90000;">
+                    <input type="checkbox" id="epbCheck">
+                    <label for="epbCheck">Has Electric Parking Brake (EPB)?</label>
+                </div>
+                
+                <div id="suspensionOptions" class="smart-row" style="display: none; background: #00833e;">
+                    <input type="checkbox" id="offroadCheck">
+                    <label for="offroadCheck">Z71 / Off-Road Package?</label>
+                </div>
+
+                <div id="towOptions" class="smart-row" style="display: none; background: #005399;">
+                    <input type="checkbox" id="towCheck">
+                    <label for="towCheck">Max Tow / Heavy Cooling Pkg?</label>
+                </div>
+            </div>
+
             <button class="btn-search" onclick="runSearch()">Find Part</button>
         </div>
 
         <div id="resultsArea">
             <div class="card" style="border-top: 5px solid #00a8ff;">
                 <h3 style="margin-top:0; font-size:18px;" id="resVehicle">Vehicle</h3>
-                <p style="color:var(--brand); font-weight:900; font-size: 22px; margin-top:5px;" id="resPart">PART</p>
+                <p style="color:var(--brand); font-weight:900; font-size: 22px; margin-top:5px; margin-bottom: 5px;" id="resPart">PART</p>
+                <p style="font-size: 12px; color: #00a8ff; font-weight: bold; margin-top:0;" id="resSpecs"></p>
                 
                 <div class="section-title">Online Deals (Shipping)</div>
+                <a href="#" id="link1AAuto" target="_blank" class="store-btn" style="background:#0033a0;">1A Auto</a>
                 <a href="#" id="linkAmazon" target="_blank" class="store-btn" style="background:#ff9900; color:black;">Amazon Auto</a>
                 <a href="#" id="linkEbay" target="_blank" class="store-btn" style="background:#e53238;">eBay Motors</a>
                 <a href="#" id="linkRockAuto" target="_blank" class="store-btn" style="background:#005399;">RockAuto</a>
@@ -121,50 +169,6 @@
                 
                 <input type="url" id="logLink" placeholder="1. Paste link to the part here..." style="margin-bottom: 10px; border-left: 4px solid #00a8ff;" oninput="analyzePastedLink()">
                 
-                <div id="smartModifiers" style="background: #2a2a2a; padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #444;">
-                    <label style="font-size: 11px; color: var(--brand); display: block; margin-bottom: 5px; text-transform: uppercase;">Smart Fitment Options</label>
-                    <select id="logPosition" style="padding: 12px; font-size: 14px; margin-bottom: 8px; width: 100%; border-radius: 6px; background: #1e1e1e; border: 1px solid #555; color: white;">
-                        <option value="">Position (Optional)</option>
-                        <option value="Front Pair">Front Pair</option>
-                        <option value="Rear Pair">Rear Pair</option>
-                        <option value="Full Set">Full Set (Front & Rear)</option>
-                        <option value="Driver Side">Driver Side (Left)</option>
-                        <option value="Passenger Side">Passenger Side (Right)</option>
-                    </select>
-                    
-                    <div id="drivetrainOptions" style="display: none;">
-                        <select id="driveSelect" style="padding: 12px; font-size: 14px; margin-bottom: 8px; width: 100%; border-radius: 6px; background: #1e1e1e; border: 1px solid #555; color: white;">
-                            <option value="">Select Drivetrain</option>
-                            <option value="4WD / AWD">4WD / AWD</option>
-                            <option value="2WD / RWD">2WD / RWD</option>
-                        </select>
-                    </div>
-                    
-                    <div id="oilOptions" style="display: none;">
-                        <select id="oilSelect" style="padding: 12px; font-size: 14px; margin-bottom: 8px; width: 100%; border-radius: 6px; background: #1e1e1e; border: 1px solid #555; color: white;">
-                            <option value="">Select Oil Type</option>
-                            <option value="Full Synthetic">Full Synthetic</option>
-                            <option value="Synthetic Blend">Synthetic Blend</option>
-                            <option value="Conventional">Conventional</option>
-                        </select>
-                    </div>
-
-                    <div id="brakeOptions" class="smart-row" style="display: none; background: #d90000;">
-                        <input type="checkbox" id="epbCheck">
-                        <label for="epbCheck">Electric Parking Brake (EPB)?</label>
-                    </div>
-                    
-                    <div id="suspensionOptions" class="smart-row" style="display: none; background: #00833e;">
-                        <input type="checkbox" id="offroadCheck">
-                        <label for="offroadCheck">Z71 / FX4 / Off-Road Package?</label>
-                    </div>
-
-                    <div id="towOptions" class="smart-row" style="display: none; background: #005399;">
-                        <input type="checkbox" id="towCheck">
-                        <label for="towCheck">Heavy Duty Tow Package / Max Cool?</label>
-                    </div>
-                </div>
-
                 <div class="grid-2">
                     <input type="text" id="logName" placeholder="Part Name / Number">
                     <input type="text" id="logPrice" placeholder="Price (e.g. $120)">
@@ -248,7 +252,7 @@
         }
 
         // --- GARAGE DATABASE ---
-        let wrenchDB = JSON.parse(localStorage.getItem('wrenchDB_v7')) || {};
+        let wrenchDB = JSON.parse(localStorage.getItem('wrenchDB_v8')) || {};
         let activeVehicleKey = null;
 
         function saveToGarage() {
@@ -261,7 +265,7 @@
             const key = `${y} ${m} ${mod} | ${eng}`;
             if(!wrenchDB[key]) {
                 wrenchDB[key] = { savedParts: [], videos: [], shortModel: mod.split(' ')[0] };
-                localStorage.setItem('wrenchDB_v7', JSON.stringify(wrenchDB));
+                localStorage.setItem('wrenchDB_v8', JSON.stringify(wrenchDB));
             }
             loadGarage();
             activeVehicleKey = key;
@@ -287,7 +291,7 @@
 
         function deleteFromGarage(key) {
             delete wrenchDB[key];
-            localStorage.setItem('wrenchDB_v7', JSON.stringify(wrenchDB));
+            localStorage.setItem('wrenchDB_v8', JSON.stringify(wrenchDB));
             document.getElementById('resultsArea').style.display = 'none';
             loadGarage();
         }
@@ -295,14 +299,52 @@
         function setActiveVehicle(key) {
             activeVehicleKey = key;
             document.getElementById('partInput').value = '';
+            document.getElementById('smartModifiers').style.display = 'none';
             alert(`Loaded ${key}. Type a part below to search.`);
             document.getElementById('resultsArea').style.display = 'none';
+        }
+
+        // --- THE "LIVE TYPING" SMART TRIGGERS ---
+        function checkSmartTriggers() {
+            const part = document.getElementById('partInput').value.toLowerCase();
+            const smartBox = document.getElementById('smartModifiers');
+            
+            // Hide all first
+            document.getElementById('brakeOptions').style.display = 'none';
+            document.getElementById('suspensionOptions').style.display = 'none';
+            document.getElementById('drivetrainOptions').style.display = 'none';
+            document.getElementById('towOptions').style.display = 'none';
+            document.getElementById('oilOptions').style.display = 'none';
+            document.getElementById('logPosition').style.display = 'block';
+
+            if (part.length < 3) {
+                smartBox.style.display = 'none';
+                return;
+            }
+
+            let showBox = false;
+
+            if(part.includes('brake') || part.includes('rotor') || part.includes('pad') || part.includes('caliper')) {
+                document.getElementById('brakeOptions').style.display = 'flex'; showBox = true;
+            } else if(part.includes('shock') || part.includes('strut') || part.includes('control arm') || part.includes('tie rod') || part.includes('hub')) {
+                document.getElementById('suspensionOptions').style.display = 'flex';
+                document.getElementById('drivetrainOptions').style.display = 'block'; showBox = true;
+            } else if(part.includes('radiator') || part.includes('alternator') || part.includes('cooler') || part.includes('fan')) {
+                document.getElementById('towOptions').style.display = 'flex'; showBox = true;
+            } else if(part.includes('oil')) {
+                document.getElementById('oilOptions').style.display = 'block';
+                document.getElementById('logPosition').style.display = 'none'; showBox = true;
+            }
+
+            smartBox.style.display = showBox ? 'block' : 'none';
         }
 
         // --- THE LAUNCHPAD SEARCH ENGINE ---
         function runSearch() {
             let year, make, engine, shortModel;
-            const part = document.getElementById('partInput').value;
+            let part = document.getElementById('partInput').value;
+            let queryModifiers = ""; // This holds the words we inject into the search links
+            let displaySpecs = [];   // This holds the text we show on the screen
 
             if(!part) return alert("Please type a part to search for!");
 
@@ -320,13 +362,45 @@
                 shortModel = model.split(' ')[0]; 
             }
 
-            const cleanSearch = `${year} ${make} ${shortModel} ${part}`;
-            const videoSearch = `How to replace ${part} ${year} ${make} ${shortModel} ${engine}`;
+            // --- GATHER THE PRE-SEARCH ANSWERS ---
+            const position = document.getElementById('logPosition').value;
+            if(position && document.getElementById('logPosition').style.display !== 'none') {
+                queryModifiers += ` ${position}`;
+                displaySpecs.push(position);
+            }
+
+            if(document.getElementById('brakeOptions').style.display !== 'none' && document.getElementById('epbCheck').checked) {
+                queryModifiers += ` Electric Parking Brake`;
+                displaySpecs.push("EPB Equipped");
+            }
+            if(document.getElementById('suspensionOptions').style.display !== 'none' && document.getElementById('offroadCheck').checked) {
+                queryModifiers += ` Off Road`;
+                displaySpecs.push("Off-Road Package");
+            }
+            if(document.getElementById('drivetrainOptions').style.display !== 'none' && document.getElementById('driveSelect').value) {
+                queryModifiers += ` ${document.getElementById('driveSelect').value}`;
+                displaySpecs.push(document.getElementById('driveSelect').value);
+            }
+            if(document.getElementById('towOptions').style.display !== 'none' && document.getElementById('towCheck').checked) {
+                queryModifiers += ` Heavy Duty Cooling`;
+                displaySpecs.push("Tow / HD Cooling");
+            }
+            if(document.getElementById('oilOptions').style.display !== 'none' && document.getElementById('oilSelect').value) {
+                queryModifiers += ` ${document.getElementById('oilSelect').value}`;
+                displaySpecs.push(document.getElementById('oilSelect').value);
+            }
+
+            // --- INJECT MODIFIERS INTO THE SEARCH STRINGS ---
+            // Now AutoZone & RockAuto get the EPB or Towing instructions natively!
+            const cleanSearch = `${year} ${make} ${shortModel} ${part} ${queryModifiers}`.trim();
+            const videoSearch = `How to replace ${part} ${position} ${year} ${make} ${shortModel} ${engine}`.trim();
 
             document.getElementById('resVehicle').innerText = `${year} ${make} ${shortModel} | ${engine}`;
             document.getElementById('resPart').innerText = part.toUpperCase();
+            document.getElementById('resSpecs').innerText = displaySpecs.length > 0 ? `(${displaySpecs.join(' | ')})` : "";
 
-            // Store Links
+            // Update Store Links
+            document.getElementById('link1AAuto').href = `https://www.1aauto.com/search?q=${encodeURIComponent(cleanSearch)}`;
             document.getElementById('linkAmazon').href = `https://www.amazon.com/s?k=${encodeURIComponent(cleanSearch + ' automotive')}`;
             document.getElementById('linkEbay').href = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(cleanSearch)}`;
             document.getElementById('linkRockAuto').href = `https://www.rockauto.com/en/partsearch/?searchtext=${encodeURIComponent(cleanSearch)}`;
@@ -339,40 +413,14 @@
             document.getElementById('linkTRQVideo').href = `https://www.youtube.com/results?search_query=${encodeURIComponent(videoSearch + ' "TRQ"')}`;
             document.getElementById('linkYouTube').href = `https://www.youtube.com/results?search_query=${encodeURIComponent(videoSearch)}`;
 
-            // **THE "PARTS COUNTER" SMART TRIGGERS**
-            const pLower = part.toLowerCase();
-            
-            // Reset all options first
-            document.getElementById('brakeOptions').style.display = 'none';
-            document.getElementById('suspensionOptions').style.display = 'none';
-            document.getElementById('drivetrainOptions').style.display = 'none';
-            document.getElementById('towOptions').style.display = 'none';
-            document.getElementById('oilOptions').style.display = 'none';
-            document.getElementById('logPosition').style.display = 'block';
-
-            // Check Brakes
-            if(pLower.includes('brake') || pLower.includes('rotor') || pLower.includes('pad') || pLower.includes('caliper')) {
-                document.getElementById('brakeOptions').style.display = 'flex';
-            }
-            // Check Suspension & Steering
-            else if(pLower.includes('shock') || pLower.includes('strut') || pLower.includes('control arm') || pLower.includes('tie rod') || pLower.includes('hub')) {
-                document.getElementById('suspensionOptions').style.display = 'flex';
-                document.getElementById('drivetrainOptions').style.display = 'block';
-            }
-            // Check Towing (Cooling / Electrical)
-            else if(pLower.includes('radiator') || pLower.includes('alternator') || pLower.includes('cooler') || pLower.includes('fan')) {
-                document.getElementById('towOptions').style.display = 'flex';
-            }
-            // Check Oil
-            else if(pLower.includes('oil')) {
-                document.getElementById('oilOptions').style.display = 'block';
-                document.getElementById('logPosition').style.display = 'none'; // You don't put oil in the "Driver Side"
-            }
-
             document.getElementById('resultsArea').style.display = 'block';
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             
-            document.getElementById('logName').value = part.charAt(0).toUpperCase() + part.slice(1);
+            // Auto-fill the Build Sheet notepad with everything attached
+            let finalName = part.charAt(0).toUpperCase() + part.slice(1);
+            if(displaySpecs.length > 0) finalName += ` [${displaySpecs.join(', ')}]`;
+            document.getElementById('logName').value = finalName;
+            
             if(activeVehicleKey) renderNotepad();
         }
 
@@ -455,49 +503,19 @@
             
             if(!name && !link) return alert("Please enter at least a part name or paste a link.");
             if(!name) name = "Saved Part Link";
-
-            // --- GATHER SMART FITMENT TAGS ---
-            const position = document.getElementById('logPosition').value;
-            if(position && document.getElementById('logPosition').style.display !== 'none') name += ` - ${position}`;
-
-            if(document.getElementById('brakeOptions').style.display !== 'none' && document.getElementById('epbCheck').checked) {
-                name += ` (w/ Electric Parking Brake)`;
-            }
-            if(document.getElementById('suspensionOptions').style.display !== 'none' && document.getElementById('offroadCheck').checked) {
-                name += ` (Z71 / Off-Road Pkg)`;
-            }
-            if(document.getElementById('drivetrainOptions').style.display !== 'none' && document.getElementById('driveSelect').value) {
-                name += ` (${document.getElementById('driveSelect').value})`;
-            }
-            if(document.getElementById('towOptions').style.display !== 'none' && document.getElementById('towCheck').checked) {
-                name += ` (Tow/Max Cooling Pkg)`;
-            }
-            if(document.getElementById('oilOptions').style.display !== 'none' && document.getElementById('oilSelect').value) {
-                name += ` (${document.getElementById('oilSelect').value})`;
-            }
             
             wrenchDB[activeVehicleKey].savedParts.push({ name: name, price: price, link: link });
-            localStorage.setItem('wrenchDB_v7', JSON.stringify(wrenchDB));
+            localStorage.setItem('wrenchDB_v8', JSON.stringify(wrenchDB));
             
-            // CLEAN UP FORM AFTER SAVE
             document.getElementById('logPrice').value = '';
             document.getElementById('logLink').value = '';
-            document.getElementById('logPosition').value = '';
-            document.getElementById('driveSelect').value = '';
-            document.getElementById('oilSelect').value = '';
-            document.getElementById('epbCheck').checked = false;
-            document.getElementById('offroadCheck').checked = false;
-            document.getElementById('towCheck').checked = false;
-            
-            const basePart = document.getElementById('partInput').value;
-            document.getElementById('logName').value = basePart ? basePart.charAt(0).toUpperCase() + basePart.slice(1) : '';
             
             renderNotepad();
         }
 
         function deletePart(index) {
             wrenchDB[activeVehicleKey].savedParts.splice(index, 1);
-            localStorage.setItem('wrenchDB_v7', JSON.stringify(wrenchDB));
+            localStorage.setItem('wrenchDB_v8', JSON.stringify(wrenchDB));
             renderNotepad();
         }
 
@@ -507,14 +525,14 @@
             if(!link) return;
             
             wrenchDB[activeVehicleKey].videos.push(link);
-            localStorage.setItem('wrenchDB_v7', JSON.stringify(wrenchDB));
+            localStorage.setItem('wrenchDB_v8', JSON.stringify(wrenchDB));
             document.getElementById('videoLinkInput').value = '';
             renderNotepad();
         }
 
         function deleteVideo(index) {
             wrenchDB[activeVehicleKey].videos.splice(index, 1);
-            localStorage.setItem('wrenchDB_v7', JSON.stringify(wrenchDB));
+            localStorage.setItem('wrenchDB_v8', JSON.stringify(wrenchDB));
             renderNotepad();
         }
     </script>
