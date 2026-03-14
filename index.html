@@ -34,10 +34,11 @@
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .saved-item { background: #2a2a2a; padding: 10px; border-radius: 6px; margin-bottom: 10px; font-size: 13px; border-left: 3px solid #00a8ff; display: flex; justify-content: space-between; align-items: center;}
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000; border-radius: 8px; margin-bottom: 10px;}
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         
-        /* Hide results until searched */
+        /* Fixed Video Container */
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000; border-radius: 8px; margin-bottom: 10px;}
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        
         #resultsArea { display: none; }
     </style>
 </head>
@@ -91,13 +92,13 @@
                 <h3 style="margin-top:0; font-size:16px;" id="resVehicle">Vehicle</h3>
                 <p style="color:var(--brand); font-weight:bold; font-size: 18px;" id="resPart">PART</p>
                 
-                <p style="font-size: 11px; color: #888; margin-top:15px; text-transform:uppercase;">Locate Part Locally (Today):</p>
-                <a href="#" id="linkAutoZone" target="_blank" class="store-btn" style="background:#d90000;">Check AutoZone</a>
-                <a href="#" id="linkOReilly" target="_blank" class="store-btn" style="background:#00833e;">Check O'Reilly</a>
-                <a href="#" id="linkAdvance" target="_blank" class="store-btn" style="background:#ffcc00; color:black;">Check Advance Auto</a>
+                <p style="font-size: 11px; color: #888; margin-top:15px; text-transform:uppercase;">Direct Links (Google X-Ray Method):</p>
+                <a href="#" id="linkRockAuto" target="_blank" class="store-btn" style="background:#005399;">Find on RockAuto</a>
+                <a href="#" id="linkAutoZone" target="_blank" class="store-btn" style="background:#d90000;">Find on AutoZone</a>
+                <a href="#" id="linkOReilly" target="_blank" class="store-btn" style="background:#00833e;">Find on O'Reilly</a>
+                <a href="#" id="linkAdvance" target="_blank" class="store-btn" style="background:#ffcc00; color:black;">Find on Advance Auto</a>
                 
-                <p style="font-size: 11px; color: #888; margin-top:20px; text-transform:uppercase;">Compare Online Pricing (Shipping):</p>
-                <a href="#" id="linkRockAuto" target="_blank" class="store-btn" style="background:#005399;">Shop RockAuto</a>
+                <p style="font-size: 11px; color: #888; margin-top:20px; text-transform:uppercase;">Marketplaces (Direct Search):</p>
                 <a href="#" id="linkEbay" target="_blank" class="store-btn" style="background:#e53238;">Shop eBay Motors</a>
                 <a href="#" id="linkAmazon" target="_blank" class="store-btn" style="background:#ff9900; color:black;">Shop Amazon Auto</a>
 
@@ -110,7 +111,7 @@
                 <p style="font-size: 11px; color: #888;">Log part numbers or embed YouTube videos here for your records.</p>
                 
                 <div class="grid-2">
-                    <input type="text" id="logName" placeholder="Part Number / Details">
+                    <input type="text" id="logName" placeholder="Part / Details">
                     <input type="text" id="logPrice" placeholder="Price (e.g. $120)">
                 </div>
                 <button class="btn-search" style="padding: 10px; font-size: 12px; background: #00a8ff; color: white;" onclick="saveLog()">Save Note</button>
@@ -130,7 +131,7 @@
     </div>
 
     <script>
-        // --- TOP HALF LOGIC (EPA DATABASE) ---
+        // --- TOP HALF LOGIC (EPA DATABASE - UNCHANGED) ---
         const epaHeaders = { headers: { 'Accept': 'application/json' } };
         window.onload = () => {
             loadGarage();
@@ -239,63 +240,66 @@
         function setActiveVehicle(key) {
             activeVehicleKey = key;
             alert(`Loaded ${key}. Type a part below to search.`);
+            renderNotepad();
+            document.getElementById('resultsArea').style.display = 'block';
         }
 
-        // --- SEARCH ENGINE & LINK GENERATOR ---
+        // --- THE "GOOGLE X-RAY" SEARCH ENGINE ---
         function runSearch() {
-            let year, make, model, engine, shortModel;
+            let year, make, engine, shortModel;
             const part = document.getElementById('partInput').value;
 
             if(!part) return alert("Please type a part to search for!");
 
             if (activeVehicleKey) {
-                // Use the loaded garage vehicle
                 const split = activeVehicleKey.split(' | ');
                 const carParts = split[0].split(' ');
                 year = carParts[0];
                 make = carParts[1];
-                model = carParts.slice(2).join(' ');
                 engine = split[1];
                 shortModel = wrenchDB[activeVehicleKey].shortModel;
             } else {
-                // Use the dropdowns directly
                 year = document.getElementById('yearSelect').value;
                 make = document.getElementById('makeSelect').value;
-                model = document.getElementById('modelSelect').value;
+                const model = document.getElementById('modelSelect').value;
                 engine = document.getElementById('engineSelect').value;
                 if(!year || !make || !model) return alert("Select a vehicle first!");
-                shortModel = model.split(' ')[0]; // Strips "Pickup 4WD" from "F150"
+                shortModel = model.split(' ')[0]; 
             }
 
-            // SANITIZE THE QUERIES SO THE STORES DON'T BREAK
-            // Store Query gets the CLEAN model (e.g. "2016 FORD F150 Alternator")
-            const basicQuery = encodeURIComponent(`${year} ${make} ${shortModel} ${part}`);
-            // YouTube gets the engine to find exact tutorials
-            const videoQuery = encodeURIComponent(`How to replace ${part} ${year} ${make} ${shortModel} ${engine}`);
+            // The X-Ray Query: Forces Google to find the exact page on their website
+            const xrayQuery = `${year} ${make} ${shortModel} ${engine} ${part}`;
 
-            document.getElementById('resVehicle').innerText = `${year} ${make} ${model} | ${engine}`;
+            document.getElementById('resVehicle').innerText = `${year} ${make} ${shortModel} | ${engine}`;
             document.getElementById('resPart').innerText = `PART: ${part.toUpperCase()}`;
 
-            // Inject the sanitized links into the buttons
-            document.getElementById('linkAutoZone').href = `https://www.autozone.com/searchresult?searchText=${basicQuery}`;
-            document.getElementById('linkOReilly').href = `https://www.oreillyauto.com/search?q=${basicQuery}`;
-            document.getElementById('linkAdvance').href = `https://shop.advanceautoparts.com/web/SearchResults?searchTerm=${basicQuery}`;
+            // Inject the X-Ray Google links for the problematic stores
+            document.getElementById('linkAutoZone').href = `https://www.google.com/search?q=site:autozone.com+${encodeURIComponent(xrayQuery)}`;
+            document.getElementById('linkOReilly').href = `https://www.google.com/search?q=site:oreillyauto.com+${encodeURIComponent(xrayQuery)}`;
+            document.getElementById('linkAdvance').href = `https://www.google.com/search?q=site:advanceautoparts.com+${encodeURIComponent(xrayQuery)}`;
+            document.getElementById('linkRockAuto').href = `https://www.google.com/search?q=site:rockauto.com+${encodeURIComponent(xrayQuery)}`;
             
-            document.getElementById('linkRockAuto').href = `https://www.rockauto.com/en/partsearch/?searchtext=${basicQuery}`;
-            document.getElementById('linkEbay').href = `https://www.ebay.com/sch/i.html?_nkw=${basicQuery}`;
-            document.getElementById('linkAmazon').href = `https://www.amazon.com/s?k=${basicQuery}+automotive`;
+            // eBay & Amazon actually have good internal search engines, so we link them directly
+            document.getElementById('linkEbay').href = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(year + ' ' + make + ' ' + shortModel + ' ' + part)}`;
+            document.getElementById('linkAmazon').href = `https://www.amazon.com/s?k=${encodeURIComponent(year + ' ' + make + ' ' + shortModel + ' ' + part)}+automotive`;
             
-            document.getElementById('linkYouTube').href = `https://www.youtube.com/results?search_query=${videoQuery}`;
+            // YouTube
+            document.getElementById('linkYouTube').href = `https://www.youtube.com/results?search_query=${encodeURIComponent('How to replace ' + part + ' ' + year + ' ' + make + ' ' + shortModel + ' ' + engine)}`;
 
-            // Show Results
             document.getElementById('resultsArea').style.display = 'block';
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            
-            // Render Notepad if a garage car is active
             if(activeVehicleKey) renderNotepad();
         }
 
-        // --- NOTEPAD LOGIC ---
+        // --- BULLETPROOF YOUTUBE EMBEDDER & NOTEPAD ---
+        
+        // This function intercepts messy URLs and rips out just the 11-character video ID
+        function extractYouTubeID(url) {
+            const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
         function renderNotepad() {
             if(!activeVehicleKey || !wrenchDB[activeVehicleKey]) return;
             
@@ -312,15 +316,21 @@
             const videosList = document.getElementById('savedVideosList');
             videosList.innerHTML = '';
             wrenchDB[activeVehicleKey].videos.forEach((v, idx) => {
-                let videoId = v.split('v=')[1] || v.split('youtu.be/')[1];
-                if(videoId) videoId = videoId.split('&')[0];
-                videosList.innerHTML += `
-                    <div style="background: #111; padding: 10px; border-radius: 8px; border: 1px solid #333; margin-bottom: 15px;">
-                        <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
-                        </div>
-                        <button class="delete-btn" style="width:100%;" onclick="deleteLog('videos', ${idx})">Remove Video</button>
-                    </div>`;
+                // Use the bulletproof extractor
+                const videoId = extractYouTubeID(v);
+                
+                if(videoId) {
+                    videosList.innerHTML += `
+                        <div style="background: #111; padding: 10px; border-radius: 8px; border: 1px solid #333; margin-bottom: 15px;">
+                            <div class="video-container">
+                                <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+                            </div>
+                            <button class="delete-btn" style="width:100%; margin-top: 5px;" onclick="deleteLog('videos', ${idx})">Remove Video</button>
+                        </div>`;
+                } else {
+                    // Fallback if the URL was completely invalid
+                    videosList.innerHTML += `<div class="saved-item"><p style="color:red; font-size:11px;">Invalid Video Link</p><button class="delete-btn" onclick="deleteLog('videos', ${idx})">X</button></div>`;
+                }
             });
         }
 
@@ -339,7 +349,7 @@
         function saveVideo() {
             if(!activeVehicleKey) return alert("Save this vehicle to your Garage first!");
             const link = document.getElementById('videoLinkInput').value;
-            if(!link.includes('youtu')) return alert("Paste a valid YouTube link!");
+            if(!link) return;
             
             wrenchDB[activeVehicleKey].videos.push(link);
             localStorage.setItem('wrenchDB_v3', JSON.stringify(wrenchDB));
