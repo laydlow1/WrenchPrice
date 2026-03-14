@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WrenchPrice | Part Finder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand: #f1c40f; /* High-viz mechanic yellow */
+            --bg: #121212;
+            --card: #1e1e1e;
+            --text: #ffffff;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container { width: 100%; max-width: 600px; }
+
+        /* Header Area */
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { font-weight: 900; letter-spacing: -1px; margin: 0; font-size: 32px; }
+        header span { color: var(--brand); }
+
+        /* Step Cards */
+        .card { 
+            background: var(--card); 
+            padding: 20px; 
+            border-radius: 15px; 
+            margin-bottom: 15px; 
+            border: 1px solid #333;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        h2 { font-size: 14px; text-transform: uppercase; color: #888; margin-top: 0; letter-spacing: 1px; }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .btn-search {
+            width: 100%;
+            padding: 15px;
+            background: var(--brand);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .btn-search:active { transform: scale(0.98); }
+
+        .loading-text { font-size: 12px; color: var(--brand); margin-top: 5px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>WRENCH<span>PRICE</span></h1>
+            <p style="color: #666; font-size: 14px;">The Ultimate Mechanic's Price & Video Guide</p>
+        </header>
+
+        <div class="card">
+            <h2>1. Select Vehicle</h2>
+            <select id="makeSelect" onchange="fetchModels()">
+                <option>Loading Makes...</option>
+            </select>
+            
+            <select id="modelSelect" disabled>
+                <option>Select a Make First</option>
+            </select>
+            
+            <input type="number" id="yearInput" placeholder="Year (e.g. 2015)" min="1981" max="2027">
+            <div id="loadingStatus" class="loading-text">Fetching data from NHTSA...</div>
+        </div>
+
+        <div class="card">
+            <h2>2. What part do you need?</h2>
+            <input type="text" id="partInput" placeholder="e.g. Alternator, Brake Pads, Headlight">
+            <button class="btn-search" onclick="startSearch()">Scour the Internet</button>
+        </div>
+
+        <div id="resultsArea"></div>
+    </div>
+
+    <script>
+        // Fetch all Manufacturers on load
+        fetch('https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json')
+            .then(res => res.json())
+            .then(data => {
+                const makeSelect = document.getElementById('makeSelect');
+                makeSelect.innerHTML = '<option value="">Select Manufacturer</option>';
+                const makes = data.Results.sort((a,b) => a.Make_Name.localeCompare(b.Make_Name));
+                makes.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m.Make_Name;
+                    opt.textContent = m.Make_Name;
+                    makeSelect.appendChild(opt);
+                });
+            });
+
+        function fetchModels() {
+            const make = document.getElementById('makeSelect').value;
+            const modelSelect = document.getElementById('modelSelect');
+            const status = document.getElementById('loadingStatus');
+
+            if(!make) return;
+
+            modelSelect.disabled = true;
+            modelSelect.innerHTML = '<option>Loading Models...</option>';
+            status.style.display = 'block';
+
+            // Fetches all models for the selected make
+            fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${make}?format=json`)
+                .then(res => res.json())
+                .then(data => {
+                    modelSelect.innerHTML = '<option value="">Select Model</option>';
+                    data.Results.forEach(m => {
+                        const opt = document.createElement('option');
+                        opt.value = m.Model_Name;
+                        opt.textContent = m.Model_Name;
+                        modelSelect.appendChild(opt);
+                    });
+                    modelSelect.disabled = false;
+                    status.style.display = 'none';
+                });
+        }
+
+        function startSearch() {
+            const year = document.getElementById('yearInput').value;
+            const make = document.getElementById('makeSelect').value;
+            const model = document.getElementById('modelSelect').value;
+            const part = document.getElementById('partInput').value;
+
+            if(!year || !make || !model || !part) {
+                alert("Please fill in all vehicle and part info!");
+                return;
+            }
+
+            alert(`Searching for: ${year} ${make} ${model} ${part}`);
+            // Next step: Build the Price Scraper and YouTube results here!
+        }
+    </script>
+</body>
+</html>
