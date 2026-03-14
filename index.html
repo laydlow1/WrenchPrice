@@ -51,30 +51,25 @@
     </div>
 
     <script>
-        // Initial Fetch of Makes
-        fetch('https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json')
-            .then(res => res.json())
-            .then(data => {
-                const makeSelect = document.getElementById('makeSelect');
-                makeSelect.innerHTML = '<option value="">Select Manufacturer</option>';
-                const makes = data.Results.sort((a,b) => a.Make_Name.localeCompare(b.Make_Name));
-                makes.forEach(m => {
-                    const opt = document.createElement('option');
-                    opt.value = m.Make_Name;
-                    opt.textContent = m.Make_Name;
-                    makeSelect.appendChild(opt);
-                });
-            }).catch(err => {
-                alert("Database Error: Check your connection.");
-            });
+        // Only show brands common on US streets
+        const usMakes = ["CHEVROLET", "FORD", "RAM", "DODGE", "JEEP", "GMC", "TOYOTA", "HONDA", "NISSAN", "CHRYSLER", "BUICK", "CADILLAC"];
+
+        const makeSelect = document.getElementById('makeSelect');
+        usMakes.sort().forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.textContent = m;
+            makeSelect.appendChild(opt);
+        });
 
         function fetchModels() {
             const make = document.getElementById('makeSelect').value;
             const modelSelect = document.getElementById('modelSelect');
-            const status = document.getElementById('loadingStatus');
             if(!make) return;
+            
             modelSelect.disabled = true;
-            status.style.display = 'block';
+            modelSelect.innerHTML = '<option>Loading Models...</option>';
+
             fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${make}?format=json`)
                 .then(res => res.json())
                 .then(data => {
@@ -86,49 +81,37 @@
                         modelSelect.appendChild(opt);
                     });
                     modelSelect.disabled = false;
-                    status.style.display = 'none';
                 });
         }
 
-        function startSearch() {
-            console.log("Search started...");
+        async function startSearch() {
             const year = document.getElementById('yearInput').value;
             const make = document.getElementById('makeSelect').value;
             const model = document.getElementById('modelSelect').value;
             const part = document.getElementById('partInput').value;
-
-            if(!year || !make || !model || !part) {
-                alert("Please fill in every box!");
-                return;
-            }
-
-            const query = encodeURIComponent(`${year} ${make} ${model} ${part}`);
             const resultsArea = document.getElementById('resultsArea');
 
-            // Building the UI
-            let html = `
+            if(!year || !make || !model || !part) return alert("Fill everything out!");
+
+            resultsArea.innerHTML = `<div class="card"><h3>Searching live prices for ${part}...</h3></div>`;
+
+            // This is a "Simulated" API call for now to show you the layout 
+            // Real price fetching requires a backend "proxy" which we will set up next
+            setTimeout(() => {
+                resultsArea.innerHTML = `
                 <div class="card" style="border-top: 5px solid var(--brand);">
-                    <h3 style="margin-top:0;">Searching for: ${year} ${make} ${model} ${part}</h3>
-                    
-                    <p style="font-size: 11px; color: #888; margin-top:20px; font-weight:bold;">LOCAL STORES (TODAY):</p>
-                    <a href="https://www.autozone.com/searchresult?searchText=${query}" target="_blank" class="store-btn" style="background:#d90000;">AutoZone</a>
-                    <a href="https://www.oreillyauto.com/search?q=${query}" target="_blank" class="store-btn" style="background:#00833e;">O'Reilly</a>
-                    <a href="https://shop.advanceautoparts.com/web/SearchResults?searchTerm=${query}" target="_blank" class="store-btn" style="background:#ffcc00; color:black;">Advance Auto</a>
-
-                    <p style="font-size: 11px; color: #888; margin-top:20px; font-weight:bold;">SHIPPING (SAVINGS):</p>
-                    <a href="https://www.rockauto.com/en/catalog/${make},${year},${model},${encodeURIComponent(part)}" target="_blank" class="store-btn" style="background:#005399;">RockAuto</a>
-                    <a href="https://www.ebay.com/sch/i.html?_nkw=${query}" target="_blank" class="store-btn" style="background:#e53238;">eBay Motors</a>
-
-                    <p style="font-size: 11px; color: #888; margin-top:20px; font-weight:bold;">REPAIR GUIDES:</p>
-                    <a href="https://www.youtube.com/results?search_query=how+to+replace+${query}" target="_blank" class="store-btn" style="background:#ff0000;">Watch How-To Video</a>
+                    <h3 style="margin:0;">${year} ${make} ${model}</h3>
+                    <p style="color:var(--brand); font-weight:900; font-size:24px; margin:10px 0;">$84.95 - $129.00</p>
+                    <p style="font-size:12px; color:#888;">Est. Price at Local Stores</p>
+                    <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
+                    <a href="https://www.youtube.com/results?search_query=${year}+${make}+${model}+${part}+repair" target="_blank" class="store-btn" style="background:#ff0000;">Watch Install Video</a>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                        <a href="https://www.autozone.com" class="store-btn" style="background:#333; font-size:10px;">AutoZone Link</a>
+                        <a href="https://www.rockauto.com" class="store-btn" style="background:#333; font-size:10px;">RockAuto Link</a>
+                    </div>
                 </div>
-            `;
-            
-            resultsArea.innerHTML = html;
-            console.log("HTML Injected");
-            
-            // This forces the screen to slide down so you see the results
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                `;
+            }, 1500);
         }
     </script>
 </body>
