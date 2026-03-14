@@ -32,12 +32,13 @@
         .store-btn { width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; cursor: pointer; font-size: 13px; color: white; display: block; text-align: center; text-decoration: none; box-sizing: border-box; }
         .loading-text { font-size: 11px; color: var(--brand); font-style: italic; display: none; margin-top: 4px; }
 
-        /* Workspace Styles */
-        .workspace { border-top: 4px solid var(--brand); background: #181818; display: none; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .saved-item { background: #2a2a2a; padding: 10px; border-radius: 6px; margin-bottom: 10px; font-size: 13px; border-left: 3px solid #00a8ff; display: flex; justify-content: space-between; align-items: center;}
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000; border-radius: 8px; margin-bottom: 10px;}
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        
+        /* Hide results until searched */
+        #resultsArea { display: none; }
     </style>
 </head>
 <body>
@@ -77,45 +78,59 @@
             <button class="btn-search btn-save" onclick="saveToGarage()">+ Add Vehicle to Garage</button>
         </div>
 
-        <div class="card workspace" id="workspaceArea">
-            <h2 style="color: var(--brand); font-size: 16px; margin-bottom: 5px;" id="wsTitle">Vehicle Workspace</h2>
-            <p style="font-size: 11px; color: #888; margin-top: 0; margin-bottom: 20px;">Your saved parts and videos for this vehicle.</p>
+        <div class="card">
+            <h2>2. Requested Part</h2>
+            <div class="form-group">
+                <input type="text" id="partInput" placeholder="e.g. Starter, Alternator, Rotors">
+            </div>
+            <button class="btn-search" onclick="runSearch()">Scour The Internet</button>
+        </div>
 
-            <div style="background: #222; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                <h3 style="margin-top:0; font-size:14px;">1. Find & Log Parts</h3>
-                <div class="grid-2">
-                    <input type="text" id="partNameInput" placeholder="Part (e.g. Starter)">
-                    <input type="text" id="partPriceInput" placeholder="Price / Store (e.g. $129 AutoZone)">
-                </div>
-                <button class="btn-search" style="padding: 10px; font-size: 12px;" onclick="savePartLog()">Save to Build Sheet</button>
+        <div id="resultsArea">
+            <div class="card" style="border-top: 5px solid #d90000;">
+                <h3 style="margin-top:0; font-size:16px;" id="resVehicle">Vehicle</h3>
+                <p style="color:var(--brand); font-weight:bold; font-size: 18px;" id="resPart">PART</p>
                 
-                <div style="margin-top: 15px; border-top: 1px solid #444; padding-top: 10px;">
-                    <p style="font-size: 10px; color:#888; margin-bottom: 5px;">QUICK SEARCH OUTBOUND LINKS:</p>
-                    <div class="grid-2">
-                        <button class="store-btn" style="background:#d90000;" onclick="outboundSearch('autozone')">AutoZone</button>
-                        <button class="store-btn" style="background:#005399;" onclick="outboundSearch('rockauto')">RockAuto</button>
-                    </div>
-                </div>
-                <div id="savedPartsList" style="margin-top: 10px;"></div>
+                <p style="font-size: 11px; color: #888; margin-top:15px; text-transform:uppercase;">Locate Part Locally (Today):</p>
+                <a href="#" id="linkAutoZone" target="_blank" class="store-btn" style="background:#d90000;">Check AutoZone</a>
+                <a href="#" id="linkOReilly" target="_blank" class="store-btn" style="background:#00833e;">Check O'Reilly</a>
+                <a href="#" id="linkAdvance" target="_blank" class="store-btn" style="background:#ffcc00; color:black;">Check Advance Auto</a>
+                
+                <p style="font-size: 11px; color: #888; margin-top:20px; text-transform:uppercase;">Compare Online Pricing (Shipping):</p>
+                <a href="#" id="linkRockAuto" target="_blank" class="store-btn" style="background:#005399;">Shop RockAuto</a>
+                <a href="#" id="linkEbay" target="_blank" class="store-btn" style="background:#e53238;">Shop eBay Motors</a>
+                <a href="#" id="linkAmazon" target="_blank" class="store-btn" style="background:#ff9900; color:black;">Shop Amazon Auto</a>
+
+                <p style="font-size: 11px; color: #888; margin-top:20px; text-transform:uppercase;">Repair Instructions:</p>
+                <a href="#" id="linkYouTube" target="_blank" class="store-btn" style="background:#222; border: 1px solid #444;">Search YouTube Guides</a>
             </div>
 
-            <div style="background: #222; padding: 15px; border-radius: 8px;">
-                <h3 style="margin-top:0; font-size:14px;">2. Repair Video Library</h3>
-                <p style="font-size: 11px; color: #aaa;">Paste a YouTube link below to save it permanently to this vehicle.</p>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="videoLinkInput" placeholder="https://www.youtube.com/watch?v=...">
-                    <button class="btn-search" style="margin-top: 0; width: auto; padding: 0 20px;" onclick="saveVideo()">Save</button>
-                </div>
-                <button class="store-btn" style="background:#222; border: 1px solid #444; margin-top: 10px;" onclick="outboundSearch('youtube')">Search YouTube for Guides</button>
+            <div class="card" style="border-top: 4px solid #00a8ff; background: #181818;">
+                <h3 style="margin-top:0; font-size:14px;">Digital Notepad</h3>
+                <p style="font-size: 11px; color: #888;">Log part numbers or embed YouTube videos here for your records.</p>
                 
-                <div id="savedVideosList" style="margin-top: 20px;"></div>
+                <div class="grid-2">
+                    <input type="text" id="logName" placeholder="Part Number / Details">
+                    <input type="text" id="logPrice" placeholder="Price (e.g. $120)">
+                </div>
+                <button class="btn-search" style="padding: 10px; font-size: 12px; background: #00a8ff; color: white;" onclick="saveLog()">Save Note</button>
+                <div id="savedLogs" style="margin-top: 15px;"></div>
+
+                <div style="margin-top: 20px; border-top: 1px solid #333; padding-top: 15px;">
+                    <p style="font-size: 11px; color: #aaa; margin-bottom: 5px;">Paste a YouTube link below to save the video.</p>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="videoLinkInput" placeholder="https://youtube.com/watch?v=...">
+                        <button class="btn-search" style="margin-top: 0; width: auto; padding: 0 15px; background: #ff0000; color: white;" onclick="saveVideo()">Embed</button>
+                    </div>
+                    <div id="savedVideosList" style="margin-top: 15px;"></div>
+                </div>
             </div>
         </div>
 
     </div>
 
     <script>
-        // --- TOP HALF LOGIC (UNCHANGED) ---
+        // --- TOP HALF LOGIC (EPA DATABASE) ---
         const epaHeaders = { headers: { 'Accept': 'application/json' } };
         window.onload = () => {
             loadGarage();
@@ -176,139 +191,166 @@
             document.getElementById('engineLoad').style.display = 'none';
         }
 
-        // --- NEW DATABASE LOGIC (WrenchDB) ---
-        // Upgrading to an Object database so we can store videos and parts for EACH car
-        let wrenchDB = JSON.parse(localStorage.getItem('wrenchDB_v2')) || {};
-        let activeVehicle = null;
+        // --- GARAGE DATABASE ---
+        let wrenchDB = JSON.parse(localStorage.getItem('wrenchDB_v3')) || {};
+        let activeVehicleKey = null;
 
         function saveToGarage() {
             const y = document.getElementById('yearSelect').value;
             const m = document.getElementById('makeSelect').value;
             const mod = document.getElementById('modelSelect').value;
             const eng = document.getElementById('engineSelect').value;
-
             if(!y || !m || !mod || !eng) return alert("Select all dropdowns to save to garage!");
 
-            const vehicleKey = `${y} ${m} ${mod} | ${eng}`;
-            
-            if(!wrenchDB[vehicleKey]) {
-                wrenchDB[vehicleKey] = { parts: [], videos: [] };
-                localStorage.setItem('wrenchDB_v2', JSON.stringify(wrenchDB));
+            const key = `${y} ${m} ${mod} | ${eng}`;
+            if(!wrenchDB[key]) {
+                wrenchDB[key] = { logs: [], videos: [], shortModel: mod.split(' ')[0] };
+                localStorage.setItem('wrenchDB_v3', JSON.stringify(wrenchDB));
             }
             loadGarage();
-            openWorkspace(vehicleKey);
+            activeVehicleKey = key;
+            alert("Vehicle Saved & Loaded!");
         }
 
         function loadGarage() {
             const list = document.getElementById('garageList');
             const vehicles = Object.keys(wrenchDB);
-            
             if(vehicles.length === 0) {
                 list.innerHTML = '<p style="font-size: 12px; color: #aaa; margin: 0;">Saved vehicles will appear here.</p>';
                 return;
             }
-
             list.innerHTML = '';
             vehicles.forEach((v) => {
                 list.innerHTML += `
                     <div class="garage-item">
-                        <div style="flex-grow:1;" onclick="openWorkspace('${v}')">${v}</div>
+                        <div style="flex-grow:1;" onclick="setActiveVehicle('${v}')">${v}</div>
                         <button class="delete-btn" onclick="deleteFromGarage('${v}')">X</button>
                     </div>`;
             });
         }
 
-        function deleteFromGarage(vehicleKey) {
-            delete wrenchDB[vehicleKey];
-            localStorage.setItem('wrenchDB_v2', JSON.stringify(wrenchDB));
-            document.getElementById('workspaceArea').style.display = 'none';
+        function deleteFromGarage(key) {
+            delete wrenchDB[key];
+            localStorage.setItem('wrenchDB_v3', JSON.stringify(wrenchDB));
+            document.getElementById('resultsArea').style.display = 'none';
             loadGarage();
         }
 
-        // --- THE WORKSPACE LOGIC ---
-        function openWorkspace(vehicleKey) {
-            activeVehicle = vehicleKey;
-            document.getElementById('wsTitle').innerText = vehicleKey;
-            document.getElementById('workspaceArea').style.display = 'block';
-            
-            // Scroll down to workspace
-            document.getElementById('workspaceArea').scrollIntoView({ behavior: 'smooth' });
-            renderWorkspaceData();
+        function setActiveVehicle(key) {
+            activeVehicleKey = key;
+            alert(`Loaded ${key}. Type a part below to search.`);
         }
 
-        function renderWorkspaceData() {
-            if(!activeVehicle || !wrenchDB[activeVehicle]) return;
+        // --- SEARCH ENGINE & LINK GENERATOR ---
+        function runSearch() {
+            let year, make, model, engine, shortModel;
+            const part = document.getElementById('partInput').value;
 
-            // Render Parts
-            const partsList = document.getElementById('savedPartsList');
-            partsList.innerHTML = '';
-            wrenchDB[activeVehicle].parts.forEach((p, idx) => {
-                partsList.innerHTML += `
+            if(!part) return alert("Please type a part to search for!");
+
+            if (activeVehicleKey) {
+                // Use the loaded garage vehicle
+                const split = activeVehicleKey.split(' | ');
+                const carParts = split[0].split(' ');
+                year = carParts[0];
+                make = carParts[1];
+                model = carParts.slice(2).join(' ');
+                engine = split[1];
+                shortModel = wrenchDB[activeVehicleKey].shortModel;
+            } else {
+                // Use the dropdowns directly
+                year = document.getElementById('yearSelect').value;
+                make = document.getElementById('makeSelect').value;
+                model = document.getElementById('modelSelect').value;
+                engine = document.getElementById('engineSelect').value;
+                if(!year || !make || !model) return alert("Select a vehicle first!");
+                shortModel = model.split(' ')[0]; // Strips "Pickup 4WD" from "F150"
+            }
+
+            // SANITIZE THE QUERIES SO THE STORES DON'T BREAK
+            // Store Query gets the CLEAN model (e.g. "2016 FORD F150 Alternator")
+            const basicQuery = encodeURIComponent(`${year} ${make} ${shortModel} ${part}`);
+            // YouTube gets the engine to find exact tutorials
+            const videoQuery = encodeURIComponent(`How to replace ${part} ${year} ${make} ${shortModel} ${engine}`);
+
+            document.getElementById('resVehicle').innerText = `${year} ${make} ${model} | ${engine}`;
+            document.getElementById('resPart').innerText = `PART: ${part.toUpperCase()}`;
+
+            // Inject the sanitized links into the buttons
+            document.getElementById('linkAutoZone').href = `https://www.autozone.com/searchresult?searchText=${basicQuery}`;
+            document.getElementById('linkOReilly').href = `https://www.oreillyauto.com/search?q=${basicQuery}`;
+            document.getElementById('linkAdvance').href = `https://shop.advanceautoparts.com/web/SearchResults?searchTerm=${basicQuery}`;
+            
+            document.getElementById('linkRockAuto').href = `https://www.rockauto.com/en/partsearch/?searchtext=${basicQuery}`;
+            document.getElementById('linkEbay').href = `https://www.ebay.com/sch/i.html?_nkw=${basicQuery}`;
+            document.getElementById('linkAmazon').href = `https://www.amazon.com/s?k=${basicQuery}+automotive`;
+            
+            document.getElementById('linkYouTube').href = `https://www.youtube.com/results?search_query=${videoQuery}`;
+
+            // Show Results
+            document.getElementById('resultsArea').style.display = 'block';
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            
+            // Render Notepad if a garage car is active
+            if(activeVehicleKey) renderNotepad();
+        }
+
+        // --- NOTEPAD LOGIC ---
+        function renderNotepad() {
+            if(!activeVehicleKey || !wrenchDB[activeVehicleKey]) return;
+            
+            const logsList = document.getElementById('savedLogs');
+            logsList.innerHTML = '';
+            wrenchDB[activeVehicleKey].logs.forEach((log, idx) => {
+                logsList.innerHTML += `
                     <div class="saved-item">
-                        <div><strong>${p.name}</strong> <br> <span style="color:var(--brand);">${p.price}</span></div>
-                        <button class="delete-btn" style="padding: 2px 6px;" onclick="deleteItem('parts', ${idx})">X</button>
+                        <div><strong>${log.name}</strong> <br> <span style="color:var(--brand);">${log.price}</span></div>
+                        <button class="delete-btn" style="padding: 2px 6px;" onclick="deleteLog('logs', ${idx})">X</button>
                     </div>`;
             });
 
-            // Render Videos
             const videosList = document.getElementById('savedVideosList');
             videosList.innerHTML = '';
-            wrenchDB[activeVehicle].videos.forEach((v, idx) => {
-                // Extract YouTube ID to embed it
+            wrenchDB[activeVehicleKey].videos.forEach((v, idx) => {
                 let videoId = v.split('v=')[1] || v.split('youtu.be/')[1];
-                if(videoId) videoId = videoId.split('&')[0]; // Clean the ID
-                
+                if(videoId) videoId = videoId.split('&')[0];
                 videosList.innerHTML += `
                     <div style="background: #111; padding: 10px; border-radius: 8px; border: 1px solid #333; margin-bottom: 15px;">
                         <div class="video-container">
                             <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
                         </div>
-                        <button class="delete-btn" style="width:100%;" onclick="deleteItem('videos', ${idx})">Remove Video from Library</button>
+                        <button class="delete-btn" style="width:100%;" onclick="deleteLog('videos', ${idx})">Remove Video</button>
                     </div>`;
             });
         }
 
-        function savePartLog() {
-            const name = document.getElementById('partNameInput').value;
-            const price = document.getElementById('partPriceInput').value;
-            if(!name) return alert("Enter a part name first!");
+        function saveLog() {
+            if(!activeVehicleKey) return alert("Save this vehicle to your Garage first!");
+            const name = document.getElementById('logName').value;
+            const price = document.getElementById('logPrice').value;
+            if(!name) return;
             
-            wrenchDB[activeVehicle].parts.push({ name, price });
-            localStorage.setItem('wrenchDB_v2', JSON.stringify(wrenchDB));
-            
-            document.getElementById('partNameInput').value = '';
-            document.getElementById('partPriceInput').value = '';
-            renderWorkspaceData();
+            wrenchDB[activeVehicleKey].logs.push({ name, price });
+            localStorage.setItem('wrenchDB_v3', JSON.stringify(wrenchDB));
+            document.getElementById('logName').value = ''; document.getElementById('logPrice').value = '';
+            renderNotepad();
         }
 
         function saveVideo() {
+            if(!activeVehicleKey) return alert("Save this vehicle to your Garage first!");
             const link = document.getElementById('videoLinkInput').value;
-            if(!link.includes('youtu')) return alert("Please paste a valid YouTube link!");
+            if(!link.includes('youtu')) return alert("Paste a valid YouTube link!");
             
-            wrenchDB[activeVehicle].videos.push(link);
-            localStorage.setItem('wrenchDB_v2', JSON.stringify(wrenchDB));
-            
+            wrenchDB[activeVehicleKey].videos.push(link);
+            localStorage.setItem('wrenchDB_v3', JSON.stringify(wrenchDB));
             document.getElementById('videoLinkInput').value = '';
-            renderWorkspaceData();
+            renderNotepad();
         }
 
-        function deleteItem(type, index) {
-            wrenchDB[activeVehicle][type].splice(index, 1);
-            localStorage.setItem('wrenchDB_v2', JSON.stringify(wrenchDB));
-            renderWorkspaceData();
-        }
-
-        // Keep the outbound links for quick searches based on the active vehicle
-        function outboundSearch(store) {
-            const part = document.getElementById('partNameInput').value || "Parts";
-            const vData = activeVehicle.replace('|', '').trim(); // E.g. "2016 FORD F150 Pickup 2.7L"
-            
-            const storeQuery = encodeURIComponent(`${vData} ${part}`);
-            const videoQuery = encodeURIComponent(`How to replace ${part} ${vData}`);
-
-            if(store === 'autozone') window.open(`https://www.autozone.com/searchresult?searchText=${storeQuery}`, '_blank');
-            if(store === 'rockauto') window.open(`https://www.rockauto.com/en/partsearch/?searchtext=${storeQuery}`, '_blank');
-            if(store === 'youtube') window.open(`https://www.youtube.com/results?search_query=${videoQuery}`, '_blank');
+        function deleteLog(type, index) {
+            wrenchDB[activeVehicleKey][type].splice(index, 1);
+            localStorage.setItem('wrenchDB_v3', JSON.stringify(wrenchDB));
+            renderNotepad();
         }
     </script>
 </body>
