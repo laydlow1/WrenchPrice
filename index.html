@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WrenchPrice | Part Finder</title>
+    <title>WrenchPrice | Parts Counter</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --brand: #f1c40f; --bg: #121212; --card: #1e1e1e; --text: #ffffff; }
@@ -12,13 +12,20 @@
         header { text-align: center; margin-bottom: 30px; }
         header h1 { font-weight: 900; letter-spacing: -1px; margin: 0; font-size: 38px; }
         header span { color: var(--brand); }
-        .card { background: var(--card); padding: 20px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #333; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        h2 { font-size: 14px; text-transform: uppercase; color: #888; margin-top: 0; letter-spacing: 1px; }
-        select, input { width: 100%; padding: 12px; margin-top: 10px; background: #2a2a2a; border: 1px solid #444; color: white; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
-        .btn-search { width: 100%; padding: 15px; background: var(--brand); color: #000; border: none; border-radius: 8px; font-weight: 900; text-transform: uppercase; margin-top: 15px; cursor: pointer; transition: 0.2s; }
+        .card { background: var(--card); padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
+        h2 { font-size: 13px; text-transform: uppercase; color: #888; margin-top: 0; letter-spacing: 1px; }
+        
+        /* Form Grid to look like a real counter tool */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 11px; color: var(--brand); font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
+        select, input { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #444; color: white; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
+        select:disabled, input:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .btn-search { width: 100%; padding: 15px; background: var(--brand); color: #000; border: none; border-radius: 6px; font-weight: 900; text-transform: uppercase; margin-top: 10px; cursor: pointer; font-size: 16px; }
         .btn-search:hover { background: #fff; }
-        .store-btn { width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; cursor: pointer; font-size: 14px; color: white; display: block; text-align: center; text-decoration: none; }
-        .loading-text { font-size: 12px; color: var(--brand); margin-top: 5px; display: none; }
+        
+        /* Result Buttons */
+        .store-btn { width: 100%; padding: 15px; border: none; border-radius: 6px; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; cursor: pointer; font-size: 14px; color: white; display: block; text-align: center; text-decoration: none; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -26,49 +33,77 @@
     <div class="container">
         <header>
             <h1>WRENCH<span>PRICE</span></h1>
-            <p style="color: #666; font-size: 14px;">Master Part Search & Repair Guide</p>
+            <p style="color: #666; font-size: 13px; font-weight: bold;">PRO PARTS COUNTER</p>
         </header>
 
         <div class="card">
-            <h2>1. Select Vehicle</h2>
-            <select id="makeSelect" onchange="fetchModels()">
-                <option value="">Loading Makes...</option>
-            </select>
-            <select id="modelSelect" disabled>
-                <option value="">Select a Make First</option>
-            </select>
-            <input type="number" id="yearInput" placeholder="Year (e.g. 2015)" min="1981" max="2027">
-            <div id="loadingStatus" class="loading-text">Connecting to NHTSA Database...</div>
+            <h2>1. Vehicle Specs</h2>
+            
+            <div class="form-group">
+                <label>Year</label>
+                <input type="number" id="yearInput" placeholder="e.g. 2016" min="1981" max="2027" onchange="checkYear()">
+            </div>
+
+            <div class="form-group">
+                <label>Make</label>
+                <select id="makeSelect" disabled onchange="fetchModels()">
+                    <option value="">Select Make</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Model</label>
+                <select id="modelSelect" disabled>
+                    <option value="">Select Model</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Engine / Trim</label>
+                <input type="text" id="engineInput" placeholder="e.g. 5.0L V8, 3.5L EcoBoost, 4WD" disabled>
+            </div>
         </div>
 
         <div class="card">
-            <h2>2. Find Part</h2>
-            <input type="text" id="partInput" placeholder="e.g. Brake Pads">
-            <button class="btn-search" onclick="startSearch()">Scour the Internet</button>
+            <h2>2. Requested Part</h2>
+            <div class="form-group">
+                <input type="text" id="partInput" placeholder="e.g. Alternator, Starter, Brake Pads">
+            </div>
+            <button class="btn-search" onclick="runSearch()">Check Inventory & Guides</button>
         </div>
 
         <div id="resultsArea"></div>
     </div>
 
     <script>
-        // Only show brands common on US streets
-        const usMakes = ["CHEVROLET", "FORD", "RAM", "DODGE", "JEEP", "GMC", "TOYOTA", "HONDA", "NISSAN", "CHRYSLER", "BUICK", "CADILLAC"];
+        const usMakes = ["CHEVROLET", "FORD", "RAM", "DODGE", "JEEP", "GMC", "TOYOTA", "HONDA", "NISSAN", "CHRYSLER", "BUICK", "CADILLAC", "SUBARU", "HYUNDAI", "KIA"];
 
-        const makeSelect = document.getElementById('makeSelect');
-        usMakes.sort().forEach(m => {
-            const opt = document.createElement('option');
-            opt.value = m;
-            opt.textContent = m;
-            makeSelect.appendChild(opt);
-        });
+        // Unlocks Make dropdown once Year is entered
+        function checkYear() {
+            const year = document.getElementById('yearInput').value;
+            const makeSelect = document.getElementById('makeSelect');
+            if (year.length === 4) {
+                makeSelect.disabled = false;
+                if (makeSelect.options.length <= 1) {
+                    usMakes.sort().forEach(m => {
+                        const opt = document.createElement('option');
+                        opt.value = m;
+                        opt.textContent = m;
+                        makeSelect.appendChild(opt);
+                    });
+                }
+            }
+        }
 
+        // Fetches Models based on Make
         function fetchModels() {
             const make = document.getElementById('makeSelect').value;
             const modelSelect = document.getElementById('modelSelect');
-            if(!make) return;
+            const engineInput = document.getElementById('engineInput');
             
+            if(!make) return;
             modelSelect.disabled = true;
-            modelSelect.innerHTML = '<option>Loading Models...</option>';
+            modelSelect.innerHTML = '<option>Loading...</option>';
 
             fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${make}?format=json`)
                 .then(res => res.json())
@@ -81,37 +116,45 @@
                         modelSelect.appendChild(opt);
                     });
                     modelSelect.disabled = false;
+                    engineInput.disabled = false; // Unlock Engine input
                 });
         }
 
-        async function startSearch() {
+        function runSearch() {
             const year = document.getElementById('yearInput').value;
             const make = document.getElementById('makeSelect').value;
             const model = document.getElementById('modelSelect').value;
+            const engine = document.getElementById('engineInput').value;
             const part = document.getElementById('partInput').value;
             const resultsArea = document.getElementById('resultsArea');
 
-            if(!year || !make || !model || !part) return alert("Fill everything out!");
+            if(!year || !make || !model || !part) {
+                alert("Year, Make, Model, and Part are required.");
+                return;
+            }
 
-            resultsArea.innerHTML = `<div class="card"><h3>Searching live prices for ${part}...</h3></div>`;
+            // Create a highly specific search string including the engine
+            const exactQuery = encodeURIComponent(`${year} ${make} ${model} ${engine} ${part}`.trim());
+            const videoQuery = encodeURIComponent(`How to replace ${part} ${year} ${make} ${model} ${engine}`.trim());
 
-            // This is a "Simulated" API call for now to show you the layout 
-            // Real price fetching requires a backend "proxy" which we will set up next
-            setTimeout(() => {
-                resultsArea.innerHTML = `
-                <div class="card" style="border-top: 5px solid var(--brand);">
-                    <h3 style="margin:0;">${year} ${make} ${model}</h3>
-                    <p style="color:var(--brand); font-weight:900; font-size:24px; margin:10px 0;">$84.95 - $129.00</p>
-                    <p style="font-size:12px; color:#888;">Est. Price at Local Stores</p>
-                    <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
-                    <a href="https://www.youtube.com/results?search_query=${year}+${make}+${model}+${part}+repair" target="_blank" class="store-btn" style="background:#ff0000;">Watch Install Video</a>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                        <a href="https://www.autozone.com" class="store-btn" style="background:#333; font-size:10px;">AutoZone Link</a>
-                        <a href="https://www.rockauto.com" class="store-btn" style="background:#333; font-size:10px;">RockAuto Link</a>
-                    </div>
+            resultsArea.innerHTML = `
+                <div class="card" style="border-top: 5px solid #d90000;">
+                    <h3 style="margin-top:0; font-size:16px;">${year} ${make} ${model} ${engine}</h3>
+                    <p style="color:var(--brand); font-weight:bold;">Part: ${part.toUpperCase()}</p>
+                    <p style="font-size: 11px; color: #888; margin-top:15px; text-transform:uppercase;">Locate Part Locally:</p>
+                    <a href="https://www.autozone.com/searchresult?searchText=${exactQuery}" target="_blank" class="store-btn" style="background:#d90000;">Check AutoZone Inventory</a>
+                    <a href="https://www.oreillyauto.com/search?q=${exactQuery}" target="_blank" class="store-btn" style="background:#00833e;">Check O'Reilly Inventory</a>
+                    
+                    <p style="font-size: 11px; color: #888; margin-top:20px; text-transform:uppercase;">Compare Online Pricing:</p>
+                    <a href="https://www.rockauto.com/en/catalog/${make.toLowerCase()},${year},${model.toLowerCase()},${encodeURIComponent(part)}" target="_blank" class="store-btn" style="background:#005399;">Shop RockAuto</a>
+                    <a href="https://www.ebay.com/sch/i.html?_nkw=${exactQuery}" target="_blank" class="store-btn" style="background:#e53238;">Shop eBay Motors</a>
+
+                    <p style="font-size: 11px; color: #888; margin-top:20px; text-transform:uppercase;">Repair Instructions:</p>
+                    <a href="https://www.youtube.com/results?search_query=${videoQuery}" target="_blank" class="store-btn" style="background:#222; border: 1px solid #444;">Watch YouTube Guide</a>
                 </div>
-                `;
-            }, 1500);
+            `;
+            
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
     </script>
 </body>
