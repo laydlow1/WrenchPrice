@@ -106,7 +106,7 @@
     </div>
 
     <script>
-        // Fetch all Manufacturers on load
+        // Fetch all Manufacturers from the Gov Database on load
         fetch('https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json')
             .then(res => res.json())
             .then(data => {
@@ -125,19 +125,17 @@
             const make = document.getElementById('makeSelect').value;
             const modelSelect = document.getElementById('modelSelect');
             const status = document.getElementById('loadingStatus');
-
             if(!make) return;
 
             modelSelect.disabled = true;
             modelSelect.innerHTML = '<option>Loading Models...</option>';
             status.style.display = 'block';
 
-            // Fetches all models for the selected make
             fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${make}?format=json`)
                 .then(res => res.json())
                 .then(data => {
                     modelSelect.innerHTML = '<option value="">Select Model</option>';
-                    data.Results.forEach(m => {
+                    data.Results.sort((a,b) => a.Model_Name.localeCompare(b.Model_Name)).forEach(m => {
                         const opt = document.createElement('option');
                         opt.value = m.Model_Name;
                         opt.textContent = m.Model_Name;
@@ -159,8 +157,30 @@
                 return;
             }
 
-            alert(`Searching for: ${year} ${make} ${model} ${part}`);
-            // Next step: Build the Price Scraper and YouTube results here!
+            const query = `${year} ${make} ${model} ${part}`;
+            const resultsArea = document.getElementById('resultsArea');
+
+            // Build the Results UI
+            resultsArea.innerHTML = `
+                <div class="card" style="border-left: 5px solid var(--brand);">
+                    <h2 style="color: var(--brand)">Results for ${query}</h2>
+                    
+                    <p style="font-size: 12px; margin-bottom: 5px; color: #888;">GET IT TODAY (LOCAL STORES):</p>
+                    <button class="btn-search" style="background:#d90000; color:white; margin-bottom:10px;" onclick="window.open('https://www.autozone.com/searchresult?searchText=${query}', '_blank')">Search AutoZone</button>
+                    <button class="btn-search" style="background:#00833e; color:white; margin-bottom:10px;" onclick="window.open('https://www.oreillyauto.com/search?q=${query}', '_blank')">Search O'Reilly</button>
+                    <button class="btn-search" style="background:#ffcc00; color:black; margin-bottom:10px;" onclick="window.open('https://shop.advanceautoparts.com/web/SearchResults?searchTerm=${query}', '_blank')">Search Advance Auto</button>
+
+                    <p style="font-size: 12px; margin-top: 15px; margin-bottom: 5px; color: #888;">SHIPPING (BEST PRICES):</p>
+                    <button class="btn-search" style="background:#005399; color:white; margin-bottom:10px;" onclick="window.open('https://www.rockauto.com/en/catalog/${make},${year},${model},${part}', '_blank')">Search RockAuto</button>
+                    <button class="btn-search" style="background:#e53238; color:white; margin-bottom:10px;" onclick="window.open('https://www.ebay.com/sch/i.html?_nkw=${query}', '_blank')">Search eBay Motors</button>
+
+                    <p style="font-size: 12px; margin-top: 15px; margin-bottom: 5px; color: #888;">HOW-TO GUIDES:</p>
+                    <button class="btn-search" style="background:#ff0000; color:white;" onclick="window.open('https://www.youtube.com/results?search_query=how+to+replace+${part}+${year}+${make}+${model}', '_blank')">Watch Repair Videos</button>
+                </div>
+            `;
+            
+            // Scroll down to results
+            resultsArea.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 </body>
