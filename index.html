@@ -15,7 +15,6 @@
         .card { background: var(--card); padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
         h2 { font-size: 13px; text-transform: uppercase; color: #888; margin-top: 0; letter-spacing: 1px; }
         
-        /* Form Grid to look like a real counter tool */
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-size: 11px; color: var(--brand); font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
         select, input { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #444; color: white; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
@@ -24,7 +23,6 @@
         .btn-search { width: 100%; padding: 15px; background: var(--brand); color: #000; border: none; border-radius: 6px; font-weight: 900; text-transform: uppercase; margin-top: 10px; cursor: pointer; font-size: 16px; }
         .btn-search:hover { background: #fff; }
         
-        /* Result Buttons */
         .store-btn { width: 100%; padding: 15px; border: none; border-radius: 6px; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; cursor: pointer; font-size: 14px; color: white; display: block; text-align: center; text-decoration: none; box-sizing: border-box; }
     </style>
 </head>
@@ -53,14 +51,38 @@
 
             <div class="form-group">
                 <label>Model</label>
-                <select id="modelSelect" disabled>
+                <select id="modelSelect" disabled onchange="unlockEngine()">
                     <option value="">Select Model</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label>Engine / Trim</label>
-                <input type="text" id="engineInput" placeholder="e.g. 5.0L V8, 3.5L EcoBoost, 4WD" disabled>
+                <select id="engineSelect" disabled>
+                    <option value="">Select Engine</option>
+                    <option value="1.4L 4-Cyl">1.4L 4-Cyl</option>
+                    <option value="1.5L 4-Cyl">1.5L 4-Cyl</option>
+                    <option value="1.8L 4-Cyl">1.8L 4-Cyl</option>
+                    <option value="2.0L 4-Cyl">2.0L 4-Cyl</option>
+                    <option value="2.4L 4-Cyl">2.4L 4-Cyl</option>
+                    <option value="2.5L 4-Cyl">2.5L 4-Cyl</option>
+                    <option value="2.7L V6">2.7L V6</option>
+                    <option value="3.0L V6">3.0L V6</option>
+                    <option value="3.3L V6">3.3L V6</option>
+                    <option value="3.5L V6">3.5L V6</option>
+                    <option value="3.6L V6">3.6L V6</option>
+                    <option value="4.0L V6">4.0L V6</option>
+                    <option value="4.7L V8">4.7L V8</option>
+                    <option value="5.0L V8">5.0L V8</option>
+                    <option value="5.3L V8">5.3L V8</option>
+                    <option value="5.7L V8">5.7L V8 (HEMI)</option>
+                    <option value="6.0L V8">6.0L V8</option>
+                    <option value="6.2L V8">6.2L V8</option>
+                    <option value="6.4L V8">6.4L V8</option>
+                    <option value="6.6L V8">6.6L V8 (Duramax)</option>
+                    <option value="6.7L">6.7L (Cummins/Powerstroke)</option>
+                    <option value="Electric/EV">Electric / EV</option>
+                </select>
             </div>
         </div>
 
@@ -69,7 +91,7 @@
             <div class="form-group">
                 <input type="text" id="partInput" placeholder="e.g. Alternator, Starter, Brake Pads">
             </div>
-            <button class="btn-search" onclick="runSearch()">Check Inventory & Guides</button>
+            <button class="btn-search" onclick="runSearch()">Locate Part Direct</button>
         </div>
 
         <div id="resultsArea"></div>
@@ -78,7 +100,6 @@
     <script>
         const usMakes = ["CHEVROLET", "FORD", "RAM", "DODGE", "JEEP", "GMC", "TOYOTA", "HONDA", "NISSAN", "CHRYSLER", "BUICK", "CADILLAC", "SUBARU", "HYUNDAI", "KIA"];
 
-        // Unlocks Make dropdown once Year is entered
         function checkYear() {
             const year = document.getElementById('yearInput').value;
             const makeSelect = document.getElementById('makeSelect');
@@ -95,11 +116,9 @@
             }
         }
 
-        // Fetches Models based on Make
         function fetchModels() {
             const make = document.getElementById('makeSelect').value;
             const modelSelect = document.getElementById('modelSelect');
-            const engineInput = document.getElementById('engineInput');
             
             if(!make) return;
             modelSelect.disabled = true;
@@ -116,41 +135,44 @@
                         modelSelect.appendChild(opt);
                     });
                     modelSelect.disabled = false;
-                    engineInput.disabled = false; // Unlock Engine input
                 });
+        }
+
+        function unlockEngine() {
+            document.getElementById('engineSelect').disabled = false;
         }
 
         function runSearch() {
             const year = document.getElementById('yearInput').value;
             const make = document.getElementById('makeSelect').value;
             const model = document.getElementById('modelSelect').value;
-            const engine = document.getElementById('engineInput').value;
+            const engine = document.getElementById('engineSelect').value;
             const part = document.getElementById('partInput').value;
             const resultsArea = document.getElementById('resultsArea');
 
-            if(!year || !make || !model || !part) {
-                alert("Year, Make, Model, and Part are required.");
+            if(!year || !make || !model || !engine || !part) {
+                alert("Please complete the vehicle specs and part name.");
                 return;
             }
 
-            // Create a highly specific search string including the engine
-            const exactQuery = encodeURIComponent(`${year} ${make} ${model} ${engine} ${part}`.trim());
-            const videoQuery = encodeURIComponent(`How to replace ${part} ${year} ${make} ${model} ${engine}`.trim());
-
+            // The Direct Search Query
+            const exactQuery = encodeURIComponent(`${year} ${make} ${model} ${engine} ${part}`);
+            
             resultsArea.innerHTML = `
                 <div class="card" style="border-top: 5px solid #d90000;">
-                    <h3 style="margin-top:0; font-size:16px;">${year} ${make} ${model} ${engine}</h3>
-                    <p style="color:var(--brand); font-weight:bold;">Part: ${part.toUpperCase()}</p>
-                    <p style="font-size: 11px; color: #888; margin-top:15px; text-transform:uppercase;">Locate Part Locally:</p>
-                    <a href="https://www.autozone.com/searchresult?searchText=${exactQuery}" target="_blank" class="store-btn" style="background:#d90000;">Check AutoZone Inventory</a>
-                    <a href="https://www.oreillyauto.com/search?q=${exactQuery}" target="_blank" class="store-btn" style="background:#00833e;">Check O'Reilly Inventory</a>
+                    <h3 style="margin-top:0; font-size:16px;">${year} ${make} ${model} | ${engine}</h3>
+                    <p style="color:var(--brand); font-weight:bold; font-size: 18px;">Part: ${part.toUpperCase()}</p>
                     
-                    <p style="font-size: 11px; color: #888; margin-top:20px; text-transform:uppercase;">Compare Online Pricing:</p>
-                    <a href="https://www.rockauto.com/en/catalog/${make.toLowerCase()},${year},${model.toLowerCase()},${encodeURIComponent(part)}" target="_blank" class="store-btn" style="background:#005399;">Shop RockAuto</a>
-                    <a href="https://www.ebay.com/sch/i.html?_nkw=${exactQuery}" target="_blank" class="store-btn" style="background:#e53238;">Shop eBay Motors</a>
+                    <p style="font-size: 11px; color: #888; margin-top:20px; text-transform:uppercase;">Locate Part Locally:</p>
+                    <a href="https://www.autozone.com/searchresult?searchText=${exactQuery}" target="_blank" class="store-btn" style="background:#d90000;">AutoZone Direct Search</a>
+                    <a href="https://www.oreillyauto.com/search?q=${exactQuery}" target="_blank" class="store-btn" style="background:#00833e;">O'Reilly Direct Search</a>
+                    
+                    <p style="font-size: 11px; color: #888; margin-top:20px; text-transform:uppercase;">Online Direct Pricing:</p>
+                    <a href="https://www.rockauto.com/en/partsearch/?searchtext=${exactQuery}" target="_blank" class="store-btn" style="background:#005399;">RockAuto Direct Search</a>
+                    <a href="https://www.ebay.com/sch/i.html?_nkw=${exactQuery}" target="_blank" class="store-btn" style="background:#e53238;">eBay Motors Direct Search</a>
 
                     <p style="font-size: 11px; color: #888; margin-top:20px; text-transform:uppercase;">Repair Instructions:</p>
-                    <a href="https://www.youtube.com/results?search_query=${videoQuery}" target="_blank" class="store-btn" style="background:#222; border: 1px solid #444;">Watch YouTube Guide</a>
+                    <a href="https://www.youtube.com/results?search_query=How+to+replace+${exactQuery}" target="_blank" class="store-btn" style="background:#222; border: 1px solid #444;">Watch YouTube Guide</a>
                 </div>
             `;
             
