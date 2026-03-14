@@ -112,11 +112,13 @@
                 
                 <div class="section-title">Save a Part Link</div>
                 <p style="font-size: 11px; color: #888; margin-top:0;">Found the right part? Log it here so you don't lose the link.</p>
+                
+                <input type="url" id="logLink" placeholder="1. Paste link to the part here..." style="margin-bottom: 10px; border-left: 4px solid #00a8ff;" oninput="analyzePastedLink()">
+                
                 <div class="grid-2">
-                    <input type="text" id="logName" placeholder="Part Name">
+                    <input type="text" id="logName" placeholder="Part Name / Number">
                     <input type="text" id="logPrice" placeholder="Price (e.g. $120)">
                 </div>
-                <input type="url" id="logLink" placeholder="Paste link to the part..." style="margin-top: 10px;">
                 <button class="btn-search" style="padding: 12px; font-size: 14px; margin-top: 10px; background: #00a8ff; color: white;" onclick="saveLog()">Save Part to Build Sheet</button>
                 
                 <div id="savedLogs" style="margin-top: 20px;"></div>
@@ -196,7 +198,7 @@
         }
 
         // --- GARAGE DATABASE ---
-        let wrenchDB = JSON.parse(localStorage.getItem('wrenchDB_v5')) || {};
+        let wrenchDB = JSON.parse(localStorage.getItem('wrenchDB_v6')) || {};
         let activeVehicleKey = null;
 
         function saveToGarage() {
@@ -208,9 +210,8 @@
 
             const key = `${y} ${m} ${mod} | ${eng}`;
             if(!wrenchDB[key]) {
-                // Now storing full part objects with links, not just names
                 wrenchDB[key] = { savedParts: [], videos: [], shortModel: mod.split(' ')[0] };
-                localStorage.setItem('wrenchDB_v5', JSON.stringify(wrenchDB));
+                localStorage.setItem('wrenchDB_v6', JSON.stringify(wrenchDB));
             }
             loadGarage();
             activeVehicleKey = key;
@@ -236,7 +237,7 @@
 
         function deleteFromGarage(key) {
             delete wrenchDB[key];
-            localStorage.setItem('wrenchDB_v5', JSON.stringify(wrenchDB));
+            localStorage.setItem('wrenchDB_v6', JSON.stringify(wrenchDB));
             document.getElementById('resultsArea').style.display = 'none';
             loadGarage();
         }
@@ -294,6 +295,31 @@
             if(activeVehicleKey) renderNotepad();
         }
 
+        // --- SMART PASTE SCRIPT ---
+        function analyzePastedLink() {
+            const link = document.getElementById('logLink').value.toLowerCase();
+            if(!link) return;
+            
+            let store = "";
+            if(link.includes('autozone.com')) store = "AutoZone";
+            else if(link.includes('rockauto.com')) store = "RockAuto";
+            else if(link.includes('amazon.com')) store = "Amazon";
+            else if(link.includes('ebay.com')) store = "eBay";
+            else if(link.includes('oreillyauto.com')) store = "O'Reilly";
+            else if(link.includes('advanceautoparts.com')) store = "Advance Auto";
+            
+            const nameBox = document.getElementById('logName');
+            
+            // If it detects a store and it hasn't been added yet, append it to the part name
+            if(store && !nameBox.value.includes(store)) {
+                if(nameBox.value) {
+                    nameBox.value = nameBox.value + ` (${store})`;
+                } else {
+                    nameBox.value = `Part from ${store}`;
+                }
+            }
+        }
+
         // --- MOBILE FRIENDLY BUILD SHEET ---
         function extractYouTubeID(url) {
             const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
@@ -344,22 +370,26 @@
         function saveLog() {
             if(!activeVehicleKey) return alert("Save this vehicle to your Garage first!");
             const name = document.getElementById('logName').value;
-            const price = document.getElementById('logPrice').value;
+            const price = document.getElementById('logPrice').value || "Price not set";
             const link = document.getElementById('logLink').value;
             
-            if(!name) return alert("Please enter a part name.");
+            if(!name && !link) return alert("Please enter at least a part name or paste a link.");
             
-            wrenchDB[activeVehicleKey].savedParts.push({ name, price, link });
-            localStorage.setItem('wrenchDB_v5', JSON.stringify(wrenchDB));
+            wrenchDB[activeVehicleKey].savedParts.push({ name: name || "Saved Part Link", price, link });
+            localStorage.setItem('wrenchDB_v6', JSON.stringify(wrenchDB));
             
             document.getElementById('logPrice').value = '';
             document.getElementById('logLink').value = '';
+            // Reset the name back to just the base part
+            const basePart = document.getElementById('partInput').value;
+            document.getElementById('logName').value = basePart ? basePart.charAt(0).toUpperCase() + basePart.slice(1) : '';
+            
             renderNotepad();
         }
 
         function deletePart(index) {
             wrenchDB[activeVehicleKey].savedParts.splice(index, 1);
-            localStorage.setItem('wrenchDB_v5', JSON.stringify(wrenchDB));
+            localStorage.setItem('wrenchDB_v6', JSON.stringify(wrenchDB));
             renderNotepad();
         }
 
@@ -369,14 +399,14 @@
             if(!link) return;
             
             wrenchDB[activeVehicleKey].videos.push(link);
-            localStorage.setItem('wrenchDB_v5', JSON.stringify(wrenchDB));
+            localStorage.setItem('wrenchDB_v6', JSON.stringify(wrenchDB));
             document.getElementById('videoLinkInput').value = '';
             renderNotepad();
         }
 
         function deleteVideo(index) {
             wrenchDB[activeVehicleKey].videos.splice(index, 1);
-            localStorage.setItem('wrenchDB_v5', JSON.stringify(wrenchDB));
+            localStorage.setItem('wrenchDB_v6', JSON.stringify(wrenchDB));
             renderNotepad();
         }
     </script>
