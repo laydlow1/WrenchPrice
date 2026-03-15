@@ -40,18 +40,18 @@
     <!-- AUTH GATE -->
     <div id="auth-gate" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-4 font-sans" style="opacity:0; display:none;">
         <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 md:p-10 text-center relative z-10 border border-slate-200">
-            <div class="bg-blue-600 w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-blue-500/20">
-                <i data-lucide="wrench" class="w-7 h-7 text-white"></i>
+            <div class="bg-blue-600 w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-blue-500/20 text-white">
+                <i data-lucide="wrench" class="w-7 h-7"></i>
             </div>
             <h1 class="text-2xl font-extrabold uppercase tracking-tight text-slate-900 mb-1">WrenchPrice<span class="text-blue-600">Pro</span></h1>
             <p class="text-slate-500 text-xs mb-8">Professional Grade Side-Hustle Workbench</p>
             
             <div class="space-y-3">
-                <button onclick="initializeSession('guest')" class="w-full bg-slate-900 text-white btn-pro py-4 flex items-center justify-center gap-3 hover:bg-black">
+                <button onclick="initializeSession('guest')" class="w-full bg-slate-900 text-white btn-pro py-4 flex items-center justify-center gap-3 hover:bg-black transition-all">
                     <i data-lucide="user-circle" class="w-5 h-5 text-blue-400"></i>
                     Continue as Guest
                 </button>
-                <button onclick="initializeSession('google')" class="w-full border border-slate-200 text-slate-600 btn-pro py-4 flex items-center justify-center gap-3 hover:bg-slate-50">
+                <button onclick="initializeSession('google')" class="w-full border border-slate-200 text-slate-600 btn-pro py-4 flex items-center justify-center gap-3 hover:bg-slate-50 transition-all">
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-4 h-4" />
                     Sign in with Google
                 </button>
@@ -65,7 +65,7 @@
     <!-- SIDEBAR -->
     <aside id="sidebar" class="hidden md:flex w-64 bg-slate-900 flex-col z-50 relative shrink-0">
         <div class="p-6 flex items-center gap-3 border-b border-white/5">
-            <div class="bg-blue-600 p-1.5 rounded-lg"><i data-lucide="wrench" class="text-white w-4 h-4"></i></div>
+            <div class="bg-blue-600 p-1.5 rounded-lg text-white"><i data-lucide="wrench" class="w-4 h-4"></i></div>
             <span class="text-base font-bold uppercase text-white tracking-tight">WrenchPrice</span>
         </div>
         <nav class="flex-1 p-4 space-y-1 mt-2">
@@ -93,14 +93,14 @@
             <div class="flex items-center gap-2">
                 <i data-lucide="milestone" class="w-4 h-4 text-blue-600"></i>
                 <span id="active-shop-name" class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 truncate max-w-[120px] md:max-w-none">Workbench</span>
-            </div>
+            </div>a
             <div class="flex items-center gap-3">
                 <div id="guest-badge" class="hidden bg-slate-100 text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded uppercase border border-slate-200">Guest Session</div>
                 <div class="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center text-blue-500 font-bold text-xs border border-slate-700 shadow-sm">WP</div>
             </div>
         </header>
 
-        <div id="content-area" class="flex-1 overflow-y-auto p-4 md:p-8 no-scrollbar">
+        <div id="content-area" class="flex-1 overflow-y-auto p-4 md:p-8 no-scrollbar text-slate-900">
             
             <!-- GARAGE -->
             <div id="view-garage" class="view animate-fade-in">
@@ -113,24 +113,24 @@
                             <div class="space-y-4">
                                 <div class="space-y-1">
                                     <label class="text-[9px] font-bold text-slate-500 ml-1 uppercase tracking-widest">Customer / Nickname</label>
-                                    <input id="veh-nickname" class="w-full p-3 bg-slate-50 rounded-lg text-sm font-semibold border border-slate-200 outline-none focus:border-blue-500 transition-all" placeholder="e.g. Smith's F150" />
+                                    <input id="veh-nickname" class="w-full p-3 bg-slate-50 rounded-lg text-sm font-semibold border border-slate-200 outline-none focus:border-blue-500 transition-all text-slate-900" placeholder="e.g. Smith's F150" />
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
-                                    <select id="year-select" class="p-3 bg-slate-50 rounded-lg text-sm font-semibold border border-slate-200 outline-none focus:border-blue-500">
+                                    <select id="year-select" class="p-3 bg-slate-50 rounded-lg text-sm font-semibold border border-slate-200 outline-none focus:border-blue-500 text-slate-900">
                                         <option value="">Year</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option>
                                     </select>
-                                    <select id="make-select" class="p-3 bg-slate-50 rounded-lg text-sm font-semibold border border-slate-200 outline-none focus:border-blue-500">
+                                    <select id="make-select" class="p-3 bg-slate-50 rounded-lg text-sm font-semibold border border-slate-200 outline-none focus:border-blue-500 text-slate-900">
                                         <option value="">Make</option><option>Ford</option><option>Toyota</option><option>Chevrolet</option><option>RAM</option>
                                     </select>
                                 </div>
-                                <select id="model-select" class="w-full p-3 bg-slate-50 rounded-lg text-sm font-semibold border border-slate-200 outline-none focus:border-blue-500">
+                                <select id="model-select" class="w-full p-3 bg-slate-50 rounded-lg text-sm font-semibold border border-slate-200 outline-none focus:border-blue-500 text-slate-900">
                                     <option value="">Model</option><option>F-150</option><option>Camry</option><option>Silverado</option><option>1500</option>
                                 </select>
                                 <select id="engine-select" class="w-full p-3 bg-slate-50 rounded-lg text-sm font-bold text-blue-700 border border-blue-100 outline-none focus:border-blue-500">
                                     <option value="">Engine Configuration</option><option>V6 3.5L</option><option>L4 2.5L</option><option>V8 5.7L Hemi</option>
                                 </select>
                                 <button onclick="saveVehicle()" class="w-full bg-blue-600 text-white btn-pro py-4 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/10">
-                                    <i data-lucide="save" class="w-4 h-4"></i> Lock in Fleet
+                                    <i data-lucide="save" class="w-4 h-4 text-white"></i> Lock in Fleet
                                 </button>
                             </div>
                         </div>
@@ -144,11 +144,11 @@
                 <div class="inline-flex items-center gap-2 bg-slate-900 text-blue-400 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest mb-10 border border-slate-700">
                     <i data-lucide="zap" class="w-3.5 h-3.5 fill-blue-500"></i> <span id="scanner-vehicle-info">Select Fleet Vehicle</span>
                 </div>
-                <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-10 tracking-tight uppercase italic">Job Diagnostics</h2>
+                <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-10 tracking-tight uppercase italic text-nowrap">Job Diagnostics</h2>
                 <div class="relative max-w-xl mx-auto">
-                    <input id="search-input" placeholder="What job are we running? (e.g. Brakes)" class="w-full p-4 text-base bg-white rounded-xl shadow-sm border border-slate-200 focus:border-blue-500 outline-none font-medium transition-all" />
+                    <input id="search-input" placeholder="What job are we running? (e.g. Brakes)" class="w-full p-4 text-base bg-white rounded-xl shadow-sm border border-slate-200 focus:border-blue-500 outline-none font-medium transition-all text-slate-900" />
                     <button onclick="runSearch()" class="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 text-white p-2.5 rounded-lg hover:bg-blue-700 active:scale-95 shadow-md">
-                        <i data-lucide="search" class="w-4 h-4"></i>
+                        <i data-lucide="search" class="w-4 h-4 text-white"></i>
                     </button>
                 </div>
             </div>
@@ -158,7 +158,7 @@
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-slate-200 pb-8">
                     <div>
                         <button onclick="showView('search')" class="text-blue-600 font-bold text-[10px] mb-2 flex items-center gap-2 uppercase hover:translate-x-[-4px] transition-transform">← RE-SCAN</button>
-                        <h2 id="result-job-name" class="text-3xl md:text-5xl font-black text-slate-900 uppercase tracking-tight mb-1">Alternator</h2>
+                        <h2 id="result-job-name" class="text-3xl md:text-5xl font-black text-slate-900 uppercase tracking-tight mb-1">Job</h2>
                         <p id="result-veh-details" class="text-slate-400 font-bold text-xs uppercase tracking-widest"></p>
                     </div>
                     
@@ -166,11 +166,11 @@
                         <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center gap-6 shadow-sm">
                             <div class="opacity-40 text-center border-r border-slate-100 pr-6">
                                 <p class="text-[8px] font-bold text-slate-500 uppercase mb-1">Retail</p>
-                                <p id="dealer-rate-text" class="text-lg font-bold line-through">$450</p>
+                                <p id="dealer-rate-text" class="text-lg font-bold line-through text-slate-900">$0</p>
                             </div>
                             <div class="text-center">
                                 <p class="text-[8px] font-bold text-blue-500 uppercase mb-1 whitespace-nowrap"><i data-lucide="book-open" class="w-3 h-3 inline mr-1"></i> Labor</p>
-                                <p id="result-labor-hours" class="text-xl font-black text-blue-600 italic">2.2 Hrs</p>
+                                <p id="result-labor-hours" class="text-xl font-black text-blue-600 italic">0 Hrs</p>
                             </div>
                         </div>
                     </div>
@@ -178,51 +178,54 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                     <div class="lg:col-span-8 space-y-6">
-                        <!-- LOCAL SOURCING STATION -->
-                        <div class="bg-blue-50/50 p-6 md:p-8 rounded-xl border border-blue-100 shadow-sm">
-                            <h3 class="font-bold text-xs uppercase text-blue-700 tracking-widest mb-6 flex items-center gap-2">
-                                <i data-lucide="shopping-cart" class="w-4 h-4"></i> Station 03: Parts Staging
-                            </h3>
+                        <!-- PARTS STAGING STATION -->
+                        <div class="bg-blue-50/50 p-6 md:p-8 rounded-xl border border-blue-100 shadow-sm text-slate-900">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="font-bold text-xs uppercase text-blue-700 tracking-widest flex items-center gap-2">
+                                    <i data-lucide="shopping-cart" class="w-4 h-4"></i> Station 03: Parts Intake
+                                </h3>
+                                <span id="staging-count" class="bg-blue-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">0 ITEMS</span>
+                            </div>
                             <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
                                 <div class="md:col-span-6">
-                                    <label class="text-[8px] font-bold text-slate-400 ml-1 uppercase">Description</label>
-                                    <input id="manual-part-name" class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm font-semibold outline-none focus:border-blue-500" placeholder="e.g. 5W-30 Full Synthetic" />
+                                    <label class="text-[8px] font-bold text-slate-400 ml-1 uppercase">Part Description</label>
+                                    <input id="manual-part-name" class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm font-semibold outline-none focus:border-blue-500 text-slate-900" placeholder="e.g. Oil / Filter / Gasket" />
                                 </div>
                                 <div class="md:col-span-3">
-                                    <label class="text-[8px] font-bold text-slate-400 ml-1 uppercase">Unit Cost</label>
-                                    <input type="number" id="manual-part-price" class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm font-bold outline-none focus:border-blue-500" placeholder="0.00" />
+                                    <label class="text-[8px] font-bold text-slate-400 ml-1 uppercase">Unit $</label>
+                                    <input type="number" id="manual-part-price" class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm font-bold outline-none focus:border-blue-500 text-slate-900" placeholder="0.00" />
                                 </div>
                                 <div class="md:col-span-3">
                                     <label class="text-[8px] font-bold text-slate-400 ml-1 uppercase">QTY</label>
-                                    <input type="number" id="manual-part-qty" value="1" class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm font-bold outline-none focus:border-blue-500" />
+                                    <input type="number" id="manual-part-qty" value="1" class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm font-bold outline-none focus:border-blue-500 text-slate-900" />
                                 </div>
                                 <div class="md:col-span-12">
-                                    <label class="text-[8px] font-bold text-slate-400 ml-1 uppercase">Source / Supplier</label>
-                                    <input id="manual-part-source" class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm font-semibold outline-none focus:border-blue-500" placeholder="e.g. AutoZone, Local Warehouse" />
+                                    <label class="text-[8px] font-bold text-slate-400 ml-1 uppercase">Source (Optional)</label>
+                                    <input id="manual-part-source" class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm font-semibold outline-none focus:border-blue-500 text-slate-900" placeholder="e.g. Local Stock, NAPA, Dealer" />
                                 </div>
                             </div>
                             <button onclick="addManualPartToList()" class="w-full mt-6 bg-blue-600 text-white btn-pro py-3 text-xs shadow-md">
-                                <i data-lucide="plus-circle" class="w-4 h-4 inline mr-1"></i> Add Item to Job List
+                                <i data-lucide="plus-circle" class="w-4 h-4 inline mr-1 text-white"></i> Add Item to Workbench
                             </button>
 
-                            <!-- STAGED ITEMS -->
+                            <!-- STAGED ITEMS (PERSISTENT LIST) -->
                             <div id="live-parts-list" class="mt-8 space-y-2 hidden">
-                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-2">Active Job Breakdown</p>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-2">Active Staging List</p>
                                 <div id="parts-list-items" class="space-y-1"></div>
                             </div>
                         </div>
 
                         <button onclick="openCombinedQuote()" class="w-full bg-slate-900 text-white btn-pro py-5 shadow-xl flex items-center justify-center gap-3 group italic">
                             <i data-lucide="file-text" class="w-5 h-5 text-blue-500 group-hover:scale-110 transition-transform"></i>
-                            Compile Final Quote
+                            Compile Pro Estimate
                         </button>
                     </div>
 
                     <div class="lg:col-span-4 space-y-6">
                         <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Repair Intel</h3>
-                        <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 group">
+                        <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 group text-slate-900">
                             <div class="aspect-video bg-slate-900 flex items-center justify-center cursor-pointer relative"><i data-lucide="play-circle" class="w-12 h-12 text-red-600 opacity-80 group-hover:opacity-100 transition-opacity"></i></div>
-                            <div class="p-4"><p class="text-slate-900 font-bold leading-tight text-sm uppercase italic">Professional replacement guide for ${q}</p></div>
+                            <div class="p-4"><p class="text-slate-900 font-bold leading-tight text-sm uppercase italic">Professional replacement guide available for this session.</p></div>
                         </div>
                     </div>
                 </div>
@@ -244,34 +247,39 @@
                 
                 <div class="p-6 md:p-8 space-y-6 overflow-y-auto no-scrollbar text-slate-900">
                     <div class="grid grid-cols-2 gap-4 border-b border-slate-100 pb-4">
-                        <div><p class="text-[8px] font-bold text-slate-400 uppercase mb-1">Customer / Veh</p><p id="quote-veh-name" class="font-bold text-[10px] uppercase"></p></div>
-                        <div class="text-right"><p class="text-[8px] font-bold text-slate-400 uppercase mb-1">Std Time</p><p id="quote-labor-time" class="font-bold text-[10px] italic"></p></div>
+                        <div><p class="text-[8px] font-bold text-slate-400 uppercase mb-1">Customer / Job</p><p id="quote-veh-name" class="font-bold text-[10px] uppercase text-slate-900"></p></div>
+                        <div class="text-right"><p class="text-[8px] font-bold text-slate-400 uppercase mb-1">Labor Standard</p><p id="quote-labor-time" class="font-bold text-[10px] italic text-slate-900"></p></div>
                     </div>
 
-                    <div id="quote-parts-list-display" class="space-y-2"></div>
+                    <div class="space-y-2">
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-50 pb-1">Parts Inventory Breakdown</p>
+                        <div id="quote-parts-list-display" class="space-y-2 divide-y divide-slate-50">
+                            <!-- Detailed parts with description go here -->
+                        </div>
+                    </div>
 
                     <div class="space-y-3 py-4 border-t border-slate-100">
-                        <div class="flex justify-between items-center py-2">
-                            <span class="text-xs font-bold uppercase tracking-tighter">Applied Labor ($)</span>
+                        <div class="flex justify-between items-center py-2 text-slate-900">
+                            <span class="text-xs font-bold uppercase tracking-tighter">Applied Labor Charge ($)</span>
                             <div class="flex items-center gap-2">
                                 <span class="text-blue-600 font-bold">$</span>
                                 <input type="number" id="quote-labor-input" oninput="updateQuoteTotal()" class="w-20 p-2 bg-slate-50 border border-slate-200 rounded-lg text-right font-bold text-blue-600 text-sm focus:border-blue-500 outline-none" />
                             </div>
                         </div>
-                        <div class="flex justify-between items-center text-xs">
+                        <div class="flex justify-between items-center text-xs text-slate-900">
                             <span class="uppercase font-bold text-slate-400 tracking-widest text-[9px]">Consumables</span>
-                            <span id="quote-supplies" class="font-bold text-slate-900"></span>
+                            <span id="quote-supplies" class="font-bold text-slate-900 text-sm"></span>
                         </div>
                     </div>
 
-                    <div class="bg-blue-50 p-6 rounded-xl flex justify-between items-end border border-blue-100">
-                        <div><p class="text-[9px] font-bold text-blue-600 uppercase mb-1">Total Estimate</p><p id="quote-certs" class="text-[8px] text-slate-400 italic"></p></div>
+                    <div class="bg-blue-50 p-6 rounded-xl flex justify-between items-end border border-blue-100 text-slate-900">
+                        <div><p class="text-[10px] font-bold text-blue-600 uppercase mb-1">Estimate Total</p><p id="quote-certs" class="text-[8px] text-slate-400 italic"></p></div>
                         <span id="quote-final-total" class="text-3xl font-black text-slate-900 tracking-tighter italic">$0.00</span>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
-                        <button onclick="copyInvoiceText()" class="bg-slate-100 text-slate-900 btn-pro py-3 text-[10px] hover:bg-slate-200">Summary Copy</button>
-                        <button onclick="finalizeAndLogJob()" class="bg-slate-900 text-white btn-pro py-3 text-[10px] hover:bg-black shadow-lg shadow-blue-500/10">Finalize & Log</button>
+                        <button onclick="copyInvoiceText()" class="bg-slate-100 text-slate-900 btn-pro py-3 text-[10px] hover:bg-slate-200">Copy Summary</button>
+                        <button onclick="finalizeAndLogJob()" class="bg-slate-900 text-white btn-pro py-3 text-[10px] hover:bg-black shadow-lg">Finalize & Log</button>
                     </div>
                 </div>
             </div>
@@ -312,14 +320,14 @@
         };
         let garage = JSON.parse(localStorage.getItem('wp_garage')) || [];
         let selectedCar = null;
-        let currentLaborHours = 2.0;
+        let currentLaborHours = 0;
         let currentManualParts = [];
 
         const LABOR_BOOK = [
             { keywords: ['brake', 'rotor', 'pad'], job: 'Brake Service', hours: 1.8 },
             { keywords: ['alternator', 'generator'], job: 'Alternator', hours: 2.2 },
-            { keywords: ['starter'], job: 'Starter', hours: 1.5 },
-            { keywords: ['oil', 'filter'], job: 'Basic Service', hours: 0.5 },
+            { keywords: ['starter'], job: 'Starter Motor', hours: 1.5 },
+            { keywords: ['oil', 'filter'], job: 'Lube & Filter', hours: 0.5 },
             { keywords: ['strut', 'shock', 'suspension'], job: 'Suspension', hours: 2.5 }
         ];
 
@@ -341,23 +349,25 @@
         }
 
         function syncProfileFields() {
-            const ids = ['prof-shop-name','prof-slogan','prof-phone','prof-location','prof-certs','prof-rate','prof-supplies','active-shop-name','profile-display-name','profile-certs-badge'];
-            ids.forEach(id => {
+            const elements = {
+                'prof-shop-name': { type: 'value', data: profile.shopName },
+                'prof-slogan': { type: 'value', data: profile.slogan },
+                'prof-phone': { type: 'value', data: profile.phone },
+                'prof-location': { type: 'value', data: profile.location },
+                'prof-certs': { type: 'value', data: profile.certs },
+                'prof-rate': { type: 'value', data: profile.hourlyRate },
+                'prof-supplies': { type: 'value', data: profile.shopSupplies },
+                'active-shop-name': { type: 'text', data: profile.shopName },
+                'profile-display-name': { type: 'text', data: profile.shopName },
+                'profile-certs-badge': { type: 'text', data: profile.certs }
+            };
+
+            for (const [id, cfg] of Object.entries(elements)) {
                 const el = document.getElementById(id);
-                if (!el) return;
-                if (el.tagName === 'INPUT') {
-                    if (id === 'prof-shop-name') el.value = profile.shopName;
-                    if (id === 'prof-slogan') el.value = profile.slogan;
-                    if (id === 'prof-phone') el.value = profile.phone;
-                    if (id === 'prof-location') el.value = profile.location;
-                    if (id === 'prof-certs') el.value = profile.certs;
-                    if (id === 'prof-rate') el.value = profile.hourlyRate;
-                    if (id === 'prof-supplies') el.value = profile.shopSupplies;
-                } else {
-                    if (id === 'active-shop-name' || id === 'profile-display-name') el.innerText = profile.shopName;
-                    if (id === 'profile-certs-badge') el.innerText = profile.certs;
-                }
-            });
+                if (!el) continue;
+                if (cfg.type === 'value') el.value = cfg.data;
+                else el.innerText = cfg.data;
+            }
             updateRateDisplay();
             updateSuppliesDisplay();
         }
@@ -412,9 +422,9 @@
             const list = document.getElementById('garage-list');
             if (!list) return;
             list.innerHTML = garage.map(car => `
-                <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 hover:shadow-sm transition-all group relative overflow-hidden">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 hover:shadow-sm transition-all group relative overflow-hidden text-slate-900">
                     <div class="absolute left-0 top-0 w-1 h-full bg-blue-600 opacity-20 group-hover:opacity-100 transition-all"></div>
-                    <div class="flex items-center gap-4 flex-1 cursor-pointer w-full" onclick="setActiveCar(${car.id})">
+                    <div class="flex items-center gap-4 flex-1 cursor-pointer w-full text-slate-900" onclick="setActiveCar(${car.id})">
                         <div class="bg-slate-900 p-3 rounded-lg text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-all shrink-0"><i data-lucide="car-front" class="w-5 h-5"></i></div>
                         <div class="truncate">
                             <p class="text-[7px] font-black text-blue-600 uppercase tracking-widest mb-0.5 italic">${car.nickname}</p>
@@ -425,7 +435,7 @@
                     <div class="flex gap-1.5 w-full md:w-auto">
                         <button onclick="openHistory(${car.id})" class="flex-1 md:flex-none bg-slate-100 text-slate-600 p-2 px-4 rounded-lg text-[9px] font-bold uppercase hover:bg-slate-200 italic">History</button>
                         <button onclick="setActiveCar(${car.id})" class="flex-1 md:flex-none bg-blue-600 text-white p-2 px-4 rounded-lg text-[9px] font-bold uppercase hover:bg-blue-700 italic shadow-md">Select</button>
-                        <button onclick="deleteCar(${car.id})" class="p-2 text-slate-300 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        <button onclick="deleteCar(${car.id})" class="p-2 text-slate-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                     </div>
                 </div>
             `).join('') || `<div class="p-12 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200"><p class="text-slate-400 font-bold uppercase text-[9px] tracking-widest">Workbench Empty</p></div>`;
@@ -463,19 +473,24 @@
             container.innerHTML = `
                 <div class="lg:col-span-8 space-y-6">
                     <div class="bg-blue-50/80 p-6 md:p-8 rounded-xl border border-blue-100">
-                        <h3 class="font-bold text-[10px] uppercase text-blue-700 tracking-widest mb-6 flex items-center gap-2"><i data-lucide="shopping-cart" class="w-4 h-4"></i> Local Intake</h3>
+                        <h3 class="font-bold text-[10px] uppercase text-blue-700 tracking-widest mb-6 flex items-center gap-2">
+                            <i data-lucide="shopping-cart" class="w-4 h-4"></i> Local Part Sourcing
+                        </h3>
                         <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-                            <div class="md:col-span-6"><label class="text-[7px] font-bold text-slate-400 uppercase">Part Description</label><input id="manual-part-name" class="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold outline-none focus:border-blue-500" placeholder="e.g. Oil / Filter" /></div>
-                            <div class="md:col-span-3"><label class="text-[7px] font-bold text-slate-400 uppercase">Unit $</label><input type="number" id="manual-part-price" class="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-xs font-bold outline-none" /></div>
-                            <div class="md:col-span-3"><label class="text-[7px] font-bold text-slate-400 uppercase">Qty</label><input type="number" id="manual-part-qty" value="1" class="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-xs font-bold outline-none" /></div>
+                            <div class="md:col-span-6"><label class="text-[7px] font-bold text-slate-400 uppercase">Description</label><input id="manual-part-name" class="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold outline-none focus:border-blue-500 text-slate-900" placeholder="e.g. 5W-30 Full Synthetic Oil" /></div>
+                            <div class="md:col-span-3"><label class="text-[7px] font-bold text-slate-400 uppercase">Unit $</label><input type="number" id="manual-part-price" class="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-xs font-bold outline-none text-slate-900" /></div>
+                            <div class="md:col-span-3"><label class="text-[7px] font-bold text-slate-400 uppercase">Qty</label><input type="number" id="manual-part-qty" value="1" class="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-xs font-bold outline-none text-slate-900" /></div>
                         </div>
-                        <button onclick="addManualPartToList()" class="w-full mt-4 bg-blue-600 text-white btn-pro py-2.5 text-[9px] shadow-lg"><i data-lucide="plus" class="w-3 h-3 inline mr-1"></i> Add Item</button>
-                        <div id="live-parts-list" class="mt-6 space-y-2 hidden"><p class="text-[7px] font-black text-slate-400 uppercase border-b border-slate-100 pb-1">Staged Inventory</p><div id="parts-list-items" class="space-y-1"></div></div>
+                        <button onclick="addManualPartToList()" class="w-full mt-4 bg-blue-600 text-white btn-pro py-2.5 text-[9px] shadow-lg"><i data-lucide="plus" class="w-3 h-3 inline mr-1 text-white"></i> Add Item to Job</button>
+                        <div id="live-parts-list" class="mt-6 space-y-2 hidden"><p class="text-[7px] font-black text-slate-400 uppercase border-b border-slate-100 pb-1">Staged Job Inventory</p><div id="parts-list-items" class="space-y-1"></div></div>
                     </div>
-                    <button onclick="openCombinedQuote()" class="w-full bg-slate-900 text-white btn-pro py-5 shadow-xl flex items-center justify-center gap-3">Compile Professional Estimate</button>
+                    <button onclick="openCombinedQuote()" class="w-full bg-slate-900 text-white btn-pro py-5 shadow-xl flex items-center justify-center gap-3 italic">Compile Final Quote Summary</button>
                 </div>
                 <div class="lg:col-span-4 space-y-4">
-                    <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm"><div class="aspect-video bg-slate-900 flex items-center justify-center cursor-pointer text-red-600"><i data-lucide="play-circle" class="w-10 h-10"></i></div><div class="p-4"><p class="text-xs font-bold uppercase italic">Vetted Guide: ${q}</p></div></div>
+                    <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm text-slate-900">
+                        <div class="aspect-video bg-slate-900 flex items-center justify-center cursor-pointer text-red-600"><i data-lucide="play-circle" class="w-10 h-10"></i></div>
+                        <div class="p-4"><p class="text-xs font-bold uppercase italic">Vetted Guide: ${q}</p></div>
+                    </div>
                 </div>
             `;
             lucide.createIcons();
@@ -485,21 +500,45 @@
             const name = document.getElementById('manual-part-name').value;
             const price = parseFloat(document.getElementById('manual-part-price').value);
             const qty = parseInt(document.getElementById('manual-part-qty').value) || 1;
-            if(!name || isNaN(price)) return;
+            if(!name || isNaN(price)) return alert("Description and Price required.");
             currentManualParts.push({ name, price, qty, id: Date.now() });
+            
             document.getElementById('manual-part-name').value = "";
             document.getElementById('manual-part-price').value = "";
+            document.getElementById('manual-part-qty').value = "1";
+            
             renderManualPartsList();
         }
 
         function renderManualPartsList() {
             const listContainer = document.getElementById('live-parts-list');
             const itemsContainer = document.getElementById('parts-list-items');
-            if(currentManualParts.length === 0) { listContainer.classList.add('hidden'); return; }
+            const countBadge = document.getElementById('staging-count');
+            
+            if(currentManualParts.length === 0) { 
+                listContainer.classList.add('hidden'); 
+                if(countBadge) countBadge.innerText = "0 ITEMS";
+                return; 
+            }
+            
             listContainer.classList.remove('hidden');
+            if(countBadge) countBadge.innerText = `${currentManualParts.length} ITEMS`;
+            
             itemsContainer.innerHTML = currentManualParts.map(item => `
-                <div class="flex justify-between items-center bg-white p-2 rounded-lg border border-slate-100 shadow-xs"><p class="text-[10px] font-bold uppercase truncate">${item.name} (x${item.qty})</p><span class="text-[10px] font-black text-blue-600">$${(item.price * item.qty).toFixed(2)}</span></div>
+                <div class="flex justify-between items-center bg-white p-2 rounded-lg border border-slate-100 shadow-xs text-slate-900">
+                    <div class="truncate mr-4"><p class="text-[10px] font-bold uppercase truncate">${item.name} (x${item.qty})</p></div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-[10px] font-black text-blue-600">$${(item.price * item.qty).toFixed(2)}</span>
+                        <button onclick="removeManualPart(${item.id})" class="text-slate-300 hover:text-red-500"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
+                    </div>
+                </div>
             `).join('');
+            lucide.createIcons();
+        }
+
+        function removeManualPart(id) {
+            currentManualParts = currentManualParts.filter(p => p.id !== id);
+            renderManualPartsList();
         }
 
         function openCombinedQuote() {
@@ -514,8 +553,12 @@
             
             const list = document.getElementById('quote-parts-list-display');
             list.innerHTML = currentManualParts.map(p => `
-                <div class="flex justify-between items-center text-[10px] py-1"><span class="font-medium text-slate-500 uppercase">${p.name} (x${p.qty})</span><span class="font-bold text-slate-900">$${(p.price * p.qty).toFixed(2)}</span></div>
+                <div class="flex justify-between items-center text-[10px] py-1.5 group">
+                    <span class="font-medium text-slate-600 uppercase italic">${p.name} <span class="text-slate-300 mx-1">/</span> x${p.qty}</span>
+                    <span class="font-bold text-slate-900">$${(p.price * p.qty).toFixed(2)}</span>
+                </div>
             `).join('') || `<p class="text-center py-2 text-slate-300 text-[8px] uppercase">Service Only</p>`;
+            
             updateQuoteTotal();
             const modal = document.getElementById('quote-modal');
             modal.style.display = 'flex';
@@ -549,8 +592,8 @@
             if(!car) return;
             const list = document.getElementById('log-content-list');
             list.innerHTML = car.logs.map(l => `
-                <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 flex justify-between items-center"><div class="truncate"><p class="font-bold uppercase text-[10px] truncate">${l.job}</p><p class="text-[7px] font-bold text-slate-400 uppercase">${l.date} • ${l.parts} Parts</p></div><p class="text-sm font-black text-blue-600 italic">$${l.total}</p></div>
-            `).join('') || `<div class="p-8 text-center"><p class="text-[8px] font-bold text-slate-300 uppercase">History Empty</p></div>`;
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 flex justify-between items-center text-slate-900"><div class="truncate mr-4"><p class="font-bold uppercase text-[10px] truncate">${l.job}</p><p class="text-[7px] font-bold text-slate-400 uppercase">${l.date} • ${l.parts} Items</p></div><p class="text-sm font-black text-blue-600 italic shrink-0">$${l.total}</p></div>
+            `).join('') || `<div class="p-8 text-center text-slate-900"><p class="text-[8px] font-bold text-slate-300 uppercase tracking-widest">No History Stored</p></div>`;
             document.getElementById('log-modal').style.display = 'flex';
         }
 
@@ -559,6 +602,32 @@
         function logout() { localStorage.removeItem('wp_session'); window.location.reload(); }
         function handleBackdropClick(e) { if(e.target.id === 'quote-modal' || e.target.id === 'log-modal') { closeQuote(); closeLog(); } }
         function initializeSession(type) { localStorage.setItem('wp_session', type); init(); }
+
+        function copyInvoiceText() {
+            const total = document.getElementById('quote-final-total').innerText;
+            const partsBreakdown = currentManualParts.map(p => `- ${p.name} (x${p.qty}): $${(p.price * p.qty).toFixed(2)}`).join('\n');
+            const text = `
+ESTIMATE: ${profile.shopName}
+CUSTOMER: ${selectedCar.nickname}
+-----------------------------------
+JOB: ${document.getElementById('result-job-name').innerText}
+
+PARTS BREAKDOWN:
+${partsBreakdown}
+
+LABOR & FEES:
+- Applied Labor: $${document.getElementById('quote-labor-input').value}
+- Shop Consumables: $${profile.shopSupplies}
+-----------------------------------
+GRAND TOTAL: ${total}
+
+CONTACT: ${profile.phone || 'N/A'}
+            `.trim();
+            
+            const el = document.createElement('textarea');
+            el.value = text; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
+            alert("Professional Quote Copied.");
+        }
 
         window.onload = init;
     </script>
