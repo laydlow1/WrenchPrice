@@ -3,538 +3,371 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WrenchPrice | Mobile Garage</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>WrenchPrice Pro | Auto Parts Finder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root { --brand: #f1c40f; --bg: #121212; --card: #1e1e1e; --text: #ffffff; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        .container { width: 100%; max-width: 500px; }
-        header { text-align: center; margin-bottom: 20px; }
-        header h1 { font-weight: 900; letter-spacing: -1px; margin: 0; font-size: 34px; }
-        header span { color: var(--brand); }
-        
-        .garage-section { background: #222; border: 1px dashed var(--brand); padding: 15px; border-radius: 12px; margin-bottom: 15px; }
-        .garage-item { background: #333; padding: 15px; margin-top: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-left: 4px solid var(--brand); font-weight: bold; font-size: 15px;}
-        .garage-item:active { background: #444; }
-        .delete-btn { background: #d90000; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-
-        .card { background: var(--card); padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
-        h2 { font-size: 14px; text-transform: uppercase; color: #888; margin-top: 0; letter-spacing: 1px; }
-        
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 12px; color: var(--brand); font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
-        select, input { width: 100%; padding: 15px; background: #2a2a2a; border: 1px solid #444; color: white; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
-        select:disabled, input:disabled { opacity: 0.4; cursor: not-allowed; }
-        
-        .btn-search { width: 100%; padding: 18px; background: var(--brand); color: #000; border: none; border-radius: 8px; font-weight: 900; text-transform: uppercase; margin-top: 5px; cursor: pointer; font-size: 16px; }
-        .btn-save { background: #333; color: white; border: 1px solid #555; margin-top: 10px; font-size: 14px;}
-        
-        .store-btn { width: 100%; padding: 16px; border: none; border-radius: 8px; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; cursor: pointer; font-size: 15px; color: white; display: block; text-align: center; text-decoration: none; box-sizing: border-box; }
-        .loading-text { font-size: 12px; color: var(--brand); font-style: italic; display: none; margin-top: 6px; }
-
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000; border-radius: 8px; margin-bottom: 10px;}
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        
-        #resultsArea { display: none; }
-        .section-title { font-size: 12px; color: #aaa; margin-top: 25px; margin-bottom: 10px; text-transform: uppercase; font-weight: bold; border-bottom: 1px solid #333; padding-bottom: 5px;}
-        
-        .buy-link-btn { background: #00a8ff; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; display: inline-block; margin-top: 5px;}
-        
-        /* Smart Triggers Styling */
-        .smart-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #fff; margin-top: 5px; padding: 10px; border-radius: 6px; }
-        .smart-row input[type="checkbox"] { width: 18px; height: 18px; margin: 0; cursor: pointer; }
-        .smart-row label { margin: 0; font-weight: bold; color: white; text-transform: none; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .custom-shadow { box-shadow: 0 30px 60px -15px rgba(0,0,0,0.1); }
     </style>
 </head>
-<body>
+<body class="bg-slate-100 text-slate-900 overflow-hidden h-screen flex">
 
-    <div class="container">
-        <header>
-            <h1>WRENCH<span>PRICE</span></h1>
-            <p style="color: #666; font-size: 13px; font-weight: bold;">YOUR MOBILE GARAGE</p>
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="w-72 bg-slate-900 flex flex-col transition-all duration-300 z-50">
+        <div class="p-6 flex items-center gap-4 border-b border-white/10">
+            <div class="bg-blue-600 p-2 rounded-xl"><i data-lucide="wrench" class="text-white w-6 h-6"></i></div>
+            <span class="text-xl font-black italic uppercase text-white tracking-tighter sidebar-text">WrenchPrice</span>
+        </div>
+        <nav class="flex-1 p-4 space-y-2 mt-4">
+            <button onclick="showView('garage')" id="nav-garage" class="w-full flex items-center gap-4 p-3 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-900/50">
+                <i data-lucide="layout-dashboard"></i> <span class="font-bold text-sm uppercase tracking-widest sidebar-text">My Garage</span>
+            </button>
+            <button onclick="showView('search')" id="nav-search" class="w-full flex items-center gap-4 p-3 rounded-xl text-slate-400 hover:bg-white/5 hover:text-white transition-all">
+                <i data-lucide="search"></i> <span class="font-bold text-sm uppercase tracking-widest sidebar-text">Parts Finder</span>
+            </button>
+        </nav>
+        <div class="p-6 border-t border-white/10 text-slate-500 text-[10px] uppercase font-black tracking-widest sidebar-text">
+            v1.0 Pro Demo
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col overflow-hidden relative">
+        <!-- HEADER -->
+        <header class="bg-white p-6 shadow-sm flex justify-between items-center z-40">
+            <div id="active-vehicle-indicator" class="flex items-center gap-3 bg-blue-50 px-4 py-2 rounded-2xl border border-blue-100 hidden animate-fade-in">
+                <i data-lucide="car" class="w-5 h-5 text-blue-600"></i>
+                <span id="header-vehicle-name" class="font-black text-sm uppercase tracking-tighter text-blue-900"></span>
+            </div>
+            <div id="header-placeholder" class="text-slate-400 font-bold uppercase text-xs tracking-widest">Identify Vehicle to Begin</div>
+            <div class="flex items-center gap-4">
+                <div class="bg-slate-100 p-2 rounded-full"><i data-lucide="bell-ring" class="w-5 h-5 text-slate-400"></i></div>
+                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-black text-white text-xs">WP</div>
+            </div>
         </header>
 
-        <div class="garage-section" id="garageArea">
-            <h2 style="color: var(--brand); margin-bottom: 5px;">My Garage</h2>
-            <div id="garageList"><p style="font-size: 12px; color: #aaa; margin: 0;">No vehicles saved yet.</p></div>
-        </div>
-
-        <div class="card">
-            <h2>1. Vehicle Specs</h2>
-            <div class="form-group">
-                <label>Year</label>
-                <select id="yearSelect" onchange="fetchMakes()"><option value="">Select Year</option></select>
-            </div>
-            <div class="form-group">
-                <label>Make</label>
-                <select id="makeSelect" disabled onchange="fetchModels()"><option value="">Select Make</option></select>
-                <div id="makeLoad" class="loading-text">Fetching makes...</div>
-            </div>
-            <div class="form-group">
-                <label>Model</label>
-                <select id="modelSelect" disabled onchange="fetchEngines()"><option value="">Select Model</option></select>
-                <div id="modelLoad" class="loading-text">Fetching models...</div>
-            </div>
-            <div class="form-group">
-                <label>Engine / Trim</label>
-                <select id="engineSelect" disabled><option value="">Select Engine</option></select>
-                <div id="engineLoad" class="loading-text">Finding exact engines...</div>
-            </div>
-            <button class="btn-search btn-save" onclick="saveToGarage()">+ Add Vehicle to Garage</button>
-        </div>
-
-        <div class="card">
-            <h2>2. Part Search</h2>
-            <div class="form-group">
-                <input type="text" id="partInput" placeholder="e.g. Starter, Rotors, Oil" onkeyup="checkSmartTriggers()">
-            </div>
+        <div id="content-stage" class="flex-1 overflow-y-auto p-8 max-w-7xl mx-auto w-full">
             
-            <div id="smartModifiers" style="display: none; background: #2a2a2a; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #00a8ff;">
-                <label style="font-size: 11px; color: #00a8ff; display: block; margin-bottom: 8px; text-transform: uppercase;">Parts Counter Questions:</label>
-                
-                <select id="logPosition" style="padding: 12px; font-size: 14px; margin-bottom: 8px; width: 100%; border-radius: 6px; background: #1e1e1e; border: 1px solid #555; color: white;">
-                    <option value="">Select Position (Optional)</option>
-                    <option value="Front Pair">Front Pair</option>
-                    <option value="Rear Pair">Rear Pair</option>
-                    <option value="Full Set">Full Set (Front & Rear)</option>
-                    <option value="Driver Side">Driver Side (Left)</option>
-                    <option value="Passenger Side">Passenger Side (Right)</option>
-                </select>
-                
-                <div id="drivetrainOptions" style="display: none;">
-                    <select id="driveSelect" style="padding: 12px; font-size: 14px; margin-bottom: 8px; width: 100%; border-radius: 6px; background: #1e1e1e; border: 1px solid #555; color: white;">
-                        <option value="">Select Drivetrain</option>
-                        <option value="4WD">4WD / AWD</option>
-                        <option value="2WD">2WD / RWD</option>
-                    </select>
+            <!-- GARAGE VIEW -->
+            <div id="view-garage" class="view grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
+                <div class="lg:col-span-4">
+                    <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-200">
+                        <h2 class="text-2xl font-black mb-8 flex items-center gap-3 tracking-tighter uppercase italic"><i data-lucide="plus" class="bg-blue-600 text-white rounded-full p-1 w-7 h-7"></i> Add Auto</h2>
+                        <div class="space-y-4">
+                            <select id="select-year" onchange="updateMakes()" class="w-full p-4 bg-slate-100 rounded-2xl font-bold border-none outline-none">
+                                <option value="">Year</option>
+                                <option>2025</option><option>2024</option><option>2023</option><option>2022</option>
+                            </select>
+                            <select id="select-make" onchange="updateModels()" class="w-full p-4 bg-slate-100 rounded-2xl font-bold border-none outline-none">
+                                <option value="">Make</option>
+                            </select>
+                            <select id="select-model" onchange="updateEngines()" class="w-full p-4 bg-slate-100 rounded-2xl font-bold border-none outline-none">
+                                <option value="">Model</option>
+                            </select>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black text-blue-600 uppercase tracking-widest ml-2 flex items-center gap-1">Engine & Displacement <i data-lucide="activity" class="w-3 h-3"></i></label>
+                                <select id="select-engine" class="w-full p-4 bg-slate-100 rounded-2xl font-bold text-blue-700 border-none outline-none">
+                                    <option value="">Select Engine Size</option>
+                                </select>
+                            </div>
+                            <button onclick="addVehicle()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl uppercase tracking-widest mt-4 shadow-xl hover:bg-blue-700 active:scale-95 transition-all">Save to Garage</button>
+                        </div>
+                    </div>
                 </div>
-                
-                <div id="oilOptions" style="display: none;">
-                    <select id="oilSelect" style="padding: 12px; font-size: 14px; margin-bottom: 8px; width: 100%; border-radius: 6px; background: #1e1e1e; border: 1px solid #555; color: white;">
-                        <option value="">Select Oil Type</option>
-                        <option value="Full Synthetic">Full Synthetic</option>
-                        <option value="Synthetic Blend">Synthetic Blend</option>
-                        <option value="Conventional">Conventional</option>
-                    </select>
-                </div>
-
-                <div id="brakeOptions" class="smart-row" style="display: none; background: #d90000;">
-                    <input type="checkbox" id="epbCheck">
-                    <label for="epbCheck">Has Electric Parking Brake (EPB)?</label>
-                </div>
-                
-                <div id="suspensionOptions" class="smart-row" style="display: none; background: #00833e;">
-                    <input type="checkbox" id="offroadCheck">
-                    <label for="offroadCheck">Z71 / Off-Road Package?</label>
-                </div>
-
-                <div id="towOptions" class="smart-row" style="display: none; background: #005399;">
-                    <input type="checkbox" id="towCheck">
-                    <label for="towCheck">Max Tow / Heavy Cooling Pkg?</label>
+                <div class="lg:col-span-8 space-y-6" id="garage-list">
+                    <!-- Vehicles will be injected here -->
                 </div>
             </div>
 
-            <button class="btn-search" onclick="runSearch()">Find Part</button>
+            <!-- SEARCH VIEW -->
+            <div id="view-search" class="view hidden max-w-3xl mx-auto py-20 text-center animate-fade-in">
+                <h2 class="text-6xl font-black mb-12 tracking-tighter leading-none uppercase italic text-slate-900">What needs fixed?</h2>
+                <div class="relative group">
+                    <input id="search-input" placeholder="Alternator, Brakes, Shocks..." class="w-full p-12 text-3xl bg-white rounded-[3.5rem] shadow-2xl border-4 border-transparent focus:border-blue-600 outline-none font-black transition-all" />
+                    <button onclick="runSearch()" class="absolute right-10 top-1/2 -translate-y-1/2 bg-blue-600 text-white p-6 rounded-[2.5rem] shadow-2xl hover:scale-105 active:scale-90 transition-all">
+                        <i data-lucide="search" class="w-10 h-10"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- RESULTS VIEW -->
+            <div id="view-results" class="view hidden space-y-10 animate-fade-in">
+                <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 border-b border-slate-200 pb-12">
+                    <div>
+                        <button onclick="showView('search')" class="text-blue-600 font-black text-[10px] mb-4 flex items-center gap-2 uppercase tracking-widest hover:translate-x-[-4px] transition-transform">← RE-SCAN PARTS</button>
+                        <h2 id="result-query" class="text-6xl font-black uppercase tracking-tighter leading-[0.85]">Alternator</h2>
+                        <p id="result-vehicle" class="text-slate-400 font-bold text-xl uppercase italic tracking-tight mt-2"></p>
+                    </div>
+                    <!-- Labor Matrix -->
+                    <div class="bg-white p-6 rounded-[3rem] shadow-2xl border border-slate-100 flex flex-col sm:flex-row gap-10 items-center px-10">
+                        <div class="opacity-30">
+                            <div class="flex items-center gap-2 text-[9px] font-black uppercase mb-1"><i data-lucide="hard-hat" class="w-3 h-3"></i> Shop Labor</div>
+                            <p id="cost-shop" class="text-3xl font-black line-through italic">$450</p>
+                        </div>
+                        <div class="h-10 w-px bg-slate-200 hidden sm:block"></div>
+                        <div>
+                            <div class="flex items-center gap-2 text-blue-500 text-[9px] font-black uppercase mb-1"><i data-lucide="user-check" class="w-3 h-3"></i> Shade Tree</div>
+                            <p id="cost-side" class="text-4xl font-black text-blue-600 italic tracking-tighter">$180</p>
+                        </div>
+                        <div class="h-10 w-px bg-slate-200 hidden sm:block"></div>
+                        <div class="bg-green-600 p-6 rounded-[2rem] text-white shadow-xl">
+                            <div class="flex items-center gap-2 text-green-200 text-[9px] font-black uppercase mb-1"><i data-lucide="trending-down" class="w-3 h-3"></i> DIY WIN</div>
+                            <p class="text-4xl font-black italic tracking-tighter leading-none">$0.00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                    <div class="lg:col-span-7 space-y-8" id="parts-list"></div>
+                    <div class="lg:col-span-5 space-y-8" id="videos-list"></div>
+                </div>
+            </div>
+
+            <!-- HISTORY VIEW -->
+            <div id="view-history" class="view hidden space-y-8 animate-fade-in">
+                <button onclick="showView('garage')" class="text-blue-600 font-black text-[10px] uppercase tracking-widest leading-none hover:translate-x-[-4px] transition-transform">← BACK TO GARAGE</button>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-5">
+                        <form id="log-form" onsubmit="saveLog(event)" class="bg-white p-8 rounded-[3rem] shadow-xl border border-slate-200 space-y-4">
+                            <h3 class="font-black uppercase tracking-widest text-xs mb-6 text-blue-600">New Log Entry</h3>
+                            <input id="log-service" placeholder="Service (e.g. Oil Change)" class="w-full p-4 bg-slate-100 rounded-2xl font-bold" required />
+                            <div class="grid grid-cols-2 gap-4">
+                                <input id="log-mileage" placeholder="Mileage" class="p-4 bg-slate-100 rounded-2xl font-bold" />
+                                <input id="log-cost" placeholder="Cost ($)" class="p-4 bg-slate-100 rounded-2xl font-bold" />
+                            </div>
+                            <input id="log-date" type="date" class="w-full p-4 bg-slate-100 rounded-2xl font-bold" />
+                            <button type="submit" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl uppercase tracking-widest text-xs shadow-lg">Save Service Log</button>
+                        </form>
+                    </div>
+                    <div class="lg:col-span-7 space-y-4" id="logs-list"></div>
+                </div>
+            </div>
+
         </div>
 
-        <div id="resultsArea">
-            <div class="card" style="border-top: 5px solid #00a8ff;">
-                <h3 style="margin-top:0; font-size:18px;" id="resVehicle">Vehicle</h3>
-                <p style="color:var(--brand); font-weight:900; font-size: 22px; margin-top:5px; margin-bottom: 5px;" id="resPart">PART</p>
-                <p style="font-size: 12px; color: #00a8ff; font-weight: bold; margin-top:0;" id="resSpecs"></p>
-                
-                <div class="section-title">Online Deals (Shipping)</div>
-                <a href="#" id="link1AAuto" target="_blank" class="store-btn" style="background:#0033a0;">1A Auto</a>
-                <a href="#" id="linkAmazon" target="_blank" class="store-btn" style="background:#ff9900; color:black;">Amazon Auto</a>
-                <a href="#" id="linkEbay" target="_blank" class="store-btn" style="background:#e53238;">eBay Motors</a>
-                <a href="#" id="linkRockAuto" target="_blank" class="store-btn" style="background:#005399;">RockAuto</a>
-                
-                <div class="section-title">Can't Wait? Shop Local</div>
-                <a href="#" id="linkAutoZone" target="_blank" class="store-btn" style="background:#d90000;">AutoZone</a>
-                <a href="#" id="linkOReilly" target="_blank" class="store-btn" style="background:#00833e;">O'Reilly</a>
-                <a href="#" id="linkAdvance" target="_blank" class="store-btn" style="background:#ffcc00; color:black;">Advance Auto</a>
-
-                <div class="section-title">How-To Repair Guides</div>
-                <a href="#" id="linkTRQVideo" target="_blank" class="store-btn" style="background:#cc0000; border: 1px solid #ff3333;">TRQ Repair Videos</a>
-                <a href="#" id="linkYouTube" target="_blank" class="store-btn" style="background:#222; border: 1px solid #555;">Search All YouTube Guides</a>
-            </div>
-
-            <div class="card" style="border-top: 4px solid var(--brand); background: #181818;">
-                <h3 style="margin-top:0; font-size:16px;">Vehicle Build Sheet</h3>
-                
-                <div class="section-title">Save a Part Link</div>
-                <p style="font-size: 11px; color: #888; margin-top:0;">Found the right part? Log it here so you don't lose the link.</p>
-                
-                <input type="url" id="logLink" placeholder="1. Paste link to the part here..." style="margin-bottom: 10px; border-left: 4px solid #00a8ff;" oninput="analyzePastedLink()">
-                
-                <div class="grid-2">
-                    <input type="text" id="logName" placeholder="Part Name / Number">
-                    <input type="text" id="logPrice" placeholder="Price (e.g. $120)">
+        <!-- QUOTE MODAL -->
+        <div id="quote-modal" class="fixed inset-0 z-[100] bg-blue-900/60 backdrop-blur-xl hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-xl rounded-[4rem] shadow-2xl overflow-hidden">
+                <div class="bg-blue-700 p-10 text-white flex justify-between items-center">
+                    <div><h3 class="text-3xl font-black uppercase italic tracking-tighter">Service Quote</h3><p class="text-[10px] font-bold opacity-60 uppercase tracking-[0.3em] mt-2">WrenchPrice Pro Demo</p></div>
+                    <button onclick="closeQuote()" class="bg-white/10 p-4 rounded-full"><i data-lucide="x"></i></button>
                 </div>
-                <button class="btn-search" style="padding: 12px; font-size: 14px; margin-top: 10px; background: #00a8ff; color: white;" onclick="saveLog()">Save Part to Build Sheet</button>
-                
-                <div id="savedLogs" style="margin-top: 20px;"></div>
-
-                <div class="section-title" style="margin-top: 30px;">Saved Repair Videos</div>
-                <p style="font-size: 11px; color: #888; margin-top:0;">Paste a YouTube link to embed it.</p>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="videoLinkInput" placeholder="Paste YouTube link..." style="padding:12px; font-size:14px;">
-                    <button class="btn-search" style="margin-top: 0; width: auto; padding: 0 15px; background: #ff0000; color: white;" onclick="saveVideo()">Save</button>
+                <div class="p-12 space-y-6">
+                    <div class="flex justify-between border-b pb-4"><span class="font-black text-slate-400 uppercase text-xs">Vehicle</span><span id="quote-veh" class="font-bold text-slate-900 uppercase"></span></div>
+                    <div class="flex justify-between border-b pb-4 items-center"><span class="font-black text-slate-400 uppercase text-xs">Labor Estimate</span><div class="flex items-center gap-3"><span class="text-blue-600 font-black">$</span><input id="quote-labor-input" type="number" oninput="updateQuoteTotal()" class="w-32 p-3 bg-slate-50 border-2 border-blue-100 rounded-2xl text-right font-black text-2xl text-blue-600" /></div></div>
+                    <div class="flex justify-between pt-10"><span class="font-black text-blue-700 uppercase text-2xl italic tracking-tighter">Total Estimate</span><span id="quote-total" class="text-5xl font-black text-slate-900 italic tracking-tighter">$0.00</span></div>
+                    <button onclick="alert('Quote Copied!')" class="w-full bg-slate-900 text-white font-black py-6 rounded-[2rem] uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-black transition-all">Copy Invoice Text</button>
                 </div>
-                <div id="savedVideosList" style="margin-top: 15px;"></div>
             </div>
         </div>
 
-    </div>
+    </main>
 
     <script>
-        // --- TOP HALF LOGIC (EPA DATABASE) ---
-        const epaHeaders = { headers: { 'Accept': 'application/json' } };
-        window.onload = () => {
-            loadGarage();
-            const yearSelect = document.getElementById('yearSelect');
-            for(let y = 2026; y >= 1984; y--) yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
-        };
+        // APP STATE
+        let garage = JSON.parse(localStorage.getItem('wp_garage')) || [];
+        let logs = JSON.parse(localStorage.getItem('wp_logs')) || [];
+        let selectedCar = null;
+        let currentPartPrice = 0;
 
-        function ensureArray(data) { return (!data || !data.menuItem) ? [] : Array.isArray(data.menuItem) ? data.menuItem : [data.menuItem]; }
+        // DATA HELPERS
+        const MAKES = ["Toyota", "Ford", "Honda", "Chevrolet"];
+        const MODELS = ["Camry", "F-150", "Civic", "Silverado"];
+        const ENGINES = ["LE (Standard 4-Cyl)", "XLE (Premium V6)", "TRD Pro (Turbo V6)"];
 
-        async function fetchMakes() {
-            const year = document.getElementById('yearSelect').value;
-            const makeSelect = document.getElementById('makeSelect');
-            if(!year) return;
-            document.getElementById('makeLoad').style.display = 'block'; makeSelect.disabled = true;
-            try {
-                const res = await fetch(`https://www.fueleconomy.gov/ws/rest/vehicle/menu/make?year=${year}`, epaHeaders);
-                const makes = ensureArray(await res.json());
-                makeSelect.innerHTML = '<option value="">Select Make</option>';
-                makes.forEach(m => makeSelect.innerHTML += `<option value="${m.value}">${m.value}</option>`);
-                makeSelect.disabled = false;
-            } catch (err) {}
-            document.getElementById('makeLoad').style.display = 'none';
+        function init() {
+            lucide.createIcons();
+            renderGarage();
+            updateMakes();
+            document.getElementById('log-date').valueAsDate = new Date();
         }
 
-        async function fetchModels() {
-            const year = document.getElementById('yearSelect').value;
-            const make = document.getElementById('makeSelect').value;
-            const modelSelect = document.getElementById('modelSelect');
-            if(!make) return;
-            document.getElementById('modelLoad').style.display = 'block'; modelSelect.disabled = true;
-            try {
-                const res = await fetch(`https://www.fueleconomy.gov/ws/rest/vehicle/menu/model?year=${year}&make=${make}`, epaHeaders);
-                const models = ensureArray(await res.json());
-                modelSelect.innerHTML = '<option value="">Select Model</option>';
-                models.forEach(m => modelSelect.innerHTML += `<option value="${m.value}">${m.value}</option>`);
-                modelSelect.disabled = false;
-            } catch (err) {}
-            document.getElementById('modelLoad').style.display = 'none';
-        }
-
-        async function fetchEngines() {
-            const year = document.getElementById('yearSelect').value;
-            const make = document.getElementById('makeSelect').value;
-            const model = document.getElementById('modelSelect').value;
-            const engineSelect = document.getElementById('engineSelect');
-            if(!model) return;
-            document.getElementById('engineLoad').style.display = 'block'; engineSelect.disabled = true;
-            try {
-                const res = await fetch(`https://www.fueleconomy.gov/ws/rest/vehicle/menu/options?year=${year}&make=${make}&model=${encodeURIComponent(model)}`, epaHeaders);
-                const engines = ensureArray(await res.json());
-                engineSelect.innerHTML = '<option value="">Select Engine</option>';
-                engines.forEach(e => {
-                    const cleanText = e.text.split(',')[0] + ' (' + e.text + ')';
-                    engineSelect.innerHTML += `<option value="${e.text.split(',')[0]}">${cleanText}</option>`;
-                });
-                engineSelect.disabled = false;
-            } catch (err) {}
-            document.getElementById('engineLoad').style.display = 'none';
-        }
-
-        // --- GARAGE DATABASE ---
-        let wrenchDB = JSON.parse(localStorage.getItem('wrenchDB_v8')) || {};
-        let activeVehicleKey = null;
-
-        function saveToGarage() {
-            const y = document.getElementById('yearSelect').value;
-            const m = document.getElementById('makeSelect').value;
-            const mod = document.getElementById('modelSelect').value;
-            const eng = document.getElementById('engineSelect').value;
-            if(!y || !m || !mod || !eng) return alert("Select all dropdowns to save to garage!");
-
-            const key = `${y} ${m} ${mod} | ${eng}`;
-            if(!wrenchDB[key]) {
-                wrenchDB[key] = { savedParts: [], videos: [], shortModel: mod.split(' ')[0] };
-                localStorage.setItem('wrenchDB_v8', JSON.stringify(wrenchDB));
-            }
-            loadGarage();
-            activeVehicleKey = key;
-            alert("Vehicle Saved to Garage!");
-        }
-
-        function loadGarage() {
-            const list = document.getElementById('garageList');
-            const vehicles = Object.keys(wrenchDB);
-            if(vehicles.length === 0) {
-                list.innerHTML = '<p style="font-size: 12px; color: #aaa; margin: 0;">No vehicles saved yet.</p>';
-                return;
-            }
-            list.innerHTML = '';
-            vehicles.forEach((v) => {
-                list.innerHTML += `
-                    <div class="garage-item">
-                        <div style="flex-grow:1;" onclick="setActiveVehicle('${v}')">${v}</div>
-                        <button class="delete-btn" onclick="deleteFromGarage('${v}')">X</button>
-                    </div>`;
-            });
-        }
-
-        function deleteFromGarage(key) {
-            delete wrenchDB[key];
-            localStorage.setItem('wrenchDB_v8', JSON.stringify(wrenchDB));
-            document.getElementById('resultsArea').style.display = 'none';
-            loadGarage();
-        }
-
-        function setActiveVehicle(key) {
-            activeVehicleKey = key;
-            document.getElementById('partInput').value = '';
-            document.getElementById('smartModifiers').style.display = 'none';
-            alert(`Loaded ${key}. Type a part below to search.`);
-            document.getElementById('resultsArea').style.display = 'none';
-        }
-
-        // --- THE "LIVE TYPING" SMART TRIGGERS ---
-        function checkSmartTriggers() {
-            const part = document.getElementById('partInput').value.toLowerCase();
-            const smartBox = document.getElementById('smartModifiers');
+        // NAVIGATION
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
             
-            // Hide all first
-            document.getElementById('brakeOptions').style.display = 'none';
-            document.getElementById('suspensionOptions').style.display = 'none';
-            document.getElementById('drivetrainOptions').style.display = 'none';
-            document.getElementById('towOptions').style.display = 'none';
-            document.getElementById('oilOptions').style.display = 'none';
-            document.getElementById('logPosition').style.display = 'block';
-
-            if (part.length < 3) {
-                smartBox.style.display = 'none';
-                return;
-            }
-
-            let showBox = false;
-
-            if(part.includes('brake') || part.includes('rotor') || part.includes('pad') || part.includes('caliper')) {
-                document.getElementById('brakeOptions').style.display = 'flex'; showBox = true;
-            } else if(part.includes('shock') || part.includes('strut') || part.includes('control arm') || part.includes('tie rod') || part.includes('hub')) {
-                document.getElementById('suspensionOptions').style.display = 'flex';
-                document.getElementById('drivetrainOptions').style.display = 'block'; showBox = true;
-            } else if(part.includes('radiator') || part.includes('alternator') || part.includes('cooler') || part.includes('fan')) {
-                document.getElementById('towOptions').style.display = 'flex'; showBox = true;
-            } else if(part.includes('oil')) {
-                document.getElementById('oilOptions').style.display = 'block';
-                document.getElementById('logPosition').style.display = 'none'; showBox = true;
-            }
-
-            smartBox.style.display = showBox ? 'block' : 'none';
+            document.getElementById('nav-garage').className = "w-full flex items-center gap-4 p-3 rounded-xl " + (viewId === 'garage' || viewId === 'history' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-white/5');
+            document.getElementById('nav-search').className = "w-full flex items-center gap-4 p-3 rounded-xl " + (viewId === 'search' || viewId === 'results' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-white/5');
         }
 
-        // --- THE LAUNCHPAD SEARCH ENGINE ---
+        // GARAGE LOGIC
+        function updateMakes() {
+            const s = document.getElementById('select-make');
+            s.innerHTML = '<option value="">Make</option>' + MAKES.map(m => `<option>${m}</option>`).join('');
+        }
+        function updateModels() {
+            const s = document.getElementById('select-model');
+            s.innerHTML = '<option value="">Model</option>' + MODELS.map(m => `<option>${m}</option>`).join('');
+        }
+        function updateEngines() {
+            const s = document.getElementById('select-engine');
+            s.innerHTML = '<option value="">Select Engine Size</option>' + ENGINES.map(e => `<option>${e}</option>`).join('');
+        }
+
+        function addVehicle() {
+            const car = {
+                id: Date.now(),
+                year: document.getElementById('select-year').value,
+                make: document.getElementById('select-make').value,
+                model: document.getElementById('select-model').value,
+                engine: document.getElementById('select-engine').value
+            };
+            if(!car.engine) return alert("Please finish all steps!");
+            garage.push(car);
+            localStorage.setItem('wp_garage', JSON.stringify(garage));
+            renderGarage();
+        }
+
+        function renderGarage() {
+            const list = document.getElementById('garage-list');
+            list.innerHTML = garage.map(car => `
+                <div class="bg-white p-8 rounded-[3rem] border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 hover:shadow-2xl transition-all group relative overflow-hidden">
+                    <div class="absolute left-0 top-0 w-2 h-full bg-blue-600"></div>
+                    <div class="flex items-center gap-6 flex-1 cursor-pointer" onclick="setActiveCar(${car.id})">
+                        <div class="bg-blue-50 p-6 rounded-[2rem] text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all"><i data-lucide="car" class="w-10 h-10"></i></div>
+                        <div>
+                            <p class="font-black text-2xl tracking-tighter mb-1 uppercase leading-none">${car.year} ${car.make} ${car.model}</p>
+                            <p class="text-[10px] font-black text-blue-500 uppercase tracking-widest opacity-70 italic flex items-center gap-2"><i data-lucide="activity" class="w-3 h-3"></i> ${car.engine}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="showLogs(${car.id})" class="bg-slate-50 hover:bg-slate-100 p-4 rounded-2xl text-[10px] font-black uppercase flex items-center gap-2"><i data-lucide="history" class="w-4 h-4 text-slate-400"></i> Logs</button>
+                        <button onclick="setActiveCar(${car.id})" class="bg-blue-600 text-white p-4 px-6 rounded-2xl text-[10px] font-black uppercase flex items-center gap-2 hover:bg-blue-700 shadow-lg italic">Find Parts</button>
+                        <button onclick="deleteCar(${car.id})" class="p-4 text-slate-200 hover:text-red-500 transition-colors"><i data-lucide="trash-2"></i></button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function deleteCar(id) {
+            garage = garage.filter(c => c.id !== id);
+            localStorage.setItem('wp_garage', JSON.stringify(garage));
+            renderGarage();
+        }
+
+        function setActiveCar(id) {
+            selectedCar = garage.find(c => c.id === id);
+            document.getElementById('header-vehicle-name').innerText = `${selectedCar.year} ${selectedCar.make} ${selectedCar.model}`;
+            document.getElementById('active-vehicle-indicator').classList.remove('hidden');
+            document.getElementById('header-placeholder').classList.add('hidden');
+            showView('search');
+        }
+
+        // SEARCH LOGIC
         function runSearch() {
-            let year, make, engine, shortModel;
-            let part = document.getElementById('partInput').value;
-            let queryModifiers = ""; // This holds the words we inject into the search links
-            let displaySpecs = [];   // This holds the text we show on the screen
-
-            if(!part) return alert("Please type a part to search for!");
-
-            if (activeVehicleKey) {
-                const split = activeVehicleKey.split(' | ');
-                const carParts = split[0].split(' ');
-                year = carParts[0]; make = carParts[1]; engine = split[1];
-                shortModel = wrenchDB[activeVehicleKey].shortModel;
-            } else {
-                year = document.getElementById('yearSelect').value;
-                make = document.getElementById('makeSelect').value;
-                const model = document.getElementById('modelSelect').value;
-                engine = document.getElementById('engineSelect').value;
-                if(!year || !make || !model) return alert("Select a vehicle first!");
-                shortModel = model.split(' ')[0]; 
-            }
-
-            // --- GATHER THE PRE-SEARCH ANSWERS ---
-            const position = document.getElementById('logPosition').value;
-            if(position && document.getElementById('logPosition').style.display !== 'none') {
-                queryModifiers += ` ${position}`;
-                displaySpecs.push(position);
-            }
-
-            if(document.getElementById('brakeOptions').style.display !== 'none' && document.getElementById('epbCheck').checked) {
-                queryModifiers += ` Electric Parking Brake`;
-                displaySpecs.push("EPB Equipped");
-            }
-            if(document.getElementById('suspensionOptions').style.display !== 'none' && document.getElementById('offroadCheck').checked) {
-                queryModifiers += ` Off Road`;
-                displaySpecs.push("Off-Road Package");
-            }
-            if(document.getElementById('drivetrainOptions').style.display !== 'none' && document.getElementById('driveSelect').value) {
-                queryModifiers += ` ${document.getElementById('driveSelect').value}`;
-                displaySpecs.push(document.getElementById('driveSelect').value);
-            }
-            if(document.getElementById('towOptions').style.display !== 'none' && document.getElementById('towCheck').checked) {
-                queryModifiers += ` Heavy Duty Cooling`;
-                displaySpecs.push("Tow / HD Cooling");
-            }
-            if(document.getElementById('oilOptions').style.display !== 'none' && document.getElementById('oilSelect').value) {
-                queryModifiers += ` ${document.getElementById('oilSelect').value}`;
-                displaySpecs.push(document.getElementById('oilSelect').value);
-            }
-
-            // --- INJECT MODIFIERS INTO THE SEARCH STRINGS ---
-            // Now AutoZone & RockAuto get the EPB or Towing instructions natively!
-            const cleanSearch = `${year} ${make} ${shortModel} ${part} ${queryModifiers}`.trim();
-            const videoSearch = `How to replace ${part} ${position} ${year} ${make} ${shortModel} ${engine}`.trim();
-
-            document.getElementById('resVehicle').innerText = `${year} ${make} ${shortModel} | ${engine}`;
-            document.getElementById('resPart').innerText = part.toUpperCase();
-            document.getElementById('resSpecs').innerText = displaySpecs.length > 0 ? `(${displaySpecs.join(' | ')})` : "";
-
-            // Update Store Links
-            document.getElementById('link1AAuto').href = `https://www.1aauto.com/search?q=${encodeURIComponent(cleanSearch)}`;
-            document.getElementById('linkAmazon').href = `https://www.amazon.com/s?k=${encodeURIComponent(cleanSearch + ' automotive')}`;
-            document.getElementById('linkEbay').href = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(cleanSearch)}`;
-            document.getElementById('linkRockAuto').href = `https://www.rockauto.com/en/partsearch/?searchtext=${encodeURIComponent(cleanSearch)}`;
+            const query = document.getElementById('search-input').value;
+            if(!query) return;
+            document.getElementById('result-query').innerText = query;
+            document.getElementById('result-vehicle').innerText = `${selectedCar.year} ${selectedCar.make} ${selectedCar.model} | ${selectedCar.engine}`;
             
-            document.getElementById('linkAutoZone').href = `https://www.autozone.com/searchresult?searchText=${encodeURIComponent(cleanSearch)}`;
-            document.getElementById('linkOReilly').href = `https://www.oreillyauto.com/search?q=${encodeURIComponent(cleanSearch)}`;
-            document.getElementById('linkAdvance').href = `https://shop.advanceautoparts.com/web/SearchResults?searchTerm=${encodeURIComponent(cleanSearch)}`;
+            // Simulation
+            let shop = 320;
+            if(query.toLowerCase().includes('brake')) shop = 380;
+            if(query.toLowerCase().includes('oil')) shop = 65;
             
-            // TRQ Video Injection
-            document.getElementById('linkTRQVideo').href = `https://www.youtube.com/results?search_query=${encodeURIComponent(videoSearch + ' "TRQ"')}`;
-            document.getElementById('linkYouTube').href = `https://www.youtube.com/results?search_query=${encodeURIComponent(videoSearch)}`;
-
-            document.getElementById('resultsArea').style.display = 'block';
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            document.getElementById('cost-shop').innerText = `$${shop}`;
+            document.getElementById('cost-side').innerText = `$${Math.round(shop * 0.45)}`;
             
-            // Auto-fill the Build Sheet notepad with everything attached
-            let finalName = part.charAt(0).toUpperCase() + part.slice(1);
-            if(displaySpecs.length > 0) finalName += ` [${displaySpecs.join(', ')}]`;
-            document.getElementById('logName').value = finalName;
-            
-            if(activeVehicleKey) renderNotepad();
+            renderResults(query, shop);
+            showView('results');
         }
 
-        // --- SMART PASTE SCRIPT ---
-        function analyzePastedLink() {
-            const link = document.getElementById('logLink').value.toLowerCase();
-            if(!link) return;
+        function renderResults(q, shop) {
+            const partsList = document.getElementById('parts-list');
+            const videosList = document.getElementById('videos-list');
             
-            let store = "";
-            if(link.includes('1aauto.com')) store = "1A Auto";
-            else if(link.includes('trqauto.com')) store = "TRQ";
-            else if(link.includes('autozone.com')) store = "AutoZone";
-            else if(link.includes('rockauto.com')) store = "RockAuto";
-            else if(link.includes('amazon.com')) store = "Amazon";
-            else if(link.includes('ebay.com')) store = "eBay";
-            else if(link.includes('oreillyauto.com')) store = "O'Reilly";
-            else if(link.includes('advanceautoparts.com')) store = "Advance Auto";
-            
-            const nameBox = document.getElementById('logName');
-            
-            if(store && !nameBox.value.includes(store)) {
-                if(nameBox.value) nameBox.value = nameBox.value + ` (${store})`;
-                else nameBox.value = `Part from ${store}`;
-            }
+            const sideJobLabor = Math.round(shop * 0.45);
+            const usedPrice = Math.round(shop * 0.25);
+
+            partsList.innerHTML = `
+                <div class="bg-slate-900 p-8 rounded-[3rem] text-white shadow-2xl relative overflow-hidden group">
+                    <div class="flex items-center gap-3 mb-8"><i data-lucide="recycle" class="text-green-400 w-8 h-8"></i><h3 class="font-black text-2xl uppercase italic tracking-tighter">eBay Recycled</h3></div>
+                    <div class="bg-white/5 border border-white/10 p-6 rounded-3xl flex justify-between items-center hover:bg-white/10 transition-all">
+                        <div><p class="font-black text-lg uppercase">AutoRecycle_Plus</p><p class="text-[10px] text-slate-500 uppercase">Grade A Used Match</p></div>
+                        <div class="flex items-center gap-6"><p class="text-3xl font-black text-green-400 italic">$${usedPrice}.00</p><button onclick="openQuote('${q} (Used)', ${usedPrice}, ${sideJobLabor})" class="bg-blue-600 p-4 rounded-2xl"><i data-lucide="file-text"></i></button></div>
+                    </div>
+                </div>
+                <div class="bg-white p-10 rounded-[3.5rem] border border-slate-200 flex gap-10 hover:shadow-2xl transition-all relative">
+                    <div class="w-48 h-48 bg-slate-100 rounded-[2rem] flex items-center justify-center"><i data-lucide="package" class="w-12 h-12 text-slate-300"></i></div>
+                    <div class="flex-1 flex flex-col justify-between">
+                        <div><h4 class="font-black text-4xl leading-none uppercase italic mb-3">Premium ${q}</h4><span class="bg-blue-50 text-blue-600 px-4 py-1.5 rounded-full text-[10px] font-black uppercase">Bosch Performance</span></div>
+                        <div class="flex items-end justify-between"><p class="text-6xl font-black italic tracking-tighter leading-none">$84.50</p><button onclick="openQuote('${q}', 84.50, ${sideJobLabor})" class="bg-blue-600 text-white font-black px-12 py-6 rounded-[2rem] text-xs uppercase tracking-widest">Buy Part</button></div>
+                    </div>
+                </div>
+            `;
+
+            videosList.innerHTML = `
+                <div class="bg-white rounded-[3.5rem] overflow-hidden shadow-xl border border-slate-100">
+                    <div class="aspect-video bg-slate-200 flex items-center justify-center cursor-pointer relative">
+                        <i data-lucide="play-circle" class="w-20 h-20 text-red-600 z-10"></i>
+                        <div class="absolute top-8 left-8 bg-red-600 text-[9px] font-black px-4 py-2 rounded-full text-white uppercase z-10">TRQ Auto</div>
+                    </div>
+                    <div class="p-10"><p class="text-slate-900 font-black text-2xl uppercase italic tracking-tighter leading-tight">How to Replace ${q} on ${selectedCar.make} ${selectedCar.model}</p></div>
+                </div>
+            `;
+            lucide.createIcons();
         }
 
-        // --- MOBILE FRIENDLY BUILD SHEET ---
-        function extractYouTubeID(url) {
-            const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
+        // QUOTE GENERATOR
+        function openQuote(name, price, labor) {
+            currentPartPrice = price;
+            document.getElementById('quote-veh').innerText = `${selectedCar.year} ${selectedCar.make} ${selectedCar.model}`;
+            document.getElementById('quote-labor-input').value = labor;
+            document.getElementById('quote-modal').classList.remove('hidden');
+            updateQuoteTotal();
+        }
+        function closeQuote() { document.getElementById('quote-modal').classList.add('hidden'); }
+        function updateQuoteTotal() {
+            const labor = parseFloat(document.getElementById('quote-labor-input').value) || 0;
+            document.getElementById('quote-total').innerText = `$${(currentPartPrice + labor).toFixed(2)}`;
         }
 
-        function renderNotepad() {
-            if(!activeVehicleKey || !wrenchDB[activeVehicleKey]) return;
-            
-            const logsList = document.getElementById('savedLogs');
-            logsList.innerHTML = '';
-            
-            if(wrenchDB[activeVehicleKey].savedParts.length === 0) {
-                logsList.innerHTML = '<p style="font-size:11px; color:#888;">No parts saved yet.</p>';
-            } else {
-                wrenchDB[activeVehicleKey].savedParts.forEach((item, idx) => {
-                    let linkHtml = item.link ? `<a href="${item.link}" target="_blank" class="buy-link-btn">Buy Part</a>` : '';
-                    
-                    logsList.innerHTML += `
-                        <div style="background: #2a2a2a; padding: 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: flex-start; border-left: 3px solid #00a8ff;">
-                            <div>
-                                <div style="font-weight: bold; font-size: 14px;">${item.name}</div>
-                                <div style="color: var(--brand); font-size: 13px; margin-top: 2px;">${item.price}</div>
-                                ${linkHtml}
-                            </div>
-                            <button class="delete-btn" style="padding: 6px 10px; background: #555;" onclick="deletePart(${idx})">X</button>
-                        </div>`;
-                });
-            }
-
-            const videosList = document.getElementById('savedVideosList');
-            videosList.innerHTML = '';
-            wrenchDB[activeVehicleKey].videos.forEach((v, idx) => {
-                const videoId = extractYouTubeID(v);
-                if(videoId) {
-                    videosList.innerHTML += `
-                        <div style="background: #111; padding: 10px; border-radius: 8px; border: 1px solid #333; margin-bottom: 15px;">
-                            <div class="video-container">
-                                <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
-                            </div>
-                            <button class="delete-btn" style="width:100%; margin-top: 5px;" onclick="deleteVideo(${idx})">Remove Video</button>
-                        </div>`;
-                }
-            });
+        // HISTORY LOGS
+        function showLogs(id) {
+            selectedCar = garage.find(c => c.id === id);
+            renderLogs();
+            showView('history');
+        }
+        function renderLogs() {
+            const list = document.getElementById('logs-list');
+            const carLogs = logs.filter(l => l.carId === selectedCar.id);
+            list.innerHTML = carLogs.map(log => `
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden group flex justify-between items-center">
+                    <div class="absolute left-0 top-0 w-1.5 h-full bg-blue-600"></div>
+                    <div><h4 class="font-black text-xl uppercase italic tracking-tighter">${log.service}</h4><p class="text-[10px] font-black text-blue-500 uppercase">${log.date} • ${log.mileage} MI • $${log.cost}</p></div>
+                    <button onclick="deleteLog(${log.id})" class="p-4 text-slate-200 hover:text-red-500 transition-all"><i data-lucide="trash-2"></i></button>
+                </div>
+            `).join('') || '<div class="p-12 text-center bg-white rounded-[3rem] border border-dashed border-slate-200 text-slate-400 font-bold uppercase text-xs">No records</div>';
+            lucide.createIcons();
+        }
+        function saveLog(e) {
+            e.preventDefault();
+            const log = {
+                id: Date.now(),
+                carId: selectedCar.id,
+                service: document.getElementById('log-service').value,
+                mileage: document.getElementById('log-mileage').value,
+                cost: document.getElementById('log-cost').value,
+                date: document.getElementById('log-date').value
+            };
+            logs.push(log);
+            localStorage.setItem('wp_logs', JSON.stringify(logs));
+            document.getElementById('log-form').reset();
+            renderLogs();
+        }
+        function deleteLog(id) {
+            logs = logs.filter(l => l.id !== id);
+            localStorage.setItem('wp_logs', JSON.stringify(logs));
+            renderLogs();
         }
 
-        function saveLog() {
-            if(!activeVehicleKey) return alert("Save this vehicle to your Garage first!");
-            
-            let name = document.getElementById('logName').value;
-            const price = document.getElementById('logPrice').value || "Price not set";
-            const link = document.getElementById('logLink').value;
-            
-            if(!name && !link) return alert("Please enter at least a part name or paste a link.");
-            if(!name) name = "Saved Part Link";
-            
-            wrenchDB[activeVehicleKey].savedParts.push({ name: name, price: price, link: link });
-            localStorage.setItem('wrenchDB_v8', JSON.stringify(wrenchDB));
-            
-            document.getElementById('logPrice').value = '';
-            document.getElementById('logLink').value = '';
-            
-            renderNotepad();
-        }
-
-        function deletePart(index) {
-            wrenchDB[activeVehicleKey].savedParts.splice(index, 1);
-            localStorage.setItem('wrenchDB_v8', JSON.stringify(wrenchDB));
-            renderNotepad();
-        }
-
-        function saveVideo() {
-            if(!activeVehicleKey) return alert("Save this vehicle to your Garage first!");
-            const link = document.getElementById('videoLinkInput').value;
-            if(!link) return;
-            
-            wrenchDB[activeVehicleKey].videos.push(link);
-            localStorage.setItem('wrenchDB_v8', JSON.stringify(wrenchDB));
-            document.getElementById('videoLinkInput').value = '';
-            renderNotepad();
-        }
-
-        function deleteVideo(index) {
-            wrenchDB[activeVehicleKey].videos.splice(index, 1);
-            localStorage.setItem('wrenchDB_v8', JSON.stringify(wrenchDB));
-            renderNotepad();
-        }
+        window.onload = init;
     </script>
 </body>
 </html>
