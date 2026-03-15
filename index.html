@@ -3,192 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WrenchPrice Pro | Auto Parts Finder</title>
+    <title>WrenchPrice Pro | Mechanic Workbench</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .custom-shadow { box-shadow: 0 30px 60px -15px rgba(0,0,0,0.1); }
-        /* Prevent elastic scrolling on iOS */
-        html, body { position: fixed; overflow: hidden; width: 100%; height: 100%; }
+        .metallic-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .glass-header { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
+        /* Professional Tool Slider Styling */
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; background: #3b82f6; border-radius: 10px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%; background: #ffffff; cursor: pointer; margin-top: -8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 2px solid #3b82f6; }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-900 h-screen flex flex-col md:flex-row">
+<body class="bg-slate-100 text-slate-900 h-screen flex flex-col md:flex-row overflow-hidden">
 
-    <!-- DESKTOP SIDEBAR (Hidden on Mobile) -->
-    <aside id="sidebar" class="hidden md:flex w-72 bg-slate-900 flex-col transition-all duration-300 z-50">
-        <div class="p-6 flex items-center gap-4 border-b border-white/10">
-            <div class="bg-blue-600 p-2 rounded-xl"><i data-lucide="wrench" class="text-white w-6 h-6"></i></div>
+    <!-- PIZAZZ WATERMARKS (Global Layer) -->
+    <div class="fixed inset-0 pointer-events-none opacity-[0.03] overflow-hidden select-none z-0">
+        <i data-lucide="truck" class="absolute top-20 right-10 w-[30rem] h-[30rem] -rotate-12"></i>
+        <i data-lucide="cog" class="absolute bottom-40 left-20 w-80 h-80 animate-[spin_40s_linear_infinite]"></i>
+        <i data-lucide="wrench" class="absolute top-1/2 left-1/4 w-96 h-96 rotate-45"></i>
+    </div>
+
+    <!-- LANDING / AUTH GATE -->
+    <div id="auth-gate" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-6 font-sans">
+        <div class="absolute inset-0 pointer-events-none opacity-10">
+            <i data-lucide="wrench" class="absolute top-10 left-10 w-64 h-64 -rotate-45 text-blue-500"></i>
+            <i data-lucide="truck" class="absolute bottom-10 right-10 w-[40rem] h-[40rem] rotate-12 text-blue-500"></i>
+        </div>
+        <div class="max-w-xl w-full bg-white rounded-[4rem] shadow-2xl p-12 text-center relative z-10 animate-in zoom-in border-4 border-slate-100">
+            <div class="bg-blue-600 w-24 h-24 rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-2xl transform -rotate-6">
+                <i data-lucide="wrench" class="w-12 h-12 text-white"></i>
+            </div>
+            <h1 class="text-5xl font-black italic uppercase tracking-tighter text-slate-900 mb-4">WrenchPrice<span class="text-blue-600">Pro</span></h1>
+            <p class="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-12 italic leading-relaxed">Professional Grade Side-Hustle Hub<br/>Digital Labor Book & Vetted Inventory</p>
+            <button onclick="initializeSession()" class="w-full bg-slate-900 text-white font-black py-7 rounded-3xl flex items-center justify-center gap-4 hover:bg-black transition-all shadow-2xl active:scale-95 text-lg italic group">
+                <i data-lucide="construction" class="w-6 h-6 text-blue-500 group-hover:rotate-12 transition-transform"></i>
+                Initialize Workbench
+            </button>
+        </div>
+    </div>
+
+    <!-- SIDEBAR (Desktop) -->
+    <aside id="sidebar" class="hidden md:flex w-72 bg-slate-900 flex-col transition-all duration-300 z-50 relative shrink-0">
+        <div class="p-6 flex items-center gap-4 border-b border-white/10 relative z-10">
+            <div class="bg-blue-600 p-2 rounded-xl shadow-lg"><i data-lucide="wrench" class="text-white w-6 h-6"></i></div>
             <span class="text-xl font-black italic uppercase text-white tracking-tighter">WrenchPrice</span>
         </div>
-        <nav class="flex-1 p-4 space-y-2 mt-4">
-            <button onclick="showView('garage')" id="nav-garage-desktop" class="w-full flex items-center gap-4 p-3 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-900/50">
-                <i data-lucide="layout-dashboard"></i> <span class="font-bold text-sm uppercase tracking-widest">My Garage</span>
+        <nav class="flex-1 p-4 space-y-2 mt-4 relative z-10">
+            <button onclick="showView('garage')" id="nav-garage-desktop" class="w-full flex items-center gap-4 p-4 rounded-2xl transition-all bg-blue-600 text-white shadow-xl shadow-blue-500/20">
+                <i data-lucide="layout-dashboard"></i> <span class="font-bold text-xs uppercase tracking-widest text-left flex-1">Garage</span>
             </button>
-            <button onclick="showView('search')" id="nav-search-desktop" class="w-full flex items-center gap-4 p-3 rounded-xl text-slate-400 hover:bg-white/5 hover:text-white transition-all">
-                <i data-lucide="search"></i> <span class="font-bold text-sm uppercase tracking-widest">Parts Finder</span>
+            <button onclick="showView('search')" id="nav-search-desktop" class="w-full flex items-center gap-4 p-4 rounded-2xl transition-all text-slate-400 hover:bg-white/5 hover:text-white">
+                <i data-lucide="search"></i> <span class="font-bold text-xs uppercase tracking-widest text-left flex-1">Scanner</span>
+            </button>
+            <button onclick="showView('profile')" id="nav-profile-desktop" class="w-full flex items-center gap-4 p-4 rounded-2xl transition-all text-slate-400 hover:bg-white/5 hover:text-white">
+                <i data-lucide="user-circle"></i> <span class="font-bold text-xs uppercase tracking-widest text-left flex-1">Pro Profile</span>
             </button>
         </nav>
-        <div class="p-6 border-t border-white/10 text-slate-500 text-[10px] uppercase font-black tracking-widest">
-            v1.0 Pro Demo
-        </div>
+        <div class="p-6 border-t border-white/10 text-slate-500 text-[10px] uppercase font-black tracking-widest">v1.0 Pro Demo</div>
     </aside>
 
-    <!-- MAIN CONTENT -->
-    <main class="flex-1 flex flex-col overflow-hidden relative w-full h-full pb-20 md:pb-0">
-        <!-- HEADER -->
-        <header class="bg-white p-4 md:p-6 shadow-sm flex justify-between items-center z-40 shrink-0">
-            <div id="active-vehicle-indicator" class="flex items-center gap-2 md:gap-3 bg-blue-50 px-3 md:px-4 py-2 rounded-xl md:rounded-2xl border border-blue-100 hidden animate-fade-in max-w-[70%]">
-                <i data-lucide="car" class="w-4 h-4 md:w-5 md:h-5 text-blue-600 shrink-0"></i>
-                <span id="header-vehicle-name" class="font-black text-[10px] md:text-sm uppercase tracking-tighter text-blue-900 truncate"></span>
+    <!-- MAIN APP WRAPPER -->
+    <main class="flex-1 flex flex-col overflow-hidden relative z-10 pb-20 md:pb-0">
+        
+        <!-- TOP HEADER -->
+        <header class="glass-header p-4 md:p-6 shadow-sm flex justify-between items-center sticky top-0 z-40 border-b border-slate-200/50">
+            <div id="active-vehicle-indicator" class="flex items-center gap-3">
+                <div class="flex items-center gap-2 text-slate-400 font-black uppercase text-[10px] tracking-[0.3em]">
+                    <i data-lucide="milestone" class="w-4 h-4 text-blue-600"></i>
+                    <span id="active-shop-name">Pro Garage</span>
+                </div>
             </div>
-            <div id="header-placeholder" class="text-slate-400 font-black uppercase text-[10px] md:text-xs tracking-widest">Identify Vehicle</div>
-            
-            <div class="flex items-center gap-2 md:gap-4">
-                <div class="bg-slate-100 p-2 rounded-full hidden sm:block"><i data-lucide="bell-ring" class="w-5 h-5 text-slate-400"></i></div>
-                <div class="w-8 h-8 md:w-10 md:h-10 bg-blue-600 rounded-full flex items-center justify-center font-black text-white text-[10px] md:text-xs shadow-md">WP</div>
-            </div>
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-blue-500 font-black italic border-2 border-slate-800 shadow-xl transform rotate-3">WP</div>
         </header>
 
         <!-- CONTENT STAGE -->
-        <div id="content-stage" class="flex-1 overflow-y-auto p-4 md:p-8 max-w-7xl mx-auto w-full no-scrollbar">
+        <div id="content-area" class="flex-1 overflow-y-auto p-4 md:p-8 max-w-7xl mx-auto w-full no-scrollbar">
             
             <!-- GARAGE VIEW -->
-            <div id="view-garage" class="view grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 animate-fade-in">
-                <div class="lg:col-span-4">
-                    <div class="bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-xl border border-slate-200">
-                        <h2 class="text-xl md:text-2xl font-black mb-6 md:mb-8 flex items-center gap-3 tracking-tighter uppercase italic"><i data-lucide="plus" class="bg-blue-600 text-white rounded-full p-1.5 w-6 h-6 md:w-7 md:h-7"></i> Add Auto</h2>
-                        <div class="space-y-4">
-                            <div class="space-y-1">
-                                <label class="text-[9px] font-black text-slate-400 uppercase ml-2 tracking-widest">Year</label>
-                                <select id="select-year" onchange="updateMakes()" class="w-full p-4 bg-slate-100 rounded-2xl font-bold border-none outline-none appearance-none text-sm md:text-base">
-                                    <option value="">Select Year</option>
-                                    <option>2025</option><option>2024</option><option>2023</option><option>2022</option>
+            <div id="view-garage" class="view space-y-8 animate-fade-in">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10">
+                    <div class="lg:col-span-4">
+                        <div class="bg-white p-8 md:p-10 rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl border border-slate-200">
+                            <h2 class="text-2xl md:text-3xl font-black mb-8 md:mb-10 flex items-center gap-4 tracking-tighter uppercase italic"><i data-lucide="plus" class="bg-blue-600 text-white rounded-2xl p-2 w-10 h-10 shadow-xl"></i> Add Auto</h2>
+                            <div class="space-y-4 md:space-y-5">
+                                <select id="year-select" class="w-full p-4 md:p-5 bg-slate-50 rounded-2xl font-black text-lg border-2 border-transparent focus:border-blue-600 outline-none appearance-none">
+                                    <option value="">Year</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option>
                                 </select>
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-[9px] font-black text-slate-400 uppercase ml-2 tracking-widest">Make</label>
-                                <select id="select-make" onchange="updateModels()" class="w-full p-4 bg-slate-100 rounded-2xl font-bold border-none outline-none appearance-none text-sm md:text-base">
-                                    <option value="">Select Make</option>
+                                <select id="make-select" class="w-full p-4 md:p-5 bg-slate-50 rounded-2xl font-black text-lg border-2 border-transparent focus:border-blue-600 outline-none appearance-none">
+                                    <option value="">Make</option><option>Ford</option><option>Toyota</option><option>Chevrolet</option><option>RAM</option>
                                 </select>
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-[9px] font-black text-slate-400 uppercase ml-2 tracking-widest">Model</label>
-                                <select id="select-model" onchange="updateEngines()" class="w-full p-4 bg-slate-100 rounded-2xl font-bold border-none outline-none appearance-none text-sm md:text-base">
-                                    <option value="">Select Model</option>
+                                <select id="model-select" class="w-full p-4 md:p-5 bg-slate-50 rounded-2xl font-black text-lg border-2 border-transparent focus:border-blue-600 outline-none appearance-none">
+                                    <option value="">Model</option><option>F-150</option><option>Camry</option><option>Silverado</option><option>1500</option>
                                 </select>
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-[9px] font-black text-blue-600 uppercase tracking-widest ml-2 flex items-center gap-1">Engine & Displacement <i data-lucide="activity" class="w-3 h-3"></i></label>
-                                <select id="select-engine" class="w-full p-4 bg-slate-100 rounded-2xl font-bold text-blue-700 border-none outline-none appearance-none text-sm md:text-base">
-                                    <option value="">Select Engine Size</option>
+                                <select id="engine-select" class="w-full p-4 md:p-5 bg-slate-50 rounded-2xl font-black text-lg text-blue-700 border-2 border-blue-100 focus:border-blue-600 outline-none appearance-none">
+                                    <option value="">Select Engine</option><option>V6 3.5L</option><option>L4 2.5L</option><option>V8 5.7L Hemi</option>
                                 </select>
+                                <button onclick="saveVehicle()" class="w-full bg-blue-600 text-white font-black py-5 md:py-6 rounded-[1.5rem] md:rounded-[2rem] uppercase shadow-2xl hover:bg-blue-700 transition-all active:scale-95 flex items-center justify-center gap-4 italic">
+                                    <i data-lucide="save" class="w-6 h-6"></i> Lock Garage
+                                </button>
                             </div>
-                            <button onclick="addVehicle()" class="w-full bg-blue-600 text-white font-black py-4 md:py-5 rounded-2xl uppercase tracking-widest mt-2 md:mt-4 shadow-xl hover:bg-blue-700 active:scale-95 transition-all text-xs md:text-sm">Save to Garage</button>
                         </div>
                     </div>
-                </div>
-                <div class="lg:col-span-8 space-y-4 md:space-y-6" id="garage-list">
-                    <!-- Vehicles injected here -->
+                    <div id="garage-list" class="lg:col-span-8 space-y-6">
+                        <!-- Vehicle list injected here -->
+                    </div>
                 </div>
             </div>
 
-            <!-- SEARCH VIEW -->
-            <div id="view-search" class="view hidden max-w-3xl mx-auto py-10 md:py-20 text-center animate-fade-in">
-                <h2 class="text-4xl md:text-6xl font-black mb-8 md:mb-12 tracking-tighter leading-none uppercase italic text-slate-900">What needs fixed?</h2>
-                <div class="relative group">
-                    <input id="search-input" placeholder="Parts Search..." class="w-full p-6 md:p-12 text-xl md:text-3xl bg-white rounded-[2rem] md:rounded-[3.5rem] shadow-2xl border-4 border-transparent focus:border-blue-600 outline-none font-black transition-all" />
-                    <button onclick="runSearch()" class="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 bg-blue-600 text-white p-4 md:p-6 rounded-[1.5rem] md:rounded-[2.5rem] shadow-2xl hover:scale-105 active:scale-90 transition-all">
-                        <i data-lucide="search" class="w-6 h-6 md:w-10 md:h-10"></i>
+            <!-- SCANNER VIEW -->
+            <div id="view-search" class="view hidden max-w-5xl mx-auto py-12 md:py-24 text-center animate-fade-in relative">
+                <div class="inline-flex items-center gap-3 bg-gradient-to-r from-slate-900 to-slate-800 text-blue-400 px-6 md:px-10 py-3 md:py-4 rounded-full text-[10px] md:text-[12px] font-black uppercase tracking-[0.4em] border border-slate-700 mb-12 md:mb-16 shadow-2xl">
+                    <i data-lucide="zap" class="w-5 h-5 fill-blue-500"></i> <span id="scanner-vehicle-info">Select a Vehicle First</span>
+                </div>
+                <h2 class="text-5xl md:text-8xl font-black mb-12 md:mb-16 tracking-tighter leading-[0.8] uppercase italic text-slate-900 drop-shadow-lg">Scan Job</h2>
+                <div class="relative group max-w-4xl mx-auto">
+                    <input id="search-input" placeholder="Brakes, Alternator..." class="w-full p-8 md:p-16 text-2xl md:text-5xl bg-white rounded-[3rem] md:rounded-[4.5rem] shadow-2xl border-4 md:border-8 border-transparent focus:border-blue-600 outline-none font-black transition-all" />
+                    <button onclick="runSearch()" class="absolute right-4 md:right-12 top-1/2 -translate-y-1/2 bg-blue-600 text-white p-6 md:p-10 rounded-[2rem] md:rounded-[3.5rem] shadow-2xl hover:scale-110 active:scale-90">
+                        <i data-lucide="search" class="w-8 h-8 md:w-16 md:h-16 stroke-[4]"></i>
                     </button>
                 </div>
             </div>
 
             <!-- RESULTS VIEW -->
-            <div id="view-results" class="view hidden space-y-8 md:space-y-10 animate-fade-in">
-                <div class="flex flex-col xl:flex-row xl:items-end justify-between gap-6 md:gap-8 border-b border-slate-200 pb-8 md:pb-12">
+            <div id="view-results" class="view hidden space-y-12 animate-fade-in">
+                <div class="flex flex-col xl:flex-row xl:items-end justify-between gap-8 border-b border-slate-200 pb-12">
                     <div>
-                        <button onclick="showView('search')" class="text-blue-600 font-black text-[10px] mb-4 flex items-center gap-2 uppercase tracking-widest leading-none hover:translate-x-[-4px] transition-transform">← RE-SCAN PARTS</button>
-                        <h2 id="result-query" class="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-[0.85] truncate">Alternator</h2>
-                        <p id="result-vehicle" class="text-slate-400 font-bold text-sm md:text-xl uppercase italic tracking-tight mt-2"></p>
+                        <button onclick="showView('search')" class="text-blue-600 font-black text-[12px] mb-6 flex items-center gap-3 uppercase tracking-widest hover:translate-x-[-8px] transition-transform underline italic leading-none font-black">← NEW SCAN</button>
+                        <h2 id="result-job-name" class="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.8] italic text-slate-900">Alternator</h2>
+                        <p id="result-veh-details" class="text-slate-400 font-bold text-xl md:text-3xl uppercase italic mt-6">Vehicle Details Loading...</p>
                     </div>
-                    <!-- Labor Matrix -->
-                    <div class="bg-white p-4 md:p-6 rounded-[2rem] md:rounded-[3rem] shadow-2xl border border-slate-100 flex flex-row gap-4 md:gap-10 items-center justify-between px-6 md:px-10">
-                        <div class="opacity-30 flex-1 text-center md:text-left">
-                            <div class="flex items-center justify-center md:justify-start gap-1 md:gap-2 text-slate-500 text-[8px] md:text-[9px] font-black uppercase mb-1 truncate"><i data-lucide="hard-hat" class="w-2 md:w-3 h-2 md:h-3"></i> Shop</div>
-                            <p id="cost-shop" class="text-lg md:text-3xl font-black line-through italic tracking-tighter text-slate-900">$450</p>
+                    <div class="bg-white p-8 md:p-10 rounded-[3rem] md:rounded-[4rem] shadow-2xl border border-slate-100 flex flex-col sm:flex-row gap-8 md:gap-12 items-center px-10 md:px-16 relative overflow-hidden">
+                        <i data-lucide="cog" class="absolute top-0 right-0 p-4 opacity-5 w-32 h-32"></i>
+                        <div class="opacity-20 text-center">
+                            <div class="flex items-center justify-center gap-2 text-slate-500 text-[10px] font-black uppercase mb-1">Dealer Rate</div>
+                            <p class="text-3xl md:text-4xl font-black line-through italic tracking-tighter text-slate-900">$450</p>
                         </div>
-                        <div class="h-8 md:h-10 w-px bg-slate-200"></div>
-                        <div class="flex-1 text-center md:text-left">
-                            <div class="flex items-center justify-center md:justify-start gap-1 md:gap-2 text-blue-500 text-[8px] md:text-[9px] font-black uppercase mb-1 truncate"><i data-lucide="user-check" class="w-2 md:w-3 h-2 md:h-3"></i> Side Job</div>
-                            <p id="cost-side" class="text-xl md:text-4xl font-black text-blue-600 italic tracking-tighter">$180</p>
+                        <div class="h-14 w-px bg-slate-200 hidden sm:block"></div>
+                        <div class="text-center">
+                            <div class="flex items-center justify-center gap-2 text-blue-500 text-[10px] font-black uppercase mb-1"><i data-lucide="book-open" class="w-4 h-4"></i> The Book</div>
+                            <p id="result-labor-hours" class="text-5xl md:text-6xl font-black text-blue-600 italic tracking-tighter animate-pulse">2.2 Hrs</p>
                         </div>
-                        <div class="h-8 md:h-10 w-px bg-slate-200"></div>
-                        <div class="bg-green-600 p-3 md:p-6 rounded-2xl md:rounded-[2rem] text-white shadow-xl flex-1 text-center">
-                            <div class="flex items-center justify-center gap-1 md:gap-2 text-green-200 text-[8px] md:text-[9px] font-black uppercase mb-1 truncate"><i data-lucide="trending-down" class="w-2 md:w-3 h-2 md:h-3"></i> DIY</div>
-                            <p class="text-xl md:text-4xl font-black italic tracking-tighter leading-none">$0</p>
+                        <div class="h-14 w-px bg-slate-200 hidden sm:block"></div>
+                        <div class="bg-green-600 p-8 md:p-10 rounded-[2rem] md:rounded-[3rem] text-white shadow-2xl shadow-green-500/40 text-center">
+                            <div class="flex items-center justify-center gap-2 text-green-200 text-[10px] font-black uppercase mb-1">DIY WIN</div>
+                            <p class="text-5xl md:text-6xl font-black italic tracking-tighter leading-none">$0</p>
                         </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10">
-                    <div class="lg:col-span-7 space-y-6 md:space-y-8" id="parts-list"></div>
-                    <div class="lg:col-span-5 space-y-6 md:space-y-8" id="videos-list"></div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10" id="parts-container">
+                    <!-- Parts content injected here -->
                 </div>
             </div>
 
-            <!-- HISTORY VIEW -->
-            <div id="view-history" class="view hidden space-y-6 md:space-y-8 animate-fade-in">
-                <button onclick="showView('garage')" class="text-blue-600 font-black text-[10px] uppercase tracking-widest leading-none hover:translate-x-[-4px] transition-transform">← BACK TO GARAGE</button>
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
-                    <div class="lg:col-span-5">
-                        <form id="log-form" onsubmit="saveLog(event)" class="bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] shadow-xl border border-slate-200 space-y-4">
-                            <h3 class="font-black uppercase tracking-widest text-xs mb-4 md:mb-6 text-blue-600">New Log Entry</h3>
-                            <input id="log-service" placeholder="Service Type" class="w-full p-4 bg-slate-100 rounded-2xl font-bold text-sm" required />
-                            <div class="grid grid-cols-2 gap-4">
-                                <input id="log-mileage" placeholder="Mileage" class="p-4 bg-slate-100 rounded-2xl font-bold text-sm" />
-                                <input id="log-cost" placeholder="Cost ($)" class="p-4 bg-slate-100 rounded-2xl font-bold text-sm" />
-                            </div>
-                            <input id="log-date" type="date" class="w-full p-4 bg-slate-100 rounded-2xl font-bold text-sm" />
-                            <button type="submit" class="w-full bg-blue-600 text-white font-black py-4 md:py-5 rounded-2xl uppercase tracking-widest text-xs shadow-lg">Save Log</button>
-                        </form>
+            <!-- PRO PROFILE VIEW -->
+            <div id="view-profile" class="view hidden max-w-5xl mx-auto space-y-12 animate-fade-in">
+                <div class="bg-slate-900 p-8 md:p-12 rounded-[3rem] md:rounded-[4rem] text-white shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center gap-10">
+                    <i data-lucide="truck" class="absolute top-0 right-0 p-8 opacity-10 rotate-12 w-64 h-64"></i>
+                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-[2rem] md:rounded-[2.5rem] bg-blue-600 flex items-center justify-center shadow-2xl transform -rotate-6 shrink-0">
+                        <i data-lucide="award" class="w-12 h-12 md:w-16 md:h-16 text-white"></i>
                     </div>
-                    <div class="lg:col-span-7 space-y-4" id="logs-list"></div>
+                    <div class="relative z-10 text-center md:text-left">
+                        <h2 id="profile-display-name" class="text-4xl md:text-5xl font-black uppercase italic tracking-tighter leading-none mb-4">Pro Garage</h2>
+                        <div class="flex flex-wrap justify-center md:justify-start gap-3">
+                            <span class="bg-blue-500/20 text-blue-400 px-4 py-1.5 rounded-full text-[9px] font-black tracking-widest border border-blue-500/30 uppercase">Authorized Workbench</span>
+                            <span id="profile-certs-badge" class="bg-green-500/20 text-green-400 px-4 py-1.5 rounded-full text-[9px] font-black tracking-widest border border-green-500/30 uppercase">PRO</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10">
+                    <div class="lg:col-span-7 bg-white p-8 md:p-12 rounded-[3.5rem] shadow-2xl border border-slate-200">
+                        <h3 class="text-xs font-black text-slate-400 uppercase tracking-[0.4em] mb-10 flex items-center gap-3">
+                            <i data-lucide="settings" class="w-4 h-4 text-blue-600"></i> Station 01: Shop Identity
+                        </h3>
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Shop Name</label>
+                                    <input id="prof-shop-name" class="w-full p-4 md:p-6 bg-slate-50 rounded-3xl font-black text-lg md:text-xl border-4 border-transparent focus:border-blue-600 outline-none transition-all" value="Pro Garage" />
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Tagline</label>
+                                    <input id="prof-slogan" class="w-full p-4 md:p-6 bg-slate-50 rounded-3xl font-bold border-4 border-transparent focus:border-blue-600 outline-none transition-all" value="Quality Work, Fair Price" />
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Contact Phone</label>
+                                    <input id="prof-phone" class="w-full p-4 md:p-6 bg-slate-50 rounded-3xl font-bold border-4 border-transparent focus:border-blue-600 outline-none transition-all" placeholder="(555) 000-0000" />
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Location</label>
+                                    <input id="prof-location" class="w-full p-4 md:p-6 bg-slate-50 rounded-3xl font-bold border-4 border-transparent focus:border-blue-600 outline-none transition-all" placeholder="City, State" />
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Experience / Certs</label>
+                                <input id="prof-certs" class="w-full p-4 md:p-6 bg-slate-50 rounded-3xl font-bold border-4 border-transparent focus:border-blue-600 outline-none transition-all" value="Experienced Mechanic" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 flex flex-col gap-8 md:gap-10">
+                        <div class="bg-blue-600 p-8 md:p-12 rounded-[3.5rem] md:rounded-[4rem] text-white shadow-2xl relative overflow-hidden shadow-blue-500/40">
+                            <h3 class="text-[9px] font-black uppercase tracking-[0.4em] mb-12 text-blue-200 flex items-center gap-3">
+                                <i data-lucide="dollar-sign" class="w-4 h-4"></i> Station 02: Revenue Tuning
+                            </h3>
+                            <div class="space-y-12 relative z-10">
+                                <div class="space-y-4">
+                                    <div class="flex justify-between items-end"><label class="text-[10px] font-black uppercase tracking-widest text-blue-100">Hourly Rate</label><span id="rate-display" class="text-4xl font-black italic tracking-tighter">$65</span></div>
+                                    <input type="range" id="prof-rate" min="30" max="250" step="5" value="65" oninput="updateRateDisplay()" class="w-full" />
+                                </div>
+                                <div class="space-y-4">
+                                    <div class="flex justify-between items-end"><label class="text-[10px] font-black uppercase tracking-widest text-blue-100">Shop Supplies</label><span id="supplies-display" class="text-4xl font-black italic tracking-tighter">$10</span></div>
+                                    <input type="range" id="prof-supplies" min="0" max="100" step="1" value="10" oninput="updateSuppliesDisplay()" class="w-full" />
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="commitProfile()" class="w-full bg-slate-900 text-white font-black py-6 md:py-8 rounded-[2rem] md:rounded-[3rem] uppercase tracking-[0.3em] shadow-2xl hover:bg-black transition-all flex items-center justify-center gap-4 active:scale-95 text-lg italic">
+                            <i data-lucide="shield-check" class="w-7 h-7 text-blue-500"></i> Commit Profile
+                        </button>
+                    </div>
                 </div>
             </div>
+
         </div>
 
         <!-- MOBILE BOTTOM NAV -->
-        <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-white/10 flex justify-around p-3 z-50">
-            <button onclick="showView('garage')" id="nav-garage-mobile" class="flex flex-col items-center gap-1 text-blue-500">
-                <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
-                <span class="text-[8px] font-black uppercase tracking-widest">Garage</span>
-            </button>
-            <button onclick="if(selectedCar) showView('search')" id="nav-search-mobile" class="flex flex-col items-center gap-1 text-slate-500 opacity-50">
-                <i data-lucide="search" class="w-6 h-6"></i>
-                <span class="text-[8px] font-black uppercase tracking-widest">Search</span>
-            </button>
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-white/10 flex justify-around p-3 z-[60]">
+            <button onclick="showView('garage')" class="flex flex-col items-center gap-1 text-blue-500"><i data-lucide="layout-dashboard" class="w-6 h-6"></i><span class="text-[8px] font-black uppercase">Garage</span></button>
+            <button onclick="showView('search')" class="flex flex-col items-center gap-1 text-slate-500"><i data-lucide="search" class="w-6 h-6"></i><span class="text-[8px] font-black uppercase">Scanner</span></button>
+            <button onclick="showView('profile')" class="flex flex-col items-center gap-1 text-slate-500"><i data-lucide="user-circle" class="w-6 h-6"></i><span class="text-[8px] font-black uppercase">Profile</span></button>
         </nav>
 
-        <!-- QUOTE MODAL (Optimized for Mobile) -->
-        <div id="quote-modal" class="fixed inset-0 z-[100] bg-blue-900/60 backdrop-blur-md hidden flex items-center justify-center p-4">
-            <div class="bg-white w-full max-w-xl rounded-[2.5rem] md:rounded-[4rem] shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-                <div class="bg-blue-700 p-6 md:p-10 text-white flex justify-between items-center shrink-0">
-                    <div><h3 class="text-xl md:text-3xl font-black uppercase italic tracking-tighter">Service Quote</h3><p class="text-[8px] md:text-[10px] font-bold opacity-60 uppercase tracking-[0.3em] mt-1 md:mt-2">WrenchPrice Pro Demo</p></div>
-                    <button onclick="closeQuote()" class="bg-white/10 p-3 md:p-4 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button>
-                </div>
-                <div class="p-8 md:p-12 space-y-4 md:space-y-6 overflow-y-auto">
-                    <div class="flex justify-between border-b pb-3 md:pb-4"><span class="font-black text-slate-400 uppercase text-[10px] md:text-xs">Vehicle</span><span id="quote-veh" class="font-bold text-slate-900 uppercase text-xs md:text-base text-right"></span></div>
-                    <div class="flex justify-between border-b pb-3 md:pb-4 items-center"><span class="font-black text-slate-400 uppercase text-[10px] md:text-xs">Labor Est.</span><div class="flex items-center gap-2 md:gap-3"><span class="text-blue-600 font-black text-lg md:text-xl">$</span><input id="quote-labor-input" type="number" oninput="updateQuoteTotal()" class="w-24 md:w-32 p-2 md:p-3 bg-slate-50 border-2 border-blue-100 rounded-xl md:rounded-2xl text-right font-black text-xl md:text-2xl text-blue-600" /></div></div>
-                    <div class="flex flex-col md:flex-row justify-between pt-6 md:pt-10 gap-2">
-                        <span class="font-black text-blue-700 uppercase text-xl md:text-2xl italic tracking-tighter">Total Estimate</span>
-                        <span id="quote-total" class="text-4xl md:text-5xl font-black text-slate-900 italic tracking-tighter">$0.00</span>
+        <!-- PRO QUOTE MODAL -->
+        <div id="quote-modal" class="fixed inset-0 z-[200] bg-slate-900/90 backdrop-blur-3xl hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-2xl rounded-[4rem] md:rounded-[5rem] shadow-2xl overflow-hidden animate-in zoom-in border-4 border-slate-100 max-h-[90vh] overflow-y-auto">
+                <div id="quote-modal-header" class="bg-gradient-to-br from-blue-700 to-blue-900 p-8 md:p-14 text-white flex justify-between items-center relative overflow-hidden">
+                    <i data-lucide="file-text" class="absolute top-0 right-0 p-8 opacity-10 rotate-12 w-64 h-64"></i>
+                    <div class="relative z-10">
+                        <h3 id="quote-shop-name" class="text-3xl md:text-5xl font-black uppercase italic tracking-tighter leading-none mb-4">Pro Garage</h3>
+                        <p id="quote-shop-slogan" class="text-[10px] md:text-[12px] font-bold opacity-70 uppercase tracking-[0.4em] italic">"Quality Work, Fair Price"</p>
                     </div>
-                    <button onclick="copyQuoteText()" class="w-full bg-slate-900 text-white font-black py-4 md:py-6 rounded-2xl md:rounded-[2rem] uppercase tracking-widest text-[10px] md:text-xs flex items-center justify-center gap-3 hover:bg-black transition-all shadow-xl shadow-slate-900/40">
-                        <i data-lucide="copy" class="w-4 h-4"></i> Copy Quote Text
+                    <button onclick="closeQuote()" class="bg-white/10 p-4 md:p-6 rounded-full hover:bg-white/20"><i data-lucide="x"></i></button>
+                </div>
+                <div class="p-8 md:p-16 space-y-8 md:space-y-10 text-slate-900">
+                    <div class="grid grid-cols-2 gap-6 md:gap-10">
+                        <div class="space-y-1 border-l-4 border-slate-100 pl-4 md:pl-6"><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Labor Time</p><p id="quote-labor-time" class="font-bold text-lg md:text-xl uppercase tracking-tighter">2.2 Standard Hours</p></div>
+                        <div class="space-y-1 border-l-4 border-slate-100 pl-4 md:pl-6"><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Rate Applied</p><p id="quote-rate" class="font-bold text-lg md:text-xl italic tracking-tighter">$65/Hr</p></div>
+                    </div>
+                    <div class="bg-slate-50 p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] space-y-6 md:space-y-8 shadow-inner border border-slate-100">
+                        <div class="flex justify-between items-center"><span class="font-black text-slate-400 uppercase text-xs">Part Cost</span><span id="quote-part-price" class="font-black text-2xl md:text-3xl italic tracking-tighter">$42.99</span></div>
+                        <div class="flex justify-between items-center border-y border-slate-200 py-4 md:py-6">
+                            <span class="font-black text-slate-400 uppercase text-xs">Labor Estimate</span>
+                            <div class="flex items-center gap-3">
+                                <span class="text-blue-600 font-black text-xl">$</span>
+                                <input type="number" id="quote-labor-input" oninput="updateQuoteTotal()" class="w-28 md:w-40 p-3 md:p-5 bg-white border-2 md:border-4 border-blue-50 rounded-2xl md:rounded-3xl text-right font-black text-2xl md:text-4xl text-blue-600 focus:border-blue-600 outline-none shadow-lg" />
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center"><span class="font-black text-slate-400 uppercase text-xs">Shop Supplies</span><span id="quote-supplies" class="font-black text-2xl md:text-3xl italic tracking-tighter">$10</span></div>
+                    </div>
+                    <div class="flex justify-between items-end pt-6 md:pt-10 px-4">
+                        <div><span class="font-black text-blue-700 uppercase text-2xl md:text-3xl italic leading-none block mb-2">Total Quote</span><p id="quote-certs" class="text-slate-400 font-bold text-[10px] uppercase tracking-widest italic">Verified Technician</p></div>
+                        <span id="quote-final-total" class="text-6xl md:text-8xl font-black text-slate-900 italic tracking-tighter leading-none animate-pulse">$0.00</span>
+                    </div>
+                    <button onclick="copyInvoiceText()" class="w-full bg-slate-900 text-white font-black py-6 md:py-8 rounded-3xl md:rounded-[3rem] uppercase tracking-[0.3em] text-xs md:text-sm flex items-center justify-center gap-4 hover:bg-black transition-all shadow-xl italic">
+                        <i data-lucide="copy"></i> Copy Professional Quote
                     </button>
                 </div>
             </div>
@@ -197,226 +283,255 @@
     </main>
 
     <script>
-        // APP STATE
+        // --- APP STATE ---
+        let profile = JSON.parse(localStorage.getItem('wp_prof')) || {
+            shopName: 'Pro Garage',
+            slogan: 'Master Tech Quality at Shade Tree Prices',
+            hourlyRate: 65,
+            shopSupplies: 10,
+            phone: '',
+            location: '',
+            certs: 'ASE Certified Professional'
+        };
+        
         let garage = JSON.parse(localStorage.getItem('wp_garage')) || [];
-        let logs = JSON.parse(localStorage.getItem('wp_logs')) || [];
         let selectedCar = null;
+        let currentLaborHours = 2.0;
         let currentPartPrice = 0;
         let currentPartName = "";
 
-        // DATA HELPERS
-        const MAKES = ["Toyota", "Ford", "Honda", "Chevrolet", "RAM", "Jeep"];
-        const MODELS = ["Camry", "F-150", "Civic", "Silverado", "1500", "Wrangler"];
-        const ENGINES = ["LE (Standard 4-Cyl)", "XLE (Premium V6)", "TRD Pro (Turbo V6)", "Hemi 5.7L V8"];
+        const LABOR_BOOK = [
+            { keywords: ['brake', 'rotor', 'pad'], job: 'Brake Service (Axle)', hours: 1.8 },
+            { keywords: ['alternator', 'generator'], job: 'Alternator Replacement', hours: 2.2 },
+            { keywords: ['starter'], job: 'Starter Motor Replacement', hours: 1.5 },
+            { keywords: ['oil', 'filter'], job: 'Lube, Oil & Filter', hours: 0.5 },
+            { keywords: ['strut', 'shock', 'suspension'], job: 'Suspension Component', hours: 2.5 }
+        ];
 
         function init() {
             lucide.createIcons();
+            syncProfileFields();
             renderGarage();
-            updateMakes();
-            const dateInput = document.getElementById('log-date');
-            if(dateInput) dateInput.valueAsDate = new Date();
+            if(!localStorage.getItem('wp_session')) {
+                document.getElementById('auth-gate').style.display = 'flex';
+            } else {
+                document.getElementById('auth-gate').style.display = 'none';
+            }
         }
 
-        // NAVIGATION
+        function initializeSession() {
+            localStorage.setItem('wp_session', 'active');
+            document.getElementById('auth-gate').classList.add('animate-out', 'fade-out', 'zoom-out');
+            setTimeout(() => { document.getElementById('auth-gate').style.display = 'none'; }, 400);
+        }
+
+        // --- NAVIGATION ---
         function showView(viewId) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
             document.getElementById(`view-${viewId}`).classList.remove('hidden');
-            
-            // Desktop Nav
-            const navGarageD = document.getElementById('nav-garage-desktop');
-            const navSearchD = document.getElementById('nav-search-desktop');
-            navGarageD.className = "w-full flex items-center gap-4 p-3 rounded-xl " + (viewId === 'garage' || viewId === 'history' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-white/5');
-            navSearchD.className = "w-full flex items-center gap-4 p-3 rounded-xl " + (viewId === 'search' || viewId === 'results' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-white/5');
-
-            // Mobile Nav
-            const navGarageM = document.getElementById('nav-garage-mobile');
-            const navSearchM = document.getElementById('nav-search-mobile');
-            
-            if(viewId === 'garage' || viewId === 'history') {
-                navGarageM.classList.replace('text-slate-500', 'text-blue-500');
-                navGarageM.classList.remove('opacity-50');
-                navSearchM.classList.replace('text-blue-500', 'text-slate-500');
-                if(!selectedCar) navSearchM.classList.add('opacity-50');
-            } else {
-                navSearchM.classList.replace('text-slate-500', 'text-blue-500');
-                navSearchM.classList.remove('opacity-50');
-                navGarageM.classList.replace('text-blue-500', 'text-slate-500');
-            }
-            
-            // Auto-close quote if open
-            closeQuote();
+            lucide.createIcons();
         }
 
-        // GARAGE LOGIC
-        function updateMakes() {
-            const s = document.getElementById('select-make');
-            s.innerHTML = '<option value="">Make</option>' + MAKES.map(m => `<option>${m}</option>`).join('');
-        }
-        function updateModels() {
-            const s = document.getElementById('select-model');
-            s.innerHTML = '<option value="">Model</option>' + MODELS.map(m => `<option>${m}</option>`).join('');
-        }
-        function updateEngines() {
-            const s = document.getElementById('select-engine');
-            s.innerHTML = '<option value="">Select Engine</option>' + ENGINES.map(e => `<option>${e}</option>`).join('');
+        // --- PROFILE LOGIC ---
+        function syncProfileFields() {
+            document.getElementById('prof-shop-name').value = profile.shopName;
+            document.getElementById('prof-slogan').value = profile.slogan;
+            document.getElementById('prof-phone').value = profile.phone;
+            document.getElementById('prof-location').value = profile.location;
+            document.getElementById('prof-certs').value = profile.certs;
+            document.getElementById('prof-rate').value = profile.hourlyRate;
+            document.getElementById('prof-supplies').value = profile.shopSupplies;
+            
+            document.getElementById('active-shop-name').innerText = profile.shopName;
+            document.getElementById('profile-display-name').innerText = profile.shopName;
+            document.getElementById('profile-certs-badge').innerText = profile.certs;
+            updateRateDisplay();
+            updateSuppliesDisplay();
         }
 
-        function addVehicle() {
+        function updateRateDisplay() {
+            document.getElementById('rate-display').innerText = '$' + document.getElementById('prof-rate').value;
+        }
+
+        function updateSuppliesDisplay() {
+            document.getElementById('supplies-display').innerText = '$' + document.getElementById('prof-supplies').value;
+        }
+
+        function commitProfile() {
+            profile = {
+                shopName: document.getElementById('prof-shop-name').value,
+                slogan: document.getElementById('prof-slogan').value,
+                phone: document.getElementById('prof-phone').value,
+                location: document.getElementById('prof-location').value,
+                certs: document.getElementById('prof-certs').value,
+                hourlyRate: parseInt(document.getElementById('prof-rate').value),
+                shopSupplies: parseInt(document.getElementById('prof-supplies').value)
+            };
+            localStorage.setItem('wp_prof', JSON.stringify(profile));
+            syncProfileFields();
+            showView('garage');
+        }
+
+        // --- GARAGE LOGIC ---
+        function saveVehicle() {
             const car = {
                 id: Date.now(),
-                year: document.getElementById('select-year').value,
-                make: document.getElementById('select-make').value,
-                model: document.getElementById('select-model').value,
-                engine: document.getElementById('select-engine').value
+                year: document.getElementById('year-select').value,
+                make: document.getElementById('make-select').value,
+                model: document.getElementById('model-select').value,
+                engine: document.getElementById('engine-select').value
             };
-            if(!car.engine) { alert("Please complete all steps!"); return; }
+            if(!car.year || !car.engine) return alert("Select vehicle year and engine.");
             garage.push(car);
             localStorage.setItem('wp_garage', JSON.stringify(garage));
             renderGarage();
-            
-            // Clear form
-            document.getElementById('select-year').value = "";
-            document.getElementById('select-make').value = "";
-            document.getElementById('select-model').value = "";
-            document.getElementById('select-engine').value = "";
         }
 
         function renderGarage() {
             const list = document.getElementById('garage-list');
             list.innerHTML = garage.map(car => `
-                <div class="bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6 hover:shadow-2xl transition-all group relative overflow-hidden">
-                    <div class="absolute left-0 top-0 w-2 h-full bg-blue-600"></div>
-                    <div class="flex items-center gap-4 md:gap-6 flex-1 cursor-pointer w-full" onclick="setActiveCar(${car.id})">
-                        <div class="bg-blue-50 p-4 md:p-6 rounded-2xl md:rounded-[2rem] text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all"><i data-lucide="car" class="w-8 h-8 md:w-10 md:h-10"></i></div>
-                        <div class="flex-1 truncate">
-                            <p class="font-black text-xl md:text-2xl tracking-tighter mb-1 uppercase leading-none truncate">${car.year} ${car.make} ${car.model}</p>
-                            <p class="text-[9px] md:text-[10px] font-black text-blue-500 uppercase tracking-widest opacity-70 italic flex items-center gap-2 truncate"><i data-lucide="activity" class="w-3 h-3"></i> ${car.engine}</p>
+                <div class="bg-white p-8 md:p-10 rounded-[3rem] border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 hover:shadow-2xl transition-all group relative overflow-hidden">
+                    <div class="absolute left-0 top-0 w-2.5 h-full bg-blue-600 group-hover:w-4 transition-all"></div>
+                    <div class="flex items-center gap-8 flex-1 cursor-pointer" onclick="setActiveCar(${car.id})">
+                        <div class="bg-slate-900 p-8 rounded-[2.5rem] text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-xl"><i data-lucide="car-front" class="w-12 h-12"></i></div>
+                        <div>
+                            <p class="font-black text-3xl tracking-tighter mb-1 uppercase italic text-slate-900 leading-none">${car.year} ${car.make} ${car.model}</p>
+                            <span class="text-[11px] font-black text-blue-600 uppercase tracking-[0.2em] bg-blue-50 px-4 py-1 rounded-full border border-blue-100 flex items-center gap-2 mt-2"><i data-lucide="activity" class="w-3 h-3"></i> ${car.engine}</span>
                         </div>
                     </div>
-                    <div class="flex gap-2 w-full md:w-auto">
-                        <button onclick="showLogs(${car.id})" class="flex-1 md:flex-none bg-slate-50 hover:bg-slate-100 p-3 md:p-4 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] font-black uppercase flex items-center justify-center gap-2"><i data-lucide="history" class="w-4 h-4 text-slate-400"></i> Logs</button>
-                        <button onclick="setActiveCar(${car.id})" class="flex-1 md:flex-none bg-blue-600 text-white p-3 md:p-4 md:px-6 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] font-black uppercase flex items-center justify-center gap-2 hover:bg-blue-700 shadow-lg italic">Parts</button>
-                        <button onclick="deleteCar(${car.id})" class="p-3 md:p-4 text-slate-200 hover:text-red-500 transition-colors"><i data-lucide="trash-2"></i></button>
+                    <div class="flex gap-4">
+                        <button onclick="setActiveCar(${car.id})" class="bg-blue-600 text-white p-5 px-8 rounded-2xl text-[10px] font-black uppercase hover:bg-blue-700 shadow-xl shadow-blue-500/20 italic">Select</button>
+                        <button onclick="deleteCar(${car.id})" class="p-4 text-slate-200 hover:text-red-500"><i data-lucide="trash-2"></i></button>
                     </div>
                 </div>
             `).join('');
             lucide.createIcons();
         }
 
-        function deleteCar(id) {
-            garage = garage.filter(c => c.id !== id);
-            localStorage.setItem('wp_garage', JSON.stringify(garage));
-            if(selectedCar && selectedCar.id === id) {
-                selectedCar = null;
-                document.getElementById('active-vehicle-indicator').classList.add('hidden');
-                document.getElementById('header-placeholder').classList.remove('hidden');
-                document.getElementById('nav-search-mobile').classList.add('opacity-50');
-            }
-            renderGarage();
-        }
-
         function setActiveCar(id) {
             selectedCar = garage.find(c => c.id === id);
-            document.getElementById('header-vehicle-name').innerText = `${selectedCar.year} ${selectedCar.make} ${selectedCar.model}`;
-            document.getElementById('active-vehicle-indicator').classList.remove('hidden');
-            document.getElementById('header-placeholder').classList.add('hidden');
-            document.getElementById('nav-search-mobile').classList.remove('opacity-50');
+            document.getElementById('scanner-vehicle-info').innerText = `${selectedCar.year} ${selectedCar.make} ${selectedCar.engine}`;
             showView('search');
         }
 
-        // SEARCH LOGIC
+        function deleteCar(id) {
+            garage = garage.filter(c => c.id !== id);
+            localStorage.setItem('wp_garage', JSON.stringify(garage));
+            renderGarage();
+        }
+
+        // --- SCANNER LOGIC ---
         function runSearch() {
-            const query = document.getElementById('search-input').value;
-            if(!query) return;
-            document.getElementById('result-query').innerText = query;
-            document.getElementById('result-vehicle').innerText = `${selectedCar.year} ${selectedCar.make} ${selectedCar.model} | ${selectedCar.engine}`;
+            const q = document.getElementById('search-input').value;
+            if(!q || !selectedCar) return alert("Select vehicle and enter part name.");
             
-            let shop = 320;
-            if(query.toLowerCase().includes('brake')) shop = 380;
-            if(query.toLowerCase().includes('oil')) shop = 65;
-            if(query.toLowerCase().includes('alternator')) shop = 450;
-            if(query.toLowerCase().includes('shocks')) shop = 520;
+            const bookEntry = LABOR_BOOK.find(entry => entry.keywords.some(k => q.toLowerCase().includes(k))) || { hours: 2.0 };
+            currentLaborHours = bookEntry.hours;
+            currentPartName = q;
             
-            document.getElementById('cost-shop').innerText = `$${shop}`;
-            document.getElementById('cost-side').innerText = `$${Math.round(shop * 0.45)}`;
+            document.getElementById('result-job-name').innerText = q;
+            document.getElementById('result-veh-details').innerText = `${selectedCar.year} ${selectedCar.make} ${selectedCar.model} | ${selectedCar.engine}`;
+            document.getElementById('result-labor-hours').innerText = currentLaborHours + ' Hrs';
             
-            renderResults(query, shop);
+            renderResultCards(q);
             showView('results');
         }
 
-        function renderResults(q, shop) {
-            const partsList = document.getElementById('parts-list');
-            const videosList = document.getElementById('videos-list');
+        function renderResultCards(q) {
+            const container = document.getElementById('parts-container');
+            const myLaborTotal = Math.round(currentLaborHours * profile.hourlyRate);
+            const recycledPrice = 24.50; // Mock price
             
-            const sideJobLabor = Math.round(shop * 0.45);
-            const usedPrice = Math.round(shop * 0.25);
-
-            partsList.innerHTML = `
-                <div class="bg-slate-900 p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] text-white shadow-2xl relative overflow-hidden group">
-                    <div class="flex items-center gap-3 mb-6 md:mb-8"><i data-lucide="recycle" class="text-green-400 w-6 h-6 md:w-8 md:h-8"></i><h3 class="font-black text-xl md:text-2xl uppercase italic tracking-tighter">eBay Recycled</h3></div>
-                    <div class="bg-white/5 border border-white/10 p-5 md:p-6 rounded-[1.5rem] md:rounded-3xl flex justify-between items-center hover:bg-white/10 transition-all">
-                        <div class="flex-1 truncate">
-                            <p class="font-black text-base md:text-lg uppercase truncate">AutoRecycle_Plus</p>
-                            <p class="text-[8px] md:text-[10px] text-slate-500 uppercase tracking-widest">Grade A OEM Match</p>
+            container.innerHTML = `
+                <div class="lg:col-span-7 space-y-10">
+                    <div class="bg-slate-900 p-10 rounded-[4rem] text-white shadow-2xl relative overflow-hidden group">
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-center mb-10 border-b border-white/10 pb-8">
+                                <div class="flex items-center gap-4"><i data-lucide="recycle" class="text-green-400 w-12 h-12"></i><h3 class="font-black text-3xl uppercase italic tracking-tighter">Recycled OEM</h3></div>
+                                <div class="bg-green-500/10 text-green-400 px-6 py-2 rounded-xl text-[10px] font-black tracking-widest border border-green-500/20 uppercase">Vetted Inventory</div>
+                            </div>
+                            <div class="bg-white/5 border border-white/10 p-10 rounded-[3rem] flex justify-between items-center hover:bg-white/10 transition-all border-l-8 border-l-green-500">
+                                <div><p class="font-black text-2xl uppercase tracking-tight text-white">AutoRecycle_Plus</p><p class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Grade A OEM Match</p></div>
+                                <div class="flex items-center gap-10">
+                                    <p class="text-5xl font-black text-green-400 italic">$${recycledPrice}</p>
+                                    <button onclick="openQuote('${q} (Used)', ${recycledPrice}, ${myLaborTotal})" class="bg-blue-600 hover:bg-blue-500 p-6 rounded-[2rem] shadow-xl"><i data-lucide="file-text" class="text-white"></i></button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-4 md:gap-6">
-                            <p class="text-xl md:text-3xl font-black text-green-400 italic">$${usedPrice}</p>
-                            <button onclick="openQuote('${q} (Used)', ${usedPrice}, ${sideJobLabor})" class="bg-blue-600 p-3 md:p-4 rounded-xl md:rounded-2xl shadow-lg"><i data-lucide="file-text" class="w-5 h-5 md:w-6 md:h-6"></i></button>
+                        <i data-lucide="recycle" class="absolute -bottom-32 -right-32 w-[30rem] h-[30rem] text-white/5 rotate-12"></i>
+                    </div>
+                    <div class="bg-white p-12 rounded-[4rem] border border-slate-200 flex flex-col md:flex-row gap-10 hover:shadow-2xl transition-all relative group">
+                        <div class="absolute right-0 top-0 bg-blue-600 text-white font-black px-8 py-3 rounded-bl-[2.5rem] text-[9px] uppercase tracking-widest">PRO GRADE</div>
+                        <div class="w-full md:w-56 h-56 bg-slate-50 rounded-[3rem] flex items-center justify-center shadow-inner overflow-hidden">
+                            <i data-lucide="package" class="w-16 h-16 text-slate-200"></i>
+                        </div>
+                        <div class="flex-1 flex flex-col justify-between py-2">
+                            <div><h4 class="font-black text-4xl leading-none uppercase italic text-slate-900 mb-3">Premium ${q}</h4><span class="text-[10px] font-black text-blue-600 bg-blue-50 px-4 py-1.5 rounded-full uppercase tracking-widest border border-blue-100">Bosch Signature Line</span></div>
+                            <div class="flex items-end justify-between mt-10">
+                                <p class="text-6xl font-black italic tracking-tighter text-slate-900 leading-none">$84.99</p>
+                                <button onclick="openQuote('${q} (New)', 84.99, ${myLaborTotal})" class="bg-slate-900 text-white font-black px-12 py-6 rounded-[2.5rem] text-xs uppercase tracking-widest hover:bg-black transition-all shadow-xl italic">Generate Quote</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white p-6 md:p-10 rounded-[2rem] md:rounded-[3.5rem] border border-slate-200 flex flex-col sm:flex-row gap-6 md:gap-10 hover:shadow-2xl transition-all relative">
-                    <div class="w-full sm:w-48 h-40 md:h-48 bg-slate-50 rounded-2xl md:rounded-[2rem] flex items-center justify-center shrink-0 border border-slate-100">
-                        <i data-lucide="package" class="w-10 h-10 md:w-12 md:h-12 text-slate-200"></i>
-                    </div>
-                    <div class="flex-1 flex flex-col justify-between">
-                        <div>
-                            <h4 class="font-black text-2xl md:text-4xl leading-none uppercase italic mb-2 md:mb-3">Premium ${q}</h4>
-                            <span class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-widest">Bosch Performance</span>
-                        </div>
-                        <div class="flex items-end justify-between mt-4 md:mt-0">
-                            <p class="text-4xl md:text-6xl font-black italic tracking-tighter leading-none">$84</p>
-                            <button onclick="openQuote('${q}', 84, ${sideJobLabor})" class="bg-blue-600 text-white font-black px-8 md:px-12 py-4 md:py-6 rounded-xl md:rounded-[2rem] text-[10px] md:text-xs uppercase tracking-widest shadow-xl shadow-blue-200">Buy New</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            videosList.innerHTML = `
-                <div class="bg-white rounded-[2rem] md:rounded-[3.5rem] overflow-hidden shadow-xl border border-slate-100 group">
-                    <div class="aspect-video bg-slate-200 flex items-center justify-center cursor-pointer relative overflow-hidden">
-                        <i data-lucide="play-circle" class="w-16 h-16 md:w-20 md:h-20 text-red-600 z-10 group-hover:scale-110 transition-transform"></i>
-                        <div class="absolute top-4 md:top-8 left-4 md:left-8 bg-red-600 text-[8px] md:text-[9px] font-black px-3 md:px-4 py-2 rounded-full text-white uppercase z-10 shadow-lg">TRQ Auto HQ</div>
-                        <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
-                    </div>
-                    <div class="p-6 md:p-10">
-                        <p class="text-slate-900 font-black text-lg md:text-2xl uppercase italic tracking-tighter leading-tight line-clamp-2">Complete replacement of ${q} on ${selectedCar.make} ${selectedCar.model}</p>
+                <div class="lg:col-span-5 space-y-10">
+                    <h3 class="font-black text-slate-400 text-[10px] uppercase tracking-[0.4em] flex items-center gap-4 px-10"><i data-lucide="youtube" class="text-red-600"></i> Expert Intelligence</h3>
+                    <div class="bg-white rounded-[4rem] overflow-hidden shadow-2xl border border-slate-100 group relative transition-all">
+                        <div class="aspect-video bg-slate-900 flex items-center justify-center cursor-pointer relative"><i data-lucide="play-circle" class="w-24 h-24 text-red-600 shadow-2xl"></i><div class="absolute top-10 left-10 bg-red-600 text-[9px] font-black px-4 py-2 rounded-full text-white uppercase tracking-widest">TRQ AUTO HQ</div></div>
+                        <div class="p-10"><p class="text-slate-900 font-black leading-tight uppercase italic tracking-tighter text-2xl line-clamp-2">Complete replacement of ${q} on ${selectedCar.make} ${selectedCar.model}</p></div>
                     </div>
                 </div>
             `;
             lucide.createIcons();
         }
 
-        // QUOTE GENERATOR
-        function openQuote(name, price, labor) {
-            currentPartPrice = price;
+        // --- QUOTE LOGIC ---
+        function openQuote(name, partPrice, laborTotal) {
+            currentPartPrice = partPrice;
             currentPartName = name;
-            document.getElementById('quote-veh').innerText = `${selectedCar.year} ${selectedCar.make} ${selectedCar.model}`;
-            document.getElementById('quote-labor-input').value = labor;
-            document.getElementById('quote-modal').classList.remove('hidden');
+            
+            document.getElementById('quote-shop-name').innerText = profile.shopName;
+            document.getElementById('quote-shop-slogan').innerText = `"${profile.slogan}"`;
+            document.getElementById('quote-labor-time').innerText = currentLaborHours + ' Standard Hours';
+            document.getElementById('quote-rate').innerText = '$' + profile.hourlyRate + '/Hr';
+            document.getElementById('quote-part-price').innerText = '$' + partPrice.toFixed(2);
+            document.getElementById('quote-labor-input').value = laborTotal;
+            document.getElementById('quote-supplies').innerText = '$' + profile.shopSupplies;
+            document.getElementById('quote-certs').innerText = profile.certs;
+            
             updateQuoteTotal();
+            document.getElementById('quote-modal').style.display = 'flex';
         }
-        function closeQuote() { document.getElementById('quote-modal').classList.add('hidden'); }
+
+        function closeQuote() { document.getElementById('quote-modal').style.display = 'none'; }
+
         function updateQuoteTotal() {
             const labor = parseFloat(document.getElementById('quote-labor-input').value) || 0;
-            document.getElementById('quote-total').innerText = `$${(currentPartPrice + labor).toFixed(2)}`;
+            const total = currentPartPrice + labor + profile.shopSupplies;
+            document.getElementById('quote-final-total').innerText = '$' + total.toFixed(2);
         }
-        function copyQuoteText() {
-            const total = document.getElementById('quote-total').innerText;
-            const labor = document.getElementById('quote-labor-input').value;
-            const text = `WrenchPrice Side Job Quote\nVehicle: ${selectedCar.year} ${selectedCar.make} ${selectedCar.model}\nService: ${currentPartName}\n\nParts: $${currentPartPrice}\nLabor: $${labor}\nTotal Estimate: ${total}`;
+
+        function copyInvoiceText() {
+            const total = document.getElementById('quote-final-total').innerText;
+            const text = `
+SERVICE ESTIMATE: ${profile.shopName}
+"${profile.slogan}"
+-----------------------------------
+VEHICLE: ${selectedCar.year} ${selectedCar.make} ${selectedCar.model}
+SERVICE: ${currentPartName}
+
+BREAKDOWN:
+- Book Hours: ${currentLaborHours}
+- Labor Applied: $${document.getElementById('quote-labor-input').value}
+- Shop Supplies: $${profile.shopSupplies}
+-----------------------------------
+ESTIMATED TOTAL: ${total}
+
+CONTACT: ${profile.phone || 'N/A'}
+CERTIFICATIONS: ${profile.certs}
+-----------------------------------
+            `.trim();
             
-            // Fallback for clipboard if needed in local files
             const el = document.createElement('textarea');
             el.value = text;
             document.body.appendChild(el);
@@ -424,49 +539,6 @@
             document.execCommand('copy');
             document.body.removeChild(el);
             alert("Quote copied to clipboard!");
-        }
-
-        // HISTORY LOGS
-        function showLogs(id) {
-            selectedCar = garage.find(c => c.id === id);
-            renderLogs();
-            showView('history');
-        }
-        function renderLogs() {
-            const list = document.getElementById('logs-list');
-            const carLogs = logs.filter(l => l.carId === selectedCar.id);
-            list.innerHTML = carLogs.map(log => `
-                <div class="bg-white p-4 md:p-6 rounded-[1.5rem] md:rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden group flex justify-between items-center">
-                    <div class="absolute left-0 top-0 w-1.5 h-full bg-blue-600" />
-                    <div class="flex-1 truncate mr-2">
-                        <h4 class="font-black text-base md:text-xl uppercase italic tracking-tighter truncate">${log.service}</h4>
-                        <p class="text-[9px] md:text-[10px] font-black text-blue-500 uppercase tracking-widest">${log.date} • ${log.mileage} MI • $${log.cost}</p>
-                    </div>
-                    <button onclick="deleteLog(${log.id})" class="p-2 md:p-4 text-slate-200 hover:text-red-500 transition-all"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
-                </div>
-            `).join('') || '<div class="p-12 text-center bg-white rounded-[2rem] border border-dashed border-slate-200 text-slate-400 font-bold uppercase text-[10px] tracking-widest italic">No service records found</div>';
-            lucide.createIcons();
-        }
-        function saveLog(e) {
-            e.preventDefault();
-            const log = {
-                id: Date.now(),
-                carId: selectedCar.id,
-                service: document.getElementById('log-service').value,
-                mileage: document.getElementById('log-mileage').value,
-                cost: document.getElementById('log-cost').value,
-                date: document.getElementById('log-date').value
-            };
-            logs.push(log);
-            localStorage.setItem('wp_logs', JSON.stringify(logs));
-            document.getElementById('log-form').reset();
-            document.getElementById('log-date').valueAsDate = new Date();
-            renderLogs();
-        }
-        function deleteLog(id) {
-            logs = logs.filter(l => l.id !== id);
-            localStorage.setItem('wp_logs', JSON.stringify(logs));
-            renderLogs();
         }
 
         window.onload = init;
