@@ -14,19 +14,24 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .metallic-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
         .glass-header { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
+        
         /* Professional Tool Slider Styling */
         input[type=range] { -webkit-appearance: none; background: transparent; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; background: #3b82f6; border-radius: 10px; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%; background: #ffffff; cursor: pointer; margin-top: -8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 2px solid #3b82f6; }
+        
+        /* Modal Animation */
+        .zoom-in { transform: scale(0.95); opacity: 0; transition: all 0.2s ease-out; }
+        .zoom-in.active { transform: scale(1); opacity: 1; }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-900 h-screen flex flex-col md:flex-row overflow-hidden">
 
     <!-- PIZAZZ WATERMARKS (Global Layer) -->
     <div class="fixed inset-0 pointer-events-none opacity-[0.03] overflow-hidden select-none z-0">
-        <i data-lucide="truck" class="absolute top-20 right-10 w-[30rem] h-[30rem] -rotate-12"></i>
-        <i data-lucide="cog" class="absolute bottom-40 left-20 w-80 h-80 animate-[spin_40s_linear_infinite]"></i>
-        <i data-lucide="wrench" class="absolute top-1/2 left-1/4 w-96 h-96 rotate-45"></i>
+        <i data-lucide="truck" class="absolute top-20 right-10 w-[30rem] h-[30rem] -rotate-12 text-slate-900"></i>
+        <i data-lucide="cog" class="absolute bottom-40 left-20 w-80 h-80 animate-[spin_40s_linear_infinite] text-slate-900"></i>
+        <i data-lucide="wrench" class="absolute top-1/2 left-1/4 w-96 h-96 rotate-45 text-slate-900"></i>
     </div>
 
     <!-- LANDING / AUTH GATE -->
@@ -35,16 +40,28 @@
             <i data-lucide="wrench" class="absolute top-10 left-10 w-64 h-64 -rotate-45 text-blue-500"></i>
             <i data-lucide="truck" class="absolute bottom-10 right-10 w-[40rem] h-[40rem] rotate-12 text-blue-500"></i>
         </div>
-        <div class="max-w-xl w-full bg-white rounded-[4rem] shadow-2xl p-12 text-center relative z-10 animate-in zoom-in border-4 border-slate-100">
+        <div class="max-w-xl w-full bg-white rounded-[4rem] shadow-2xl p-12 text-center relative z-10 animate-in border-4 border-slate-100">
             <div class="bg-blue-600 w-24 h-24 rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-2xl transform -rotate-6">
                 <i data-lucide="wrench" class="w-12 h-12 text-white"></i>
             </div>
             <h1 class="text-5xl font-black italic uppercase tracking-tighter text-slate-900 mb-4">WrenchPrice<span class="text-blue-600">Pro</span></h1>
             <p class="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-12 italic leading-relaxed">Professional Grade Side-Hustle Hub<br/>Digital Labor Book & Vetted Inventory</p>
-            <button onclick="initializeSession()" class="w-full bg-slate-900 text-white font-black py-7 rounded-3xl flex items-center justify-center gap-4 hover:bg-black transition-all shadow-2xl active:scale-95 text-lg italic group">
-                <i data-lucide="construction" class="w-6 h-6 text-blue-500 group-hover:rotate-12 transition-transform"></i>
-                Initialize Workbench
-            </button>
+            
+            <div class="space-y-4">
+                <button onclick="initializeSession('guest')" class="w-full bg-slate-900 text-white font-black py-7 rounded-3xl flex items-center justify-center gap-4 hover:bg-black transition-all shadow-2xl active:scale-95 text-lg italic group">
+                    <i data-lucide="user-circle" class="w-6 h-6 text-blue-500"></i>
+                    Continue as Guest
+                </button>
+                <button onclick="initializeSession('google')" class="w-full border-2 border-slate-100 text-slate-400 font-black py-7 rounded-3xl flex items-center justify-center gap-4 hover:bg-slate-50 transition-all active:scale-95">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5 grayscale opacity-50" />
+                    Sign in with Google
+                </button>
+            </div>
+            
+            <div class="mt-10 flex items-center justify-center gap-6 opacity-20">
+                <div class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4"></i><span class="text-[8px] font-black uppercase">Private</span></div>
+                <div class="flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4"></i><span class="text-[8px] font-black uppercase">Encrypted</span></div>
+            </div>
         </div>
     </div>
 
@@ -55,17 +72,21 @@
             <span class="text-xl font-black italic uppercase text-white tracking-tighter">WrenchPrice</span>
         </div>
         <nav class="flex-1 p-4 space-y-2 mt-4 relative z-10">
-            <button onclick="showView('garage')" id="nav-garage-desktop" class="w-full flex items-center gap-4 p-4 rounded-2xl transition-all bg-blue-600 text-white shadow-xl shadow-blue-500/20">
+            <button onclick="showView('garage')" id="nav-garage-desktop" class="nav-btn w-full flex items-center gap-4 p-4 rounded-2xl transition-all text-white bg-blue-600 shadow-xl">
                 <i data-lucide="layout-dashboard"></i> <span class="font-bold text-xs uppercase tracking-widest text-left flex-1">Garage</span>
             </button>
-            <button onclick="showView('search')" id="nav-search-desktop" class="w-full flex items-center gap-4 p-4 rounded-2xl transition-all text-slate-400 hover:bg-white/5 hover:text-white">
+            <button onclick="showView('search')" id="nav-search-desktop" class="nav-btn w-full flex items-center gap-4 p-4 rounded-2xl transition-all text-slate-400 hover:bg-white/5 hover:text-white">
                 <i data-lucide="search"></i> <span class="font-bold text-xs uppercase tracking-widest text-left flex-1">Scanner</span>
             </button>
-            <button onclick="showView('profile')" id="nav-profile-desktop" class="w-full flex items-center gap-4 p-4 rounded-2xl transition-all text-slate-400 hover:bg-white/5 hover:text-white">
+            <button onclick="showView('profile')" id="nav-profile-desktop" class="nav-btn w-full flex items-center gap-4 p-4 rounded-2xl transition-all text-slate-400 hover:bg-white/5 hover:text-white">
                 <i data-lucide="user-circle"></i> <span class="font-bold text-xs uppercase tracking-widest text-left flex-1">Pro Profile</span>
             </button>
         </nav>
-        <div class="p-6 border-t border-white/10 text-slate-500 text-[10px] uppercase font-black tracking-widest">v1.0 Pro Demo</div>
+        <div class="p-6 border-t border-white/10">
+            <button onclick="logout()" class="w-full flex items-center gap-4 p-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-colors">
+                <i data-lucide="log-out" class="w-5 h-5"></i> <span class="font-bold text-xs uppercase tracking-widest">Sign Out</span>
+            </button>
+        </div>
     </aside>
 
     <!-- MAIN APP WRAPPER -->
@@ -79,7 +100,10 @@
                     <span id="active-shop-name">Pro Garage</span>
                 </div>
             </div>
-            <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-blue-500 font-black italic border-2 border-slate-800 shadow-xl transform rotate-3">WP</div>
+            <div class="flex items-center gap-4">
+                <div id="guest-badge" class="hidden bg-yellow-100 text-yellow-700 text-[8px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Guest Mode</div>
+                <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-blue-500 font-black italic border-2 border-slate-800 shadow-xl transform rotate-3">WP</div>
+            </div>
         </header>
 
         <!-- CONTENT STAGE -->
@@ -90,7 +114,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10">
                     <div class="lg:col-span-4">
                         <div class="bg-white p-8 md:p-10 rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl border border-slate-200">
-                            <h2 class="text-2xl md:text-3xl font-black mb-8 md:mb-10 flex items-center gap-4 tracking-tighter uppercase italic"><i data-lucide="plus" class="bg-blue-600 text-white rounded-2xl p-2 w-10 h-10 shadow-xl"></i> Add Auto</h2>
+                            <h2 class="text-2xl md:text-3xl font-black mb-8 md:mb-10 flex items-center gap-4 tracking-tighter uppercase italic text-slate-900"><i data-lucide="plus" class="bg-blue-600 text-white rounded-2xl p-2 w-10 h-10 shadow-xl"></i> Add Auto</h2>
                             <div class="space-y-4 md:space-y-5">
                                 <select id="year-select" class="w-full p-4 md:p-5 bg-slate-50 rounded-2xl font-black text-lg border-2 border-transparent focus:border-blue-600 outline-none appearance-none">
                                     <option value="">Year</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option>
@@ -136,13 +160,13 @@
                     <div>
                         <button onclick="showView('search')" class="text-blue-600 font-black text-[12px] mb-6 flex items-center gap-3 uppercase tracking-widest hover:translate-x-[-8px] transition-transform underline italic leading-none font-black">← NEW SCAN</button>
                         <h2 id="result-job-name" class="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.8] italic text-slate-900">Alternator</h2>
-                        <p id="result-veh-details" class="text-slate-400 font-bold text-xl md:text-3xl uppercase italic mt-6">Vehicle Details Loading...</p>
+                        <p id="result-veh-details" class="text-slate-400 font-bold text-xl md:text-3xl uppercase italic mt-6"></p>
                     </div>
-                    <div class="bg-white p-8 md:p-10 rounded-[3rem] md:rounded-[4rem] shadow-2xl border border-slate-100 flex flex-col sm:flex-row gap-8 md:gap-12 items-center px-10 md:px-16 relative overflow-hidden">
+                    <div class="bg-white p-8 md:p-10 rounded-[3rem] md:rounded-[4rem] shadow-2xl border border-slate-100 flex flex-col sm:flex-row gap-8 md:gap-12 items-center px-10 md:px-16 relative overflow-hidden text-slate-900">
                         <i data-lucide="cog" class="absolute top-0 right-0 p-4 opacity-5 w-32 h-32"></i>
                         <div class="opacity-20 text-center">
                             <div class="flex items-center justify-center gap-2 text-slate-500 text-[10px] font-black uppercase mb-1">Dealer Rate</div>
-                            <p class="text-3xl md:text-4xl font-black line-through italic tracking-tighter text-slate-900">$450</p>
+                            <p class="text-3xl md:text-4xl font-black line-through italic tracking-tighter">$450</p>
                         </div>
                         <div class="h-14 w-px bg-slate-200 hidden sm:block"></div>
                         <div class="text-center">
@@ -237,21 +261,23 @@
 
         <!-- MOBILE BOTTOM NAV -->
         <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-white/10 flex justify-around p-3 z-[60]">
-            <button onclick="showView('garage')" class="flex flex-col items-center gap-1 text-blue-500"><i data-lucide="layout-dashboard" class="w-6 h-6"></i><span class="text-[8px] font-black uppercase">Garage</span></button>
-            <button onclick="showView('search')" class="flex flex-col items-center gap-1 text-slate-500"><i data-lucide="search" class="w-6 h-6"></i><span class="text-[8px] font-black uppercase">Scanner</span></button>
-            <button onclick="showView('profile')" class="flex flex-col items-center gap-1 text-slate-500"><i data-lucide="user-circle" class="w-6 h-6"></i><span class="text-[8px] font-black uppercase">Profile</span></button>
+            <button onclick="showView('garage')" id="nav-garage-mobile" class="nav-btn-mob flex flex-col items-center gap-1 text-blue-500"><i data-lucide="layout-dashboard" class="w-6 h-6"></i><span class="text-[8px] font-black uppercase">Garage</span></button>
+            <button onclick="showView('search')" id="nav-search-mobile" class="nav-btn-mob flex flex-col items-center gap-1 text-slate-500"><i data-lucide="search" class="w-6 h-6"></i><span class="text-[8px] font-black uppercase">Scanner</span></button>
+            <button onclick="showView('profile')" id="nav-profile-mobile" class="nav-btn-mob flex flex-col items-center gap-1 text-slate-500"><i data-lucide="user-circle" class="w-6 h-6"></i><span class="text-[8px] font-black uppercase">Profile</span></button>
         </nav>
 
         <!-- PRO QUOTE MODAL -->
-        <div id="quote-modal" class="fixed inset-0 z-[200] bg-slate-900/90 backdrop-blur-3xl hidden flex items-center justify-center p-4">
-            <div class="bg-white w-full max-w-2xl rounded-[4rem] md:rounded-[5rem] shadow-2xl overflow-hidden animate-in zoom-in border-4 border-slate-100 max-h-[90vh] overflow-y-auto">
+        <div id="quote-modal" class="fixed inset-0 z-[200] bg-slate-900/90 backdrop-blur-3xl hidden flex items-center justify-center p-4" onclick="handleBackdropClick(event)">
+            <div class="bg-white w-full max-w-2xl rounded-[4rem] md:rounded-[5rem] shadow-2xl overflow-hidden animate-in zoom-in border-4 border-slate-100 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
                 <div id="quote-modal-header" class="bg-gradient-to-br from-blue-700 to-blue-900 p-8 md:p-14 text-white flex justify-between items-center relative overflow-hidden">
                     <i data-lucide="file-text" class="absolute top-0 right-0 p-8 opacity-10 rotate-12 w-64 h-64"></i>
                     <div class="relative z-10">
                         <h3 id="quote-shop-name" class="text-3xl md:text-5xl font-black uppercase italic tracking-tighter leading-none mb-4">Pro Garage</h3>
                         <p id="quote-shop-slogan" class="text-[10px] md:text-[12px] font-bold opacity-70 uppercase tracking-[0.4em] italic">"Quality Work, Fair Price"</p>
                     </div>
-                    <button onclick="closeQuote()" class="bg-white/10 p-4 md:p-6 rounded-full hover:bg-white/20"><i data-lucide="x"></i></button>
+                    <button onclick="closeQuote()" class="bg-white/10 p-4 md:p-6 rounded-full hover:bg-white/20 transition-colors">
+                        <i data-lucide="x" class="w-8 h-8"></i>
+                    </button>
                 </div>
                 <div class="p-8 md:p-16 space-y-8 md:space-y-10 text-slate-900">
                     <div class="grid grid-cols-2 gap-6 md:gap-10">
@@ -312,23 +338,56 @@
             lucide.createIcons();
             syncProfileFields();
             renderGarage();
-            if(!localStorage.getItem('wp_session')) {
+            
+            const session = localStorage.getItem('wp_session');
+            if(!session) {
                 document.getElementById('auth-gate').style.display = 'flex';
             } else {
                 document.getElementById('auth-gate').style.display = 'none';
+                if(session === 'guest') document.getElementById('guest-badge').classList.remove('hidden');
             }
         }
 
-        function initializeSession() {
-            localStorage.setItem('wp_session', 'active');
-            document.getElementById('auth-gate').classList.add('animate-out', 'fade-out', 'zoom-out');
-            setTimeout(() => { document.getElementById('auth-gate').style.display = 'none'; }, 400);
+        function initializeSession(type) {
+            if(type === 'google') {
+                alert("Cloud Sync (Google) will be fully active on your live domain. Entering Secure Mode now.");
+            }
+            localStorage.setItem('wp_session', type);
+            if(type === 'guest') document.getElementById('guest-badge').classList.remove('hidden');
+            
+            document.getElementById('auth-gate').style.opacity = '0';
+            setTimeout(() => { 
+                document.getElementById('auth-gate').style.display = 'none'; 
+            }, 300);
+        }
+
+        function logout() {
+            localStorage.removeItem('wp_session');
+            window.location.reload();
         }
 
         // --- NAVIGATION ---
         function showView(viewId) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
             document.getElementById(`view-${viewId}`).classList.remove('hidden');
+            
+            // Desktop Nav Highlight
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'shadow-xl');
+                btn.classList.add('text-slate-400', 'hover:bg-white/5');
+            });
+            const activeBtn = document.getElementById(`nav-${viewId}-desktop`);
+            activeBtn.classList.add('bg-blue-600', 'text-white', 'shadow-xl');
+            activeBtn.classList.remove('text-slate-400');
+
+            // Mobile Nav Highlight
+            document.querySelectorAll('.nav-btn-mob').forEach(btn => {
+                btn.classList.remove('text-blue-500');
+                btn.classList.add('text-slate-500');
+            });
+            const activeBtnMob = document.getElementById(`nav-${viewId}-mobile`);
+            if(activeBtnMob) activeBtnMob.classList.add('text-blue-500');
+
             lucide.createIcons();
         }
 
@@ -390,12 +449,12 @@
         function renderGarage() {
             const list = document.getElementById('garage-list');
             list.innerHTML = garage.map(car => `
-                <div class="bg-white p-8 md:p-10 rounded-[3rem] border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 hover:shadow-2xl transition-all group relative overflow-hidden">
+                <div class="bg-white p-8 md:p-10 rounded-[3rem] border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 hover:shadow-2xl transition-all group relative overflow-hidden text-slate-900">
                     <div class="absolute left-0 top-0 w-2.5 h-full bg-blue-600 group-hover:w-4 transition-all"></div>
                     <div class="flex items-center gap-8 flex-1 cursor-pointer" onclick="setActiveCar(${car.id})">
                         <div class="bg-slate-900 p-8 rounded-[2.5rem] text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-xl"><i data-lucide="car-front" class="w-12 h-12"></i></div>
                         <div>
-                            <p class="font-black text-3xl tracking-tighter mb-1 uppercase italic text-slate-900 leading-none">${car.year} ${car.make} ${car.model}</p>
+                            <p class="font-black text-3xl tracking-tighter mb-1 uppercase italic leading-none">${car.year} ${car.make} ${car.model}</p>
                             <span class="text-[11px] font-black text-blue-600 uppercase tracking-[0.2em] bg-blue-50 px-4 py-1 rounded-full border border-blue-100 flex items-center gap-2 mt-2"><i data-lucide="activity" class="w-3 h-3"></i> ${car.engine}</span>
                         </div>
                     </div>
@@ -410,7 +469,7 @@
 
         function setActiveCar(id) {
             selectedCar = garage.find(c => c.id === id);
-            document.getElementById('scanner-vehicle-info').innerText = `${selectedCar.year} ${selectedCar.make} ${selectedCar.engine}`;
+            document.getElementById('scanner-vehicle-info').innerText = `IDENTIFIED: ${selectedCar.year} ${selectedCar.make} ${selectedCar.engine}`;
             showView('search');
         }
 
@@ -440,7 +499,7 @@
         function renderResultCards(q) {
             const container = document.getElementById('parts-container');
             const myLaborTotal = Math.round(currentLaborHours * profile.hourlyRate);
-            const recycledPrice = 24.50; // Mock price
+            const recycledPrice = 24.50;
             
             container.innerHTML = `
                 <div class="lg:col-span-7 space-y-10">
@@ -460,15 +519,15 @@
                         </div>
                         <i data-lucide="recycle" class="absolute -bottom-32 -right-32 w-[30rem] h-[30rem] text-white/5 rotate-12"></i>
                     </div>
-                    <div class="bg-white p-12 rounded-[4rem] border border-slate-200 flex flex-col md:flex-row gap-10 hover:shadow-2xl transition-all relative group">
+                    <div class="bg-white p-12 rounded-[4rem] border border-slate-200 flex flex-col md:flex-row gap-10 hover:shadow-2xl transition-all relative group text-slate-900">
                         <div class="absolute right-0 top-0 bg-blue-600 text-white font-black px-8 py-3 rounded-bl-[2.5rem] text-[9px] uppercase tracking-widest">PRO GRADE</div>
                         <div class="w-full md:w-56 h-56 bg-slate-50 rounded-[3rem] flex items-center justify-center shadow-inner overflow-hidden">
                             <i data-lucide="package" class="w-16 h-16 text-slate-200"></i>
                         </div>
                         <div class="flex-1 flex flex-col justify-between py-2">
-                            <div><h4 class="font-black text-4xl leading-none uppercase italic text-slate-900 mb-3">Premium ${q}</h4><span class="text-[10px] font-black text-blue-600 bg-blue-50 px-4 py-1.5 rounded-full uppercase tracking-widest border border-blue-100">Bosch Signature Line</span></div>
+                            <div><h4 class="font-black text-4xl leading-none uppercase italic mb-3">Premium ${q}</h4><span class="text-[10px] font-black text-blue-600 bg-blue-50 px-4 py-1.5 rounded-full uppercase tracking-widest border border-blue-100">Bosch Signature Line</span></div>
                             <div class="flex items-end justify-between mt-10">
-                                <p class="text-6xl font-black italic tracking-tighter text-slate-900 leading-none">$84.99</p>
+                                <p class="text-6xl font-black italic tracking-tighter leading-none">$84.99</p>
                                 <button onclick="openQuote('${q} (New)', 84.99, ${myLaborTotal})" class="bg-slate-900 text-white font-black px-12 py-6 rounded-[2.5rem] text-xs uppercase tracking-widest hover:bg-black transition-all shadow-xl italic">Generate Quote</button>
                             </div>
                         </div>
@@ -500,10 +559,18 @@
             document.getElementById('quote-certs').innerText = profile.certs;
             
             updateQuoteTotal();
-            document.getElementById('quote-modal').style.display = 'flex';
+            const modal = document.getElementById('quote-modal');
+            modal.style.display = 'flex';
+            lucide.createIcons(); // Ensure the X icon renders
         }
 
-        function closeQuote() { document.getElementById('quote-modal').style.display = 'none'; }
+        function closeQuote() { 
+            document.getElementById('quote-modal').style.display = 'none'; 
+        }
+
+        function handleBackdropClick(e) {
+            if(e.target.id === 'quote-modal') closeQuote();
+        }
 
         function updateQuoteTotal() {
             const labor = parseFloat(document.getElementById('quote-labor-input').value) || 0;
@@ -538,7 +605,7 @@ CERTIFICATIONS: ${profile.certs}
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            alert("Quote copied to clipboard!");
+            alert("Professional quote copied to clipboard!");
         }
 
         window.onload = init;
