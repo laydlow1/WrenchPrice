@@ -128,9 +128,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="garage-list" class="lg:col-span-8 space-y-4">
-                        <!-- Fleet injected here -->
-                    </div>
+                    <div id="garage-list" class="lg:col-span-8 space-y-4"></div>
                 </div>
             </div>
 
@@ -161,15 +159,15 @@
                         <div class="bg-white p-4 px-6 rounded-2xl border border-slate-200 flex items-center gap-6 shadow-sm">
                             <div class="opacity-40 text-center border-r border-slate-100 pr-6">
                                 <p class="text-[9px] font-bold text-slate-500 uppercase mb-1">Dealer</p>
-                                <p class="text-xl font-bold line-through text-slate-900">$450</p>
+                                <p id="dealer-rate-text" class="text-xl font-bold line-through text-slate-900">$450</p>
                             </div>
                             <div class="text-center border-r border-slate-100 pr-6">
                                 <p class="text-[9px] font-bold text-blue-500 uppercase mb-1 whitespace-nowrap"><i data-lucide="book-open" class="w-3 h-3 inline mr-1"></i> Book Time</p>
                                 <p id="result-labor-hours" class="text-2xl font-black text-blue-600 italic">2.2 Hrs</p>
                             </div>
                             <div class="bg-green-600 text-white p-3 px-5 rounded-xl text-center shadow-lg shadow-green-500/10">
-                                <p class="text-[9px] font-bold uppercase mb-1">DIY Saved</p>
-                                <p class="text-xl font-black italic">$320+</p>
+                                <p class="text-[9px] font-bold uppercase mb-1">PRO WIN</p>
+                                <p id="savings-text" class="text-xl font-black italic">$320+</p>
                             </div>
                         </div>
                     </div>
@@ -213,8 +211,8 @@
                                     <input id="prof-certs" class="w-full p-3 bg-slate-50 rounded-xl font-medium border border-slate-200 focus:border-blue-500 outline-none transition-all" value="ASE Certified Professional" />
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <input id="prof-phone" class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-sm" placeholder="Phone" />
-                                    <input id="prof-location" class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-sm" placeholder="City, State" />
+                                    <input id="prof-phone" class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-sm font-medium" placeholder="Phone" />
+                                    <input id="prof-location" class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-sm font-medium" placeholder="City, State" />
                                 </div>
                             </div>
                         </div>
@@ -244,48 +242,48 @@
 
         <!-- QUOTE MODAL -->
         <div id="quote-modal" class="fixed inset-0 z-[200] bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4 modal-overlay" onclick="closeQuote()">
-            <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl overflow-hidden modal-content border border-slate-200 max-h-[85vh] flex flex-col" onclick="event.stopPropagation()">
-                <div class="bg-slate-900 p-6 md:p-8 text-white flex justify-between items-center shrink-0">
+            <div class="bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden modal-content border border-slate-200 max-h-[90vh] flex flex-col" onclick="event.stopPropagation()">
+                <div class="bg-slate-900 p-6 text-white flex justify-between items-center shrink-0">
                     <div>
-                        <h3 id="quote-shop-name" class="text-xl md:text-2xl font-bold uppercase tracking-tight truncate max-w-[240px]">Garage</h3>
-                        <p id="quote-shop-slogan" class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-1 italic">Professional Service</p>
+                        <h3 id="quote-shop-name" class="text-lg font-bold uppercase tracking-tight truncate max-w-[240px]">Workbench</h3>
+                        <p id="quote-shop-slogan" class="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mt-0.5 italic">Professional Service</p>
                     </div>
                     <button onclick="closeQuote()" class="text-slate-500 hover:text-white transition-colors p-2">
-                        <i data-lucide="x" class="w-6 h-6"></i>
+                        <i data-lucide="x" class="w-5 h-5"></i>
                     </button>
                 </div>
                 
-                <div class="p-6 md:p-10 space-y-6 overflow-y-auto text-slate-900">
-                    <div class="grid grid-cols-2 gap-4 border-b border-slate-100 pb-6">
-                        <div><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Vehicle</p><p id="quote-veh-name" class="font-bold text-sm uppercase"></p></div>
-                        <div class="text-right"><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Job Standards</p><p id="quote-labor-time" class="font-bold text-sm italic"></p></div>
+                <div class="p-6 md:p-8 space-y-6 overflow-y-auto text-slate-900">
+                    <div class="grid grid-cols-2 gap-4 border-b border-slate-100 pb-4">
+                        <div><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Vehicle</p><p id="quote-veh-name" class="font-bold text-xs uppercase"></p></div>
+                        <div class="text-right"><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Standard Time</p><p id="quote-labor-time" class="font-bold text-xs italic"></p></div>
                     </div>
 
                     <div class="space-y-4">
                         <div class="flex justify-between items-center text-sm font-medium text-slate-600">
-                            <span>Diagnostic & Part Cost</span>
+                            <span>Diagnostic / Hard Parts</span>
                             <span id="quote-part-price" class="font-bold text-slate-900"></span>
                         </div>
-                        <div class="flex justify-between items-center py-4 border-y border-slate-100">
-                            <span class="text-sm font-bold text-slate-900">Labor Applied ($)</span>
+                        <div class="flex justify-between items-center py-3 border-y border-slate-100">
+                            <span class="text-sm font-bold text-slate-900">Labor Charge ($)</span>
                             <div class="flex items-center gap-2">
                                 <span class="text-blue-600 font-bold">$</span>
                                 <input type="number" id="quote-labor-input" oninput="updateQuoteTotal()" class="w-24 p-2 bg-slate-50 border border-slate-200 rounded-lg text-right font-bold text-blue-600 focus:border-blue-500 outline-none" />
                             </div>
                         </div>
                         <div class="flex justify-between items-center text-sm font-medium text-slate-600">
-                            <span>Shop Supplies / Consumables</span>
+                            <span>Shop Supplies Fee</span>
                             <span id="quote-supplies" class="font-bold text-slate-900"></span>
                         </div>
                     </div>
 
-                    <div class="bg-blue-50 p-6 rounded-2xl flex justify-between items-end mt-8 border border-blue-100">
-                        <div><p class="text-[10px] font-bold text-blue-600 uppercase mb-1">Estimate Total</p><p id="quote-certs" class="text-[10px] text-slate-400 italic"></p></div>
-                        <span id="quote-final-total" class="text-4xl font-black text-slate-900 tracking-tighter italic">$0.00</span>
+                    <div class="bg-blue-50 p-6 rounded-xl flex justify-between items-end mt-4 border border-blue-100">
+                        <div><p class="text-[9px] font-bold text-blue-600 uppercase mb-1">Grand Total</p><p id="quote-certs" class="text-[9px] text-slate-400 italic"></p></div>
+                        <span id="quote-final-total" class="text-3xl font-black text-slate-900 tracking-tighter italic">$0.00</span>
                     </div>
 
-                    <button onclick="copyInvoiceText()" class="w-full bg-slate-900 text-white font-bold py-4 rounded-xl text-sm uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-black transition-all shadow-lg active:scale-95 italic">
-                        <i data-lucide="copy" class="w-4 h-4"></i> Copy Quote to Clipboard
+                    <button onclick="copyInvoiceText()" class="w-full bg-slate-900 text-white font-bold py-4 rounded-xl text-sm uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-black transition-all shadow-md active:scale-[0.98] italic">
+                        <i data-lucide="copy" class="w-4 h-4"></i> Copy Quote for Customer
                     </button>
                 </div>
             </div>
@@ -322,7 +320,7 @@
             { keywords: ['brake', 'rotor', 'pad'], job: 'Brake Service', hours: 1.8 },
             { keywords: ['alternator', 'generator'], job: 'Alternator', hours: 2.2 },
             { keywords: ['starter'], job: 'Starter Motor', hours: 1.5 },
-            { keywords: ['oil', 'filter'], job: 'Basic Service', hours: 0.5 },
+            { keywords: ['oil', 'filter'], job: 'Lube, Oil & Filter', hours: 0.5 },
             { keywords: ['strut', 'shock', 'suspension'], job: 'Suspension', hours: 2.5 }
         ];
 
@@ -334,7 +332,6 @@
             const session = localStorage.getItem('wp_session');
             if(!session) {
                 document.getElementById('auth-gate').style.display = 'flex';
-                document.getElementById('auth-gate').style.opacity = '1';
             } else {
                 document.getElementById('auth-gate').style.display = 'none';
                 if(session === 'guest') document.getElementById('guest-badge').classList.remove('hidden');
@@ -344,7 +341,6 @@
         function initializeSession(type) {
             localStorage.setItem('wp_session', type);
             if(type === 'guest') document.getElementById('guest-badge').classList.remove('hidden');
-            
             const gate = document.getElementById('auth-gate');
             gate.style.transition = 'opacity 0.3s ease';
             gate.style.opacity = '0';
@@ -356,7 +352,6 @@
             window.location.reload();
         }
 
-        // --- NAVIGATION ---
         function showView(viewId) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
             document.getElementById(`view-${viewId}`).classList.remove('hidden');
@@ -373,16 +368,14 @@
                     if(mobBtn) mobBtn.classList.replace('text-blue-500', 'text-slate-500');
                 }
             });
-
             lucide.createIcons();
         }
 
-        // --- PROFILE LOGIC ---
         function syncProfileFields() {
             document.getElementById('prof-shop-name').value = profile.shopName;
             document.getElementById('prof-slogan').value = profile.slogan;
-            document.getElementById('prof-phone').value = profile.phone;
-            document.getElementById('prof-location').value = profile.location;
+            document.getElementById('prof-phone').value = profile.phone || '';
+            document.getElementById('prof-location').value = profile.location || '';
             document.getElementById('prof-certs').value = profile.certs;
             document.getElementById('prof-rate').value = profile.hourlyRate;
             document.getElementById('prof-supplies').value = profile.shopSupplies;
@@ -417,7 +410,6 @@
             showView('garage');
         }
 
-        // --- GARAGE LOGIC ---
         function saveVehicle() {
             const car = {
                 id: Date.now(),
@@ -435,26 +427,21 @@
         function renderGarage() {
             const list = document.getElementById('garage-list');
             list.innerHTML = garage.map(car => `
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 hover:shadow-md transition-all group relative overflow-hidden">
-                    <div class="absolute left-0 top-0 w-1.5 h-full bg-blue-600 opacity-20 group-hover:opacity-100 transition-all"></div>
-                    <div class="flex items-center gap-6 flex-1 cursor-pointer w-full" onclick="setActiveCar(${car.id})">
-                        <div class="bg-slate-900 p-5 rounded-xl text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner shrink-0"><i data-lucide="car-front" class="w-8 h-8"></i></div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 hover:shadow-sm transition-all group relative overflow-hidden">
+                    <div class="absolute left-0 top-0 w-1 h-full bg-blue-600 opacity-20 group-hover:opacity-100 transition-all"></div>
+                    <div class="flex items-center gap-5 flex-1 cursor-pointer w-full" onclick="setActiveCar(${car.id})">
+                        <div class="bg-slate-900 p-4 rounded-xl text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner shrink-0"><i data-lucide="car-front" class="w-6 h-6"></i></div>
                         <div class="truncate">
-                            <p class="font-bold text-xl text-slate-900 leading-none truncate mb-1 uppercase tracking-tight">${car.year} ${car.make} ${car.model}</p>
-                            <span class="text-[10px] font-bold text-blue-600 uppercase tracking-widest flex items-center gap-2"><i data-lucide="activity" class="w-3 h-3"></i> ${car.engine}</span>
+                            <p class="font-bold text-lg text-slate-900 leading-none truncate mb-1 uppercase tracking-tight">${car.year} ${car.make} ${car.model}</p>
+                            <span class="text-[9px] font-bold text-blue-600 uppercase tracking-widest flex items-center gap-2"><i data-lucide="activity" class="w-2.5 h-2.5"></i> ${car.engine}</span>
                         </div>
                     </div>
                     <div class="flex gap-2 w-full md:w-auto">
-                        <button onclick="setActiveCar(${car.id})" class="flex-1 md:flex-none bg-blue-600 text-white p-3 px-6 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 active:scale-95 transition-all italic">Select</button>
-                        <button onclick="deleteCar(${car.id})" class="p-3 text-slate-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        <button onclick="setActiveCar(${car.id})" class="flex-1 md:flex-none bg-blue-600 text-white p-2.5 px-6 rounded-lg text-[10px] font-bold uppercase tracking-wider hover:bg-blue-700 active:scale-95 transition-all italic">Select</button>
+                        <button onclick="deleteCar(${car.id})" class="p-2.5 text-slate-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                     </div>
                 </div>
-            `).join('') || `
-                <div class="p-20 text-center bg-slate-100/50 rounded-2xl border-2 border-dashed border-slate-200">
-                    <i data-lucide="truck" class="w-12 h-12 text-slate-200 mx-auto mb-4"></i>
-                    <p class="text-slate-400 font-bold uppercase text-xs tracking-widest">Digital Garage is Empty</p>
-                </div>
-            `;
+            `).join('') || `<div class="p-16 text-center bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200"><i data-lucide="truck" class="w-10 h-10 text-slate-200 mx-auto mb-3"></i><p class="text-slate-400 font-bold uppercase text-[10px] tracking-widest">Digital Garage is Empty</p></div>`;
             lucide.createIcons();
         }
 
@@ -470,10 +457,9 @@
             renderGarage();
         }
 
-        // --- SCANNER LOGIC ---
         function runSearch() {
             const q = document.getElementById('search-input').value;
-            if(!q || !selectedCar) return alert("Identification required.");
+            if(!q || !selectedCar) return alert("Vehicle ID required.");
             
             const bookEntry = LABOR_BOOK.find(entry => entry.keywords.some(k => q.toLowerCase().includes(k))) || { hours: 2.0 };
             currentLaborHours = bookEntry.hours;
@@ -482,6 +468,10 @@
             document.getElementById('result-job-name').innerText = q;
             document.getElementById('result-veh-details').innerText = `${selectedCar.year} ${selectedCar.make} ${selectedCar.model} | ${selectedCar.engine}`;
             document.getElementById('result-labor-hours').innerText = currentLaborHours + ' Hrs';
+            
+            // Adjust mock values for demo
+            document.getElementById('dealer-rate-text').innerText = '$' + Math.round(currentLaborHours * 165);
+            document.getElementById('savings-text').innerText = '$' + Math.round(currentLaborHours * (165 - profile.hourlyRate)) + '+';
             
             renderResultCards(q);
             showView('results');
@@ -493,49 +483,75 @@
             const recycledPrice = 24.50;
             
             container.innerHTML = `
-                <div class="lg:col-span-7 space-y-8">
-                    <div class="bg-slate-900 p-8 rounded-3xl text-white shadow-xl relative overflow-hidden group border border-slate-800">
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="bg-slate-900 p-6 md:p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group border border-slate-800">
                         <div class="relative z-10">
-                            <div class="flex justify-between items-center mb-8 border-b border-white/5 pb-6">
-                                <div class="flex items-center gap-3"><i data-lucide="recycle" class="text-green-400 w-8 h-8"></i><h3 class="font-bold text-xl uppercase tracking-tight">Recycled OEM Inventory</h3></div>
-                                <div class="bg-green-500/10 text-green-400 px-3 py-1 rounded-lg text-[9px] font-bold uppercase border border-green-500/20 hidden sm:block">Vetted</div>
+                            <div class="flex justify-between items-center mb-6 border-b border-white/5 pb-4">
+                                <div class="flex items-center gap-3"><i data-lucide="recycle" class="text-green-400 w-6 h-6"></i><h3 class="font-bold text-lg uppercase tracking-tight">Recycled Inventory Match</h3></div>
+                                <div class="bg-green-500/10 text-green-400 px-2 py-1 rounded text-[8px] font-bold uppercase border border-green-500/20">Vetted</div>
                             </div>
-                            <div class="bg-white/5 border border-white/10 p-6 rounded-2xl flex justify-between items-center hover:bg-white/10 transition-all">
-                                <div><p class="font-bold text-lg text-white italic">AutoRecycle_Plus</p><p class="text-[10px] text-slate-500 font-medium uppercase tracking-widest">Grade A OEM</p></div>
-                                <div class="flex items-center gap-6">
-                                    <p class="text-3xl font-black text-green-400 italic tracking-tight">$${recycledPrice}</p>
-                                    <button onclick="openQuote('${q} (Used)', ${recycledPrice}, ${myLaborTotal})" class="bg-blue-600 hover:bg-blue-500 p-4 rounded-xl shadow-lg transition-all active:scale-95"><i data-lucide="file-text" class="text-white w-5 h-5"></i></button>
+                            <div class="bg-white/5 border border-white/10 p-5 rounded-xl flex justify-between items-center hover:bg-white/10 transition-all border-l-4 border-l-green-500">
+                                <div class="truncate mr-4"><p class="font-bold text-base text-white italic truncate">AutoRecycle_Plus</p><p class="text-[9px] text-slate-500 font-medium uppercase tracking-widest">Grade A OEM</p></div>
+                                <div class="flex items-center gap-6 shrink-0">
+                                    <p class="text-3xl font-black text-green-400 italic tracking-tighter">$${recycledPrice}</p>
+                                    <button onclick="openQuote('${q} (Used)', ${recycledPrice}, ${myLaborTotal})" class="bg-blue-600 hover:bg-blue-500 p-3.5 rounded-xl shadow-lg transition-all active:scale-90"><i data-lucide="file-text" class="text-white w-5 h-5"></i></button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white p-8 rounded-3xl border border-slate-200 flex flex-col md:flex-row gap-8 hover:shadow-md transition-all relative group text-slate-900">
-                        <div class="absolute right-0 top-0 bg-blue-600 text-white font-bold px-4 py-1.5 rounded-bl-2xl text-[9px] uppercase tracking-widest shadow-md">NEW OE</div>
-                        <div class="w-full md:w-44 h-40 bg-slate-50 rounded-2xl flex items-center justify-center border border-slate-100 shrink-0">
-                            <i data-lucide="package" class="w-10 h-10 text-slate-200"></i>
+                    <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 flex flex-col md:flex-row gap-6 hover:shadow-sm transition-all relative group text-slate-900">
+                        <div class="absolute right-0 top-0 bg-blue-600 text-white font-bold px-3 py-1 rounded-bl-xl text-[8px] uppercase tracking-widest">NEW OE</div>
+                        <div class="w-full md:w-36 h-36 bg-slate-50 rounded-xl flex items-center justify-center border border-slate-100 shrink-0">
+                            <i data-lucide="package" class="w-8 h-8 text-slate-200"></i>
                         </div>
-                        <div class="flex-1 flex flex-col justify-between py-1">
-                            <div><h4 class="font-extrabold text-2xl text-slate-900 mb-2 truncate italic uppercase">Premium ${q}</h4><span class="text-[9px] font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase tracking-widest border border-blue-100">Bosch Standard Fit</span></div>
-                            <div class="flex items-end justify-between mt-6">
-                                <p class="text-4xl font-black italic tracking-tighter text-slate-900">$84.99</p>
-                                <button onclick="openQuote('${q} (New)', 84.99, ${myLaborTotal})" class="bg-slate-900 text-white font-bold px-8 py-3 rounded-xl text-xs uppercase tracking-widest hover:bg-black transition-all shadow-md italic">Create Quote</button>
+                        <div class="flex-1 flex flex-col justify-between py-1 truncate">
+                            <div><h4 class="font-bold text-xl text-slate-900 mb-1 truncate italic uppercase tracking-tight">Premium ${q}</h4><span class="text-[8px] font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase tracking-widest border border-blue-100">Bosch Standard Fit</span></div>
+                            <div class="flex items-end justify-between mt-4">
+                                <p class="text-4xl font-black italic tracking-tighter text-slate-900 leading-none">$84.99</p>
+                                <button onclick="openQuote('${q} (New)', 84.99, ${myLaborTotal})" class="bg-slate-900 text-white font-bold px-6 py-2.5 rounded-xl text-[10px] uppercase tracking-widest hover:bg-black transition-all shadow-md italic">Add to Quote</button>
                             </div>
                         </div>
                     </div>
+
+                    <!-- LOCAL / MANUAL ENTRY PIZAZZ -->
+                    <div class="bg-blue-50/50 p-6 md:p-8 rounded-2xl border-2 border-dashed border-blue-200">
+                        <div class="flex items-center gap-3 mb-6"><i data-lucide="shopping-cart" class="text-blue-600 w-5 h-5"></i><h3 class="font-bold text-sm uppercase text-blue-700 tracking-wide">Station 03: Local Parts Entry</h3></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 ml-1 uppercase">Part Description</label>
+                                <input id="manual-part-name" class="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-blue-500" placeholder="e.g. 5W-30 Full Synthetic" />
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 ml-1 uppercase">Actual Cost ($)</label>
+                                <input type="number" id="manual-part-price" class="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-blue-500" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <button onclick="addManualPartToQuote()" class="w-full mt-4 bg-white border-2 border-blue-600 text-blue-600 font-bold py-3 rounded-xl text-xs uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Local Part to Workbench
+                        </button>
+                    </div>
                 </div>
-                <div class="lg:col-span-5 space-y-8">
-                    <h3 class="font-bold text-slate-400 text-[10px] uppercase tracking-widest flex items-center gap-3 px-2"><i data-lucide="youtube" class="text-red-600 w-4 h-4"></i> Expert Guidance</h3>
-                    <div class="bg-white rounded-3xl overflow-hidden shadow-md border border-slate-200 group relative transition-all mx-2 md:mx-0">
-                        <div class="aspect-video bg-slate-900 flex items-center justify-center cursor-pointer relative"><i data-lucide="play-circle" class="w-16 h-16 text-red-600 group-hover:scale-110 transition-transform"></i><div class="absolute top-6 left-6 bg-red-600 text-[8px] font-bold px-3 py-1.5 rounded-lg text-white uppercase tracking-widest">TRQ PRO GUIDE</div></div>
-                        <div class="p-6 text-slate-900"><p class="text-slate-900 font-bold leading-tight uppercase italic tracking-tight text-lg line-clamp-2">Complete replacement of ${q} on ${selectedCar.make} ${selectedCar.model}</p></div>
+
+                <div class="lg:col-span-5 space-y-6">
+                    <h3 class="font-bold text-slate-400 text-[10px] uppercase tracking-widest flex items-center gap-3 px-2"><i data-lucide="youtube" class="text-red-600 w-4 h-4"></i> Pro Intelligence</h3>
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 group relative transition-all">
+                        <div class="aspect-video bg-slate-900 flex items-center justify-center cursor-pointer relative"><i data-lucide="play-circle" class="w-12 h-12 text-red-600"></i><div class="absolute top-4 left-4 bg-red-600 text-[7px] font-bold px-2 py-1 rounded text-white uppercase tracking-widest">TRQ PRO</div></div>
+                        <div class="p-5 text-slate-900"><p class="text-slate-900 font-bold leading-tight uppercase italic tracking-tight text-base line-clamp-2">Direct Replacement Guide: ${q}</p></div>
                     </div>
                 </div>
             `;
             lucide.createIcons();
         }
 
-        // --- QUOTE LOGIC ---
+        function addManualPartToQuote() {
+            const name = document.getElementById('manual-part-name').value;
+            const price = parseFloat(document.getElementById('manual-part-price').value);
+            if(!name || isNaN(price)) return alert("Enter part name and price.");
+            const myLaborTotal = Math.round(currentLaborHours * profile.hourlyRate);
+            openQuote(`${name} (Local)`, price, myLaborTotal);
+        }
+
         function openQuote(name, partPrice, laborTotal) {
             currentPartPrice = partPrice;
             currentPartName = name;
@@ -553,16 +569,14 @@
             updateQuoteTotal();
             const modal = document.getElementById('quote-modal');
             modal.style.display = 'flex';
-            modal.classList.add('flex');
             modal.classList.remove('hidden');
             lucide.createIcons();
         }
 
         function closeQuote() { 
             const modal = document.getElementById('quote-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
             modal.style.display = 'none';
+            modal.classList.add('hidden');
         }
 
         function handleBackdropClick(e) {
@@ -582,17 +596,17 @@ ESTIMATE: ${profile.shopName}
 -----------------------------------
 VEHICLE: ${selectedCar.year} ${selectedCar.make} ${selectedCar.model}
 SERVICE: ${currentPartName}
-BOOK TIME: ${currentLaborHours} Hrs
+LABOR BASIS: ${currentLaborHours} Std Hrs
 
 BREAKDOWN:
-- Diagnostic/Parts: $${currentPartPrice}
-- Pro Labor: $${document.getElementById('quote-labor-input').value}
-- Shop Supplies: $${profile.shopSupplies}
+- Local Parts/Shop Parts: $${currentPartPrice.toFixed(2)}
+- Professional Labor: $${document.getElementById('quote-labor-input').value}
+- Shop Consumables: $${profile.shopSupplies}
 -----------------------------------
 TOTAL ESTIMATE: ${total}
 
 CONTACT: ${profile.phone || 'N/A'}
-LOCATION: ${profile.location || 'N/A'}
+CERTIFIED: ${profile.certs}
             `.trim();
             
             const el = document.createElement('textarea');
