@@ -64,17 +64,17 @@
         </div>
         <nav class="flex-1 p-4 space-y-1 mt-2">
             <button onclick="showView('garage')" id="nav-garage" class="nav-btn w-full flex items-center gap-3 p-3 btn-pro text-slate-400 hover:bg-white/5">
-                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> <span class="text-xs uppercase tracking-wider text-slate-400">Fleet</span>
+                <i data-lucide="layout-dashboard" class="w-5 h-5 text-slate-400"></i> <span class="text-xs uppercase tracking-wider">Fleet</span>
             </button>
             <button onclick="showView('search')" id="nav-search" class="nav-btn w-full flex items-center gap-3 p-3 btn-pro text-slate-400 hover:bg-white/5">
-                <i data-lucide="search" class="w-5 h-5"></i> <span class="text-xs uppercase tracking-wider text-slate-400">Finder</span>
+                <i data-lucide="search" class="w-5 h-5 text-slate-400"></i> <span class="text-xs uppercase tracking-wider">Finder</span>
             </button>
             <button onclick="showView('workbench')" id="nav-workbench" class="nav-btn w-full flex items-center justify-between p-3 btn-pro text-slate-400 hover:bg-white/5 relative">
-                <div class="flex items-center gap-3"><i data-lucide="clipboard-list" class="w-5 h-5 text-slate-400"></i> <span class="text-xs uppercase tracking-wider text-slate-400 text-nowrap">Workbench</span></div>
+                <div class="flex items-center gap-3 text-slate-400"><i data-lucide="clipboard-list" class="w-5 h-5"></i> <span class="text-xs uppercase tracking-wider text-nowrap">Workbench</span></div>
                 <span id="workbench-count" class="bg-blue-600 text-white text-[9px] px-1.5 py-0.5 rounded-full hidden">0</span>
             </button>
             <button onclick="showView('profile')" id="nav-profile" class="nav-btn w-full flex items-center gap-3 p-3 btn-pro text-slate-400 hover:bg-white/5">
-                <i data-lucide="user-circle" class="w-5 h-5"></i> <span class="text-xs uppercase tracking-wider text-slate-400">Settings</span>
+                <i data-lucide="user-circle" class="w-5 h-5 text-slate-400"></i> <span class="text-xs uppercase tracking-wider">Settings</span>
             </button>
         </nav>
         <div class="p-4 border-t border-white/5 text-slate-900">
@@ -98,7 +98,8 @@
             </div>
         </header>
 
-        <div id="content-area" class="flex-1 overflow-y-auto p-4 md:p-8 no-scrollbar text-slate-900">
+        <!-- ADDED pb-24 md:pb-8 TO ENSURE SCROLLING PAST MOBILE NAV -->
+        <div id="content-area" class="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8 no-scrollbar text-slate-900">
             
             <!-- VIEW: GARAGE -->
             <div id="view-garage" class="view animate-fade-in text-slate-900">
@@ -106,7 +107,7 @@
                     <div class="lg:col-span-4 text-slate-900">
                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-slate-900">
                             <h2 class="text-sm font-bold mb-6 flex items-center gap-2 text-slate-900 uppercase tracking-widest border-b border-slate-50 pb-4 text-slate-900">
-                                <i data-lucide="plus-circle" class="text-blue-600 w-4 h-4 text-blue-600"></i> New Entry
+                                <i data-lucide="plus-circle" class="text-blue-600 w-4 h-4"></i> New Entry
                             </h2>
                             <div class="space-y-4 text-slate-900">
                                 <div class="space-y-1 text-slate-900">
@@ -124,7 +125,7 @@
                                 <select id="model-select" class="w-full p-3 bg-slate-50 rounded-lg text-sm font-semibold border border-slate-200 outline-none focus:border-blue-500 text-slate-900">
                                     <option value="">Model</option><option>F-150</option><option>Camry</option><option>Silverado</option><option>1500</option>
                                 </select>
-                                <select id="engine-select" class="w-full p-3 bg-slate-50 rounded-lg text-sm font-bold text-blue-700 border border-blue-100 outline-none focus:border-blue-500 text-slate-900">
+                                <select id="engine-select" class="w-full p-3 bg-slate-50 rounded-lg text-sm font-bold text-blue-700 border border-blue-100 outline-none focus:border-blue-500 text-slate-900 text-slate-900">
                                     <option value="">Engine Configuration</option><option>V6 3.5L</option><option>L4 2.5L</option><option>V8 5.7L Hemi</option>
                                 </select>
                                 <button onclick="saveVehicle()" class="w-full bg-blue-600 text-white btn-pro py-4 flex items-center justify-center gap-2 shadow-lg">
@@ -155,11 +156,10 @@
 
                 <div id="results-stage" class="hidden space-y-6 text-slate-900">
                     <div class="flex items-center justify-between border-b border-slate-200 pb-4 text-slate-900">
-                        <div class="flex items-center gap-2 text-slate-900">
+                        <div class="flex items-center gap-2 text-slate-900 text-slate-900">
                             <h3 class="font-bold text-xs uppercase text-slate-500 tracking-widest flex items-center gap-2 text-slate-900"><i data-lucide="package" class="w-4 h-4 text-blue-600"></i> Global Inventory Comparison</h3>
                         </div>
                     </div>
-                    <!-- TIERED RESULTS LIST -->
                     <div id="ebay-results-list" class="grid grid-cols-1 md:grid-cols-3 gap-6 text-slate-900 items-stretch text-slate-900">
                         <!-- Injected eBay cards -->
                     </div>
@@ -180,19 +180,19 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 text-slate-900">
-                    <div class="lg:col-span-7 space-y-8 text-slate-900">
-                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-slate-900">
-                            <div class="flex items-center justify-between mb-6 border-b border-slate-50 pb-4 text-slate-900">
-                                <h3 class="font-bold text-xs uppercase text-slate-900 tracking-widest flex items-center gap-2 text-slate-900"><i data-lucide="list" class="w-4 h-4 text-blue-600"></i> Staged Job Items</h3>
+                    <div class="lg:col-span-7 space-y-8 text-slate-900 text-slate-900">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-slate-900 text-slate-900">
+                            <div class="flex items-center justify-between mb-6 border-b border-slate-50 pb-4 text-slate-900 text-slate-900">
+                                <h3 class="font-bold text-xs uppercase text-slate-900 tracking-widest flex items-center gap-2 text-slate-900 text-slate-900"><i data-lucide="list" class="w-4 h-4 text-blue-600"></i> Staged Job Items</h3>
                                 <span id="markup-info-badge" class="bg-blue-50 text-blue-700 text-[8px] font-black px-2 py-0.5 rounded border border-blue-100 uppercase italic"></span>
                             </div>
-                            <div id="workbench-parts-list" class="space-y-3 text-slate-900"></div>
+                            <div id="workbench-parts-list" class="space-y-3 text-slate-900 text-slate-900"></div>
                             <div id="workbench-empty-state" class="p-10 text-center text-slate-300 uppercase text-[9px] font-black tracking-widest italic text-slate-900">Workbench Empty. Stage parts to build quote.</div>
                         </div>
 
-                        <div class="bg-slate-900 p-6 rounded-2xl shadow-xl text-white">
+                        <div class="bg-slate-900 p-6 rounded-2xl shadow-xl text-white text-white">
                             <h3 class="font-bold text-[10px] uppercase text-blue-400 tracking-[0.2em] mb-6 flex items-center gap-2"><i data-lucide="shopping-cart" class="w-4 h-4 text-blue-600 text-white"></i> Add Local Supplies (Oil, Filters, etc)</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 text-slate-900">
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 text-slate-900 text-slate-900">
                                 <div class="md:col-span-6 text-slate-900">
                                     <label class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1 block">Description</label>
                                     <input id="manual-name" class="w-full p-3 bg-white border-0 rounded-lg text-sm font-semibold text-slate-900" placeholder="e.g. 5W-30 Synthetic Oil" />
@@ -211,9 +211,9 @@
                     </div>
 
                     <div class="lg:col-span-5 space-y-6 text-slate-900">
-                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-slate-900">
-                            <h3 class="font-bold text-[10px] uppercase text-slate-400 tracking-widest mb-6 flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-blue-600"></i> Labor Tuning</h3>
-                            <div class="space-y-6 text-slate-900 text-slate-900">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-slate-900 text-slate-900">
+                            <h3 class="font-bold text-[10px] uppercase text-slate-400 tracking-widest mb-6 flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-blue-600 text-blue-600"></i> Labor Tuning</h3>
+                            <div class="space-y-6 text-slate-900 text-slate-900 text-slate-900">
                                 <div class="flex justify-between items-center py-3 border-y border-slate-50 text-slate-900">
                                     <span class="text-xs font-bold uppercase text-slate-500">Applied Hours</span>
                                     <div class="flex items-center gap-2 text-slate-900">
@@ -234,7 +234,8 @@
                         <button onclick="finalizeAndLogJob()" class="w-full bg-slate-900 text-white btn-pro py-5 shadow-xl flex items-center justify-center gap-3 text-sm italic">
                             <i data-lucide="check-circle" class="w-5 h-5 text-blue-500 text-white text-white"></i> Finalize & Log Job
                         </button>
-                        <button onclick="copyInvoiceText()" class="w-full bg-blue-50 border-2 border-blue-200 text-blue-700 btn-pro py-3 text-[10px] uppercase italic hover:bg-blue-100 transition-all flex items-center justify-center gap-2">
+                        <!-- ADDED MARGIN BOTTOM TO BUTTON TO ENSURE VISIBILITY -->
+                        <button onclick="copyInvoiceText()" class="w-full bg-blue-50 border-2 border-blue-200 text-blue-700 btn-pro py-3 mb-4 text-[10px] uppercase italic hover:bg-blue-100 transition-all flex items-center justify-center gap-2">
                             <i data-lucide="share-2" class="w-4 h-4 text-blue-700 text-blue-700"></i> Copy Pro Estimate Text
                         </button>
                     </div>
@@ -242,29 +243,29 @@
             </div>
 
             <!-- VIEW: PROFILE (Settings) -->
-            <div id="view-profile" class="view hidden max-w-4xl mx-auto space-y-8 animate-fade-in text-slate-900">
-                <div class="bg-white p-8 md:p-10 rounded-2xl border border-slate-200 shadow-sm text-slate-900 text-slate-900">
-                    <h2 class="text-xl font-black uppercase tracking-tighter mb-8 flex items-center gap-3 text-slate-900 text-slate-900"><i data-lucide="settings" class="w-6 h-6 text-blue-600 text-white text-white"></i> Settings</h2>
+            <div id="view-profile" class="view hidden max-w-4xl mx-auto space-y-8 animate-fade-in text-slate-900 text-slate-900">
+                <div class="bg-white p-8 md:p-10 rounded-2xl border border-slate-200 shadow-sm text-slate-900 text-slate-900 text-slate-900">
+                    <h2 class="text-xl font-black uppercase tracking-tighter mb-8 flex items-center gap-3 text-slate-900 text-slate-900"><i data-lucide="settings" class="w-6 h-6 text-blue-600 text-white text-white text-white"></i> Settings</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-10 text-slate-900">
-                        <div class="space-y-4 text-slate-900 text-slate-900">
+                        <div class="space-y-4 text-slate-900 text-slate-900 text-slate-900">
                             <h3 class="text-[10px] font-bold uppercase text-slate-400 tracking-widest">Shop Info</h3>
                             <input id="prof-shop-name" class="w-full p-3 bg-slate-50 rounded-lg font-bold text-sm border border-slate-200 text-slate-900 text-slate-900" placeholder="Shop Name" />
                             <input id="prof-slogan" class="w-full p-3 bg-slate-50 rounded-lg font-medium text-sm border border-slate-200 text-slate-900 text-slate-900" placeholder="Tagline" />
                             <input id="prof-certs" class="w-full p-3 bg-slate-50 rounded-lg font-medium text-sm border border-slate-200 text-slate-900 text-slate-900" placeholder="Certs" />
                             <input id="prof-phone" class="p-3 bg-slate-50 rounded-lg text-xs border border-slate-200 text-slate-900 text-slate-900" placeholder="Phone" />
                         </div>
-                        <div class="space-y-6 text-slate-900 text-slate-900">
+                        <div class="space-y-6 text-slate-900 text-slate-900 text-slate-900">
                             <h3 class="text-[10px] font-bold uppercase text-slate-400 tracking-widest">Rate Tuning</h3>
-                            <div class="bg-blue-600 p-6 rounded-2xl text-white shadow-lg text-white text-white">
-                                <div class="space-y-6 text-white text-white text-white">
-                                    <div class="space-y-2 text-white text-white text-white text-white text-white"><div class="flex justify-between items-center text-white text-white text-white text-white text-white text-white text-white text-white text-white"><label class="text-[10px] font-bold uppercase text-blue-100">Labor Rate</label><span id="rate-display" class="text-2xl font-black italic">$65</span></div><input type="range" id="prof-rate" min="30" max="250" step="5" value="65" oninput="updateRateDisplay()" class="w-full text-white text-white text-white text-white text-white text-white text-white text-white text-white" /></div>
-                                    <div class="space-y-2 text-white text-white text-white text-white text-white text-white text-white text-white text-white"><div class="flex justify-between items-center text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white"><label class="text-[10px] font-bold uppercase text-blue-100">Markup %</label><span id="markup-display" class="text-2xl font-black italic">20%</span></div><input type="range" id="prof-markup" min="0" max="100" step="5" value="20" oninput="updateMarkupDisplay()" class="w-full text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white" /></div>
-                                    <div class="space-y-2 text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white"><div class="flex justify-between items-center text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white"><label class="text-[10px] font-bold uppercase text-blue-100">Supplies Fee</label><span id="supplies-display" class="text-2xl font-black italic">$10</span></div><input type="range" id="prof-supplies" min="0" max="100" step="1" value="10" oninput="updateSuppliesDisplay()" class="w-full text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white" /></div>
+                            <div class="bg-blue-600 p-6 rounded-2xl text-white shadow-lg text-white text-white text-white">
+                                <div class="space-y-6 text-white text-white text-white text-white">
+                                    <div class="space-y-2 text-white text-white text-white text-white text-white text-white"><div class="flex justify-between items-center text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white"><label class="text-[10px] font-bold uppercase text-blue-100 text-white">Labor Rate</label><span id="rate-display" class="text-2xl font-black italic text-white">$65</span></div><input type="range" id="prof-rate" min="30" max="250" step="5" value="65" oninput="updateRateDisplay()" class="w-full text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white" /></div>
+                                    <div class="space-y-2 text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white"><div class="flex justify-between items-center text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white"><label class="text-[10px] font-bold uppercase text-blue-100 text-white text-white">Markup %</label><span id="markup-display" class="text-2xl font-black italic text-white text-white">20%</span></div><input type="range" id="prof-markup" min="0" max="100" step="5" value="20" oninput="updateMarkupDisplay()" class="w-full text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white" /></div>
+                                    <div class="space-y-2 text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white"><div class="flex justify-between items-center text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white"><label class="text-[10px] font-bold uppercase text-blue-100 text-white text-white">Supplies Fee</label><span id="supplies-display" class="text-2xl font-black italic text-white text-white">$10</span></div><input type="range" id="prof-supplies" min="0" max="100" step="1" value="10" oninput="updateSuppliesDisplay()" class="w-full text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white text-white" /></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button onclick="commitProfile()" class="w-full mt-10 bg-slate-900 text-white btn-pro py-5 flex items-center justify-center gap-3 shadow-xl"><i data-lucide="check" class="w-5 h-5 text-blue-500 text-white text-white"></i> Save Settings</button>
+                    <button onclick="commitProfile()" class="w-full mt-10 bg-slate-900 text-white btn-pro py-5 flex items-center justify-center gap-3 shadow-xl"><i data-lucide="check" class="w-5 h-5 text-blue-500 text-white text-white text-white"></i> Save Settings</button>
                 </div>
             </div>
 
@@ -279,13 +280,13 @@
         </nav>
 
         <!-- MODAL: HISTORY -->
-        <div id="log-modal" class="fixed inset-0 z-[200] bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4 modal-overlay text-slate-900 text-slate-900" onclick="closeLog()">
-            <div class="bg-white w-full max-w-lg rounded-xl shadow-2xl overflow-hidden modal-content border border-slate-200 max-h-[85vh] flex flex-col text-slate-900 text-slate-900" onclick="event.stopPropagation()">
+        <div id="log-modal" class="fixed inset-0 z-[200] bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4 modal-overlay text-slate-900 text-slate-900 text-slate-900" onclick="closeLog()">
+            <div class="bg-white w-full max-w-lg rounded-xl shadow-2xl overflow-hidden modal-content border border-slate-200 max-h-[85vh] flex flex-col text-slate-900 text-slate-900 text-slate-900" onclick="event.stopPropagation()">
                 <div class="bg-slate-900 p-6 text-white flex justify-between items-center shrink-0">
-                    <h3 class="text-sm font-bold uppercase tracking-widest text-white text-white">Service History</h3>
-                    <button onclick="closeLog()" class="text-slate-400 hover:text-white p-2 text-slate-400 text-white"><i data-lucide="x" class="w-5 h-5 text-white text-white text-white"></i></button>
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-white text-white text-white">Service History</h3>
+                    <button onclick="closeLog()" class="text-slate-400 hover:text-white p-2 text-slate-400 text-white text-white"><i data-lucide="x" class="w-5 h-5 text-white text-white text-white text-white"></i></button>
                 </div>
-                <div id="log-content-list" class="p-6 space-y-3 overflow-y-auto no-scrollbar text-slate-900 text-slate-900"></div>
+                <div id="log-content-list" class="p-6 space-y-3 overflow-y-auto no-scrollbar text-slate-900 text-slate-900 text-slate-900"></div>
             </div>
         </div>
 
@@ -373,23 +374,23 @@
             const list = document.getElementById('garage-list');
             if (!list) return;
             list.innerHTML = garage.map(car => `
-                <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 hover:shadow-sm transition-all group relative overflow-hidden text-slate-900 shadow-sm">
-                    <div class="absolute left-0 top-0 w-1 h-full bg-blue-600 opacity-20 group-hover:opacity-100 transition-all"></div>
-                    <div class="flex items-center gap-4 flex-1 cursor-pointer w-full text-slate-900" onclick="setActiveCar(${car.id})">
-                        <div class="bg-slate-900 p-3 rounded-lg text-blue-500 flex items-center justify-center shrink-0 shadow-inner"><i data-lucide="car-front" class="w-5 h-5 text-blue-500 text-white text-white"></i></div>
-                        <div class="truncate text-slate-900">
-                            <p class="text-[7px] font-black text-blue-600 uppercase mb-0.5 italic leading-none">${car.nickname}</p>
-                            <p class="font-bold text-base text-slate-900 leading-none truncate uppercase tracking-tight">${car.year} ${car.make} ${car.model}</p>
-                            <span class="text-[7px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1 mt-0.5"><i data-lucide="activity" class="w-2 h-2 text-slate-400 text-slate-400"></i> ${car.engine}</span>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 hover:shadow-sm transition-all group relative overflow-hidden text-slate-900 shadow-sm shadow-sm">
+                    <div class="absolute left-0 top-0 w-1 h-full bg-blue-600 opacity-20 group-hover:opacity-100 transition-all transition-all"></div>
+                    <div class="flex items-center gap-4 flex-1 cursor-pointer w-full text-slate-900 text-slate-900" onclick="setActiveCar(${car.id})">
+                        <div class="bg-slate-900 p-3 rounded-lg text-blue-500 flex items-center justify-center shrink-0 shadow-inner text-white shadow-inner"><i data-lucide="car-front" class="w-5 h-5 text-blue-500 text-white text-white text-white text-white"></i></div>
+                        <div class="truncate text-slate-900 text-slate-900">
+                            <p class="text-[7px] font-black text-blue-600 uppercase mb-0.5 italic leading-none leading-none">${car.nickname}</p>
+                            <p class="font-bold text-base text-slate-900 leading-none truncate uppercase tracking-tight tracking-tight">${car.year} ${car.make} ${car.model}</p>
+                            <span class="text-[7px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1 mt-0.5 mt-0.5"><i data-lucide="activity" class="w-2 h-2 text-slate-400 text-slate-400 text-slate-400"></i> ${car.engine}</span>
                         </div>
                     </div>
-                    <div class="flex gap-1.5 w-full md:w-auto text-slate-900">
-                        <button onclick="openHistory(${car.id})" class="flex-1 md:flex-none bg-slate-100 text-slate-600 p-2 px-4 rounded-lg text-[9px] font-bold uppercase hover:bg-slate-200 italic transition-all">History</button>
-                        <button onclick="setActiveCar(${car.id})" class="flex-1 md:flex-none bg-blue-600 text-white p-2 px-4 rounded-lg text-[9px] font-bold uppercase hover:bg-blue-700 italic shadow-md transition-all">Select</button>
-                        <button onclick="deleteCar(${car.id})" class="p-2 text-slate-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4 text-slate-900 text-slate-900 text-slate-900"></i></button>
+                    <div class="flex gap-1.5 w-full md:w-auto text-slate-900 text-slate-900">
+                        <button onclick="openHistory(${car.id})" class="flex-1 md:flex-none bg-slate-100 text-slate-600 p-2 px-4 rounded-lg text-[9px] font-bold uppercase hover:bg-slate-200 italic transition-all transition-all">History</button>
+                        <button onclick="setActiveCar(${car.id})" class="flex-1 md:flex-none bg-blue-600 text-white p-2 px-4 rounded-lg text-[9px] font-bold uppercase hover:bg-blue-700 italic shadow-md transition-all transition-all">Select</button>
+                        <button onclick="deleteCar(${car.id})" class="p-2 text-slate-300 hover:text-red-500 transition-colors transition-colors"><i data-lucide="trash-2" class="w-4 h-4 text-slate-900 text-slate-900 text-slate-900 text-slate-900 text-slate-900 text-slate-900"></i></button>
                     </div>
                 </div>
-            `).join('') || `<div class="p-12 text-center bg-slate-50 rounded-xl border-dashed border-2 border-slate-200 text-slate-400 text-[9px] uppercase font-bold tracking-widest text-slate-400">Fleet Empty</div>`;
+            `).join('') || `<div class="p-12 text-center bg-slate-50 rounded-xl border-dashed border-2 border-slate-200 text-slate-400 text-[9px] uppercase font-bold tracking-widest text-slate-400 text-slate-400">Fleet Empty</div>`;
             lucide.createIcons();
         }
 
@@ -469,30 +470,30 @@
             list.innerHTML = items.map(item => {
                 const markedUp = (item.price * (1 + (profile.partsMarkup/100))).toFixed(2);
                 return `
-                    <div class="bg-white rounded-xl border border-slate-200 overflow-hidden flex flex-col hover:shadow-lg transition-all relative text-slate-900 shadow-sm text-slate-900">
-                        <div class="absolute top-3 left-3 ${item.badgeColor} text-white font-black px-3 py-1 rounded-lg text-[8px] uppercase tracking-widest shadow-md z-10 text-white">${item.badge}</div>
-                        <img src="${item.img}" class="w-full h-40 object-cover grayscale-[0.5] hover:grayscale-0 transition-all duration-500" alt="part" />
-                        <div class="p-5 flex-1 flex flex-col justify-between text-slate-900 text-slate-900">
-                            <div class="text-slate-900">
-                                <h4 class="font-bold text-base text-slate-900 leading-tight mb-1 truncate uppercase italic tracking-tighter text-slate-900 text-slate-900">${item.name}</h4>
-                                <p class="text-[9px] text-slate-400 uppercase font-bold text-slate-400 text-slate-400">${item.cond}</p>
+                    <div class="bg-white rounded-xl border border-slate-200 overflow-hidden flex flex-col hover:shadow-lg transition-all relative text-slate-900 shadow-sm text-slate-900 text-slate-900">
+                        <div class="absolute top-3 left-3 ${item.badgeColor} text-white font-black px-3 py-1 rounded-lg text-[8px] uppercase tracking-widest shadow-md z-10 text-white text-white text-white">${item.badge}</div>
+                        <img src="${item.img}" class="w-full h-40 object-cover grayscale-[0.5] hover:grayscale-0 transition-all duration-500 transition-all duration-500" alt="part" />
+                        <div class="p-5 flex-1 flex flex-col justify-between text-slate-900 text-slate-900 text-slate-900 text-slate-900">
+                            <div class="text-slate-900 text-slate-900">
+                                <h4 class="font-bold text-base text-slate-900 leading-tight mb-1 truncate uppercase italic tracking-tighter text-slate-900 text-slate-900 text-slate-900 text-slate-900">${item.name}</h4>
+                                <p class="text-[9px] text-slate-400 uppercase font-bold text-slate-400 text-slate-400 text-slate-400 text-slate-400">${item.cond}</p>
                             </div>
-                            <div class="mt-6 text-slate-900 text-slate-900">
-                                <div class="flex justify-between items-end mb-4 border-b border-slate-50 pb-4 text-slate-900 text-slate-900">
-                                    <div class="text-slate-900">
-                                        <p class="text-[7px] text-slate-400 font-bold uppercase tracking-widest text-slate-400">Customer Retail</p>
-                                        <p class="text-2xl font-black italic text-blue-600 leading-none text-blue-600 text-blue-600">$${markedUp}</p>
+                            <div class="mt-6 text-slate-900 text-slate-900 text-slate-900 text-slate-900">
+                                <div class="flex justify-between items-end mb-4 border-b border-slate-50 pb-4 text-slate-900 text-slate-900 text-slate-900 text-slate-900">
+                                    <div class="text-slate-900 text-slate-900">
+                                        <p class="text-[7px] text-slate-400 font-bold uppercase tracking-widest text-slate-400 text-slate-400">Customer Retail</p>
+                                        <p class="text-2xl font-black italic text-blue-600 leading-none text-blue-600 text-blue-600 text-blue-600 text-blue-600">$${markedUp}</p>
                                     </div>
-                                    <div class="text-right text-slate-900">
-                                        <p class="text-[7px] text-slate-400 font-bold uppercase tracking-widest text-slate-400 text-slate-400">Your Cost</p>
-                                        <p class="text-sm font-bold text-slate-400 italic leading-none text-slate-400 text-slate-400">$${item.price.toFixed(2)}</p>
+                                    <div class="text-right text-slate-900 text-slate-900">
+                                        <p class="text-[7px] text-slate-400 font-bold uppercase tracking-widest text-slate-400 text-slate-400 text-slate-400 text-slate-400">Your Cost</p>
+                                        <p class="text-sm font-bold text-slate-400 italic leading-none text-slate-400 text-slate-400 text-slate-400 text-slate-400">$${item.price.toFixed(2)}</p>
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-1 gap-2 text-slate-900 text-slate-900">
-                                    <button onclick="window.open('${item.url}')" class="bg-slate-900 text-white btn-pro py-2.5 text-[9px] flex items-center justify-center gap-2 text-white">
-                                        <i data-lucide="external-link" class="w-3 h-3 text-blue-400 text-blue-400 text-blue-400"></i> Buy on eBay
+                                <div class="grid grid-cols-1 gap-2 text-slate-900 text-slate-900 text-slate-900 text-slate-900">
+                                    <button onclick="window.open('${item.url}')" class="bg-slate-900 text-white btn-pro py-2.5 text-[9px] flex items-center justify-center gap-2 text-white text-white">
+                                        <i data-lucide="external-link" class="w-3 h-3 text-blue-400 text-blue-400 text-blue-400 text-blue-400 text-blue-400"></i> Buy on eBay
                                     </button>
-                                    <button onclick="commitToWorkbench('${item.name}', ${item.price}, '${item.url}')" class="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white btn-pro py-2 text-[8px] italic transition-all text-blue-600">
+                                    <button onclick="commitToWorkbench('${item.name}', ${item.price}, '${item.url}')" class="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white btn-pro py-2 text-[8px] italic transition-all text-blue-600 transition-all text-blue-600">
                                         Stage to Workbench
                                     </button>
                                 </div>
@@ -546,19 +547,19 @@
             list.innerHTML = workbenchParts.map(p => {
                 const retail = p.cost * (1 + (profile.partsMarkup / 100));
                 return `
-                    <div class="flex justify-between items-center bg-slate-50 p-3 rounded-lg border border-slate-100 group animate-fade-in text-slate-900 shadow-sm text-left text-slate-900">
-                        <div class="truncate mr-4 text-slate-900 text-slate-900">
-                           <p class="text-[10px] font-bold uppercase truncate text-slate-900 text-slate-900">${p.name} (x${p.qty})</p>
-                           <p class="text-[7px] font-bold text-slate-400 uppercase text-slate-400 text-slate-400">${p.source} • Cost Applied</p>
+                    <div class="flex justify-between items-center bg-slate-50 p-3 rounded-lg border border-slate-100 group animate-fade-in text-slate-900 shadow-sm text-left text-slate-900 text-slate-900">
+                        <div class="truncate mr-4 text-slate-900 text-slate-900 text-slate-900">
+                           <p class="text-[10px] font-bold uppercase truncate text-slate-900 text-slate-900 text-slate-900 text-slate-900 text-slate-900">${p.name} (x${p.qty})</p>
+                           <p class="text-[7px] font-bold text-slate-400 uppercase text-slate-400 text-slate-400 text-slate-400 text-slate-400 text-slate-400">${p.source} • Cost Applied</p>
                         </div>
-                        <div class="flex items-center gap-4 shrink-0 text-slate-900 text-slate-900">
-                            <div class="text-right text-slate-900 text-slate-900 text-slate-900">
-                               <p class="text-[7px] font-bold text-blue-500 uppercase leading-none text-blue-500 text-blue-500">Retail Total</p>
-                               <p class="text-sm font-black text-slate-900 text-slate-900">$${(retail * p.qty).toFixed(2)}</p>
+                        <div class="flex items-center gap-4 shrink-0 text-slate-900 text-slate-900 text-slate-900">
+                            <div class="text-right text-slate-900 text-slate-900 text-slate-900 text-slate-900">
+                               <p class="text-[7px] font-bold text-blue-500 uppercase leading-none text-blue-500 text-blue-500 text-blue-500 text-blue-500">Retail Total</p>
+                               <p class="text-sm font-black text-slate-900 text-slate-900 text-slate-900 text-slate-900">$${(retail * p.qty).toFixed(2)}</p>
                             </div>
-                            <div class="flex gap-1 text-slate-900 text-slate-900">
-                               ${p.url ? `<button onclick="window.open('${p.url}')" class="p-2 bg-slate-900 text-blue-400 rounded-lg shadow-sm hover:text-white transition-colors text-blue-400"><i data-lucide="shopping-cart" class="w-4 h-4"></i></button>` : ''}
-                               <button onclick="removeWorkbenchPart(${p.id})" class="text-slate-300 hover:text-red-500 transition-colors text-slate-300 text-slate-300"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <div class="flex gap-1 text-slate-900 text-slate-900 text-slate-900">
+                               ${p.url ? `<button onclick="window.open('${p.url}')" class="p-2 bg-slate-900 text-blue-400 rounded-lg shadow-sm hover:text-white transition-colors text-blue-400 text-blue-400 text-blue-400"><i data-lucide="shopping-cart" class="w-4 h-4 text-blue-400"></i></button>` : ''}
+                               <button onclick="removeWorkbenchPart(${p.id})" class="text-slate-300 hover:text-red-500 transition-colors text-slate-300 text-slate-300 text-slate-300 text-slate-300 text-slate-300 text-slate-300"><i data-lucide="trash-2" class="w-4 h-4 text-slate-900"></i></button>
                             </div>
                         </div>
                     </div>
@@ -607,8 +608,8 @@
             const logList = document.getElementById('log-content-list');
             if (!logList) return;
             logList.innerHTML = car.logs.map(l => `
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex justify-between items-center text-slate-900 text-left text-slate-900"><div><p class="font-bold uppercase text-xs truncate text-slate-900 text-slate-900">${l.job}</p><p class="text-[7px] font-bold text-slate-400 uppercase text-slate-400 text-slate-400">${l.date} • ${l.parts} Committed Items</p></div><p class="text-base font-black text-blue-600 italic shrink-0 text-blue-600">$${l.total}</p></div>
-            `).join('') || `<div class="p-10 text-center text-slate-900 text-slate-900 text-slate-900"><p class="text-[9px] font-bold text-slate-300 uppercase tracking-widest text-slate-300 text-slate-300">No Logs Stored</p></div>`;
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex justify-between items-center text-slate-900 text-left text-slate-900 text-slate-900"><div><p class="font-bold uppercase text-xs truncate text-slate-900 text-slate-900 text-slate-900 text-slate-900">${l.job}</p><p class="text-[7px] font-bold text-slate-400 uppercase text-slate-400 text-slate-400 text-slate-400 text-slate-400 text-slate-400">${l.date} • ${l.parts} Committed Items</p></div><p class="text-base font-black text-blue-600 italic shrink-0 text-blue-600 text-blue-600">$${l.total}</p></div>
+            `).join('') || `<div class="p-10 text-center text-slate-900 text-slate-900 text-slate-900 text-slate-900 text-slate-900 text-slate-900"><p class="text-[9px] font-bold text-slate-300 uppercase tracking-widest text-slate-300 text-slate-300 text-slate-300 text-slate-300 text-slate-300">No Logs Stored</p></div>`;
             document.getElementById('log-modal').style.display = 'flex';
         }
 
