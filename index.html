@@ -13,10 +13,10 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Workbench Style */
-        .workbench-gradient { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+        /* Workbench Accent */
+        .workbench-panel { border-radius: 1rem; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); }
         
-        /* Sliders */
+        /* Professional Tool Sliders */
         input[type=range] { -webkit-appearance: none; background: transparent; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: #3b82f6; border-radius: 2px; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #ffffff; cursor: pointer; margin-top: -7px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 2px solid #3b82f6; }
@@ -52,7 +52,7 @@
                 <button onclick="initializeSession('guest')" class="w-full bg-slate-900 text-white btn-pro py-4 flex items-center justify-center gap-3 hover:bg-black transition-all">
                     <i data-lucide="user-circle" class="w-5 h-5 text-blue-400"></i> Continue as Guest
                 </button>
-                <button onclick="initializeSession('google')" class="w-full border border-slate-200 text-slate-600 btn-pro py-4 flex items-center justify-center gap-3 hover:bg-slate-50 transition-all text-slate-900">
+                <button onclick="initializeSession('google')" class="w-full border border-slate-200 text-slate-600 btn-pro py-4 flex items-center justify-center gap-3 hover:bg-slate-50 transition-all">
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-4 h-4" /> Sign in with Google
                 </button>
             </div>
@@ -112,8 +112,8 @@
                                 <i data-lucide="plus-circle" class="text-blue-600 w-4 h-4"></i> New Entry
                             </h2>
                             <div class="space-y-4 text-slate-900">
-                                <div class="space-y-1 text-slate-900">
-                                    <label class="text-[9px] font-bold text-slate-500 ml-1 uppercase">Customer Nickname</label>
+                                <div class="space-y-1">
+                                    <label class="text-[9px] font-bold text-slate-500 ml-1 uppercase tracking-widest">Customer Nickname</label>
                                     <input id="veh-nickname" class="w-full p-3 bg-slate-50 rounded-lg text-sm font-semibold border border-slate-200 outline-none focus:border-blue-500 transition-all text-slate-900" placeholder="e.g. Miller's F150" />
                                 </div>
                                 <div class="grid grid-cols-2 gap-3 text-slate-900">
@@ -140,7 +140,7 @@
                 </div>
             </div>
 
-            <!-- VIEW: SEARCH (Parts Finder) -->
+            <!-- VIEW: SEARCH (The Parts Finder focal point) -->
             <div id="view-search" class="view hidden space-y-8 animate-fade-in text-slate-900">
                 <div class="max-w-3xl mx-auto text-center py-6">
                     <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight uppercase italic text-nowrap">Parts Finder</h2>
@@ -151,15 +151,21 @@
                     <p id="search-veh-context" class="mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest italic">Select customer from fleet to begin search.</p>
                 </div>
 
+                <!-- LOADING STATE -->
                 <div id="search-loading" class="hidden py-12 text-center">
                     <div class="scanning-loader mb-4"></div>
                     <p class="text-[9px] font-black uppercase text-blue-500 tracking-[0.4em] animate-pulse">Scanning Global Marketplace...</p>
                 </div>
 
+                <!-- RESULTS STAGE -->
                 <div id="results-stage" class="hidden space-y-6">
                     <div class="flex items-center justify-between border-b border-slate-200 pb-4">
                         <div class="flex items-center gap-2">
                             <h3 class="font-bold text-xs uppercase text-slate-500 tracking-widest flex items-center gap-2"><i data-lucide="package" class="w-4 h-4 text-blue-600"></i> Global Inventory Comparison</h3>
+                        </div>
+                        <div id="search-labor-hint-box" class="bg-white px-4 py-2 rounded-xl border border-slate-100 shadow-sm text-center">
+                            <p class="text-[8px] font-bold text-blue-500 uppercase whitespace-nowrap">Standard Book Time</p>
+                            <p id="search-labor-hint" class="text-lg font-black text-slate-900">0 Hrs</p>
                         </div>
                     </div>
                     <!-- TIERED RESULTS LIST -->
@@ -183,13 +189,13 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 text-slate-900">
-                    <div class="lg:col-span-7 space-y-8">
+                    <div class="lg:col-span-7 space-y-8 text-slate-900">
                         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-slate-900">
                             <div class="flex items-center justify-between mb-6 border-b border-slate-50 pb-4">
                                 <h3 class="font-bold text-xs uppercase text-slate-900 tracking-widest flex items-center gap-2"><i data-lucide="list" class="w-4 h-4 text-blue-600"></i> Staged Job Items</h3>
                                 <span id="markup-info-badge" class="bg-blue-50 text-blue-700 text-[8px] font-black px-2 py-0.5 rounded border border-blue-100 uppercase italic"></span>
                             </div>
-                            <div id="workbench-parts-list" class="space-y-3"></div>
+                            <div id="workbench-parts-list" class="space-y-3 text-slate-900"></div>
                             <div id="workbench-empty-state" class="p-10 text-center text-slate-300 uppercase text-[9px] font-black tracking-widest italic">Workbench Empty. Stage parts to build quote.</div>
                         </div>
 
@@ -219,7 +225,7 @@
                             <div class="space-y-6 text-slate-900">
                                 <div class="flex justify-between items-center py-3 border-y border-slate-50">
                                     <span class="text-xs font-bold uppercase text-slate-500">Applied Hours</span>
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-2 text-slate-900">
                                         <input type="number" id="workbench-labor-hrs" oninput="calculateWorkbenchTotals()" step="0.1" class="w-16 p-2 bg-slate-50 border border-slate-200 rounded-lg text-center font-bold text-blue-600 focus:border-blue-500 outline-none shadow-sm" />
                                         <span class="text-[10px] font-bold text-slate-400">HRS</span>
                                     </div>
@@ -254,7 +260,7 @@
                             <input id="prof-certs" class="w-full p-3 bg-slate-50 rounded-lg font-medium text-sm border border-slate-200 text-slate-900" placeholder="Certs" />
                             <input id="prof-phone" class="p-3 bg-slate-50 rounded-lg text-xs border border-slate-200 text-slate-900" placeholder="Phone" />
                         </div>
-                        <div class="space-y-6">
+                        <div class="space-y-6 text-slate-900">
                             <h3 class="text-[10px] font-bold uppercase text-slate-400 tracking-widest">Rate Tuning</h3>
                             <div class="bg-blue-600 p-6 rounded-2xl text-white shadow-lg">
                                 <div class="space-y-6">
@@ -361,8 +367,9 @@
         function saveVehicle() {
             const nick = document.getElementById('veh-nickname').value;
             const year = document.getElementById('year-select').value;
-            if(!year) return alert("Select Year.");
-            const car = { id: Date.now(), nickname: nick || 'Customer Job', year, make: document.getElementById('make-select').value, model: document.getElementById('model-select').value, engine: document.getElementById('engine-select').value, logs: [] };
+            const make = document.getElementById('make-select').value;
+            if(!year || !make) return alert("Select Year and Make.");
+            const car = { id: Date.now(), nickname: nick || 'Customer Job', year, make: make, model: document.getElementById('model-select').value, engine: document.getElementById('engine-select').value, logs: [] };
             garage.push(car);
             localStorage.setItem('wp_garage', JSON.stringify(garage));
             document.getElementById('veh-nickname').value = "";
@@ -431,7 +438,6 @@
             const list = document.getElementById('ebay-results-list');
             if (!list) return;
             
-            // Tiered mock data: Budget, Standard, Premium
             const items = [
                 { 
                     name: `Certified Recycled ${q}`, 
@@ -582,7 +588,7 @@
             const idx = garage.findIndex(c => c.id === selectedCar.id);
             if(idx !== -1) {
                 garage[idx].logs.push(entry); localStorage.setItem('wp_garage', JSON.stringify(garage));
-                alert(`SUCCESS: Job for ${selectedCar.nickname} finalized.`);
+                alert(`SUCCESS: Job finalized for ${selectedCar.nickname}. History Log updated.`);
                 workbenchParts = []; updateWorkbenchUI(); showView('garage');
             }
         }
@@ -592,7 +598,7 @@
             const logList = document.getElementById('log-content-list');
             if (!logList) return;
             logList.innerHTML = car.logs.map(l => `
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex justify-between items-center text-slate-900 text-left"><div><p class="font-bold uppercase text-xs truncate">${l.job}</p><p class="text-[7px] font-bold text-slate-400 uppercase">${l.date} • ${l.parts} Parts Committed</p></div><p class="text-base font-black text-blue-600 italic shrink-0">$${l.total}</p></div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex justify-between items-center text-slate-900 text-left"><div><p class="font-bold uppercase text-xs truncate">${l.job}</p><p class="text-[7px] font-bold text-slate-400 uppercase">${l.date} • ${l.parts} Committed Items</p></div><p class="text-base font-black text-blue-600 italic shrink-0">$${l.total}</p></div>
             `).join('') || `<div class="p-10 text-center text-slate-900"><p class="text-[9px] font-bold text-slate-300 uppercase tracking-widest">No Logs Stored</p></div>`;
             document.getElementById('log-modal').style.display = 'flex';
         }
